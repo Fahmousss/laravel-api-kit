@@ -21,7 +21,6 @@ use Dedoc\Scramble\Scramble;
 // Routes are now loaded automatically from config/apiroute.php
 // See routes/api/v1.php for version 1 routes
 
-
 Scramble::registerUiRoute('docs/v1', api: 'v1');
 Scramble::registerJsonSpecificationRoute('docs/v1/api.json', api: 'v1');
 

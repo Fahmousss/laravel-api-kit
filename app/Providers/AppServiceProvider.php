@@ -49,7 +49,7 @@ final class AppServiceProvider extends ServiceProvider
             : Limit::perMinute(60)->by($request->ip()));
     }
 
-        /**
+    /**
      * Configure Scramble authentication
      * */
     private function configureScrambleAuthentication(): void
@@ -57,7 +57,7 @@ final class AppServiceProvider extends ServiceProvider
         Scramble::configure()
             ->withDocumentTransformers(function (OpenApi $openApi): void {
                 $openApi->secure(
-                    SecurityScheme::http('bearer')
+                    securityScheme: SecurityScheme::http('bearer')
                 );
             });
     }
