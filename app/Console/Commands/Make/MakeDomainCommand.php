@@ -65,7 +65,7 @@ final class MakeDomainCommand extends GeneratorCommand
 
     private function createEntity(string $domain, string $entity): void
     {
-        $entity = $entity.'Entity';
+        $entity .= 'Entity';
         $path      = app_path(sprintf('Domain/%s/Entities/%s.php', $domain, $entity));
         $namespace = sprintf('App\\Domain\\%s\\Entities', $domain);
 

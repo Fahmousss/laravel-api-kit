@@ -29,7 +29,7 @@ final class ForceJsonResponse
             return response()->json([
                 'success' => false,
                 'message' => 'An error occurred',
-                'data' => $response->getContent(),
+                'data'    => $response->getContent(),
             ], $response->getStatusCode());
         }
 

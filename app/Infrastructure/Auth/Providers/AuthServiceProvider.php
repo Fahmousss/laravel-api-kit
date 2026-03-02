@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Auth\Providers;
 
-use App\Application\Auth\Commands\RegisterUserCommand;
-use App\Application\Auth\Commands\RegisterUserCommandHandler;
-use App\Application\Auth\Queries\LoginUserQuery;
-use App\Application\Auth\Queries\LoginUserQueryHandler;
 use App\Application\Bus\CommandBus;
 use App\Application\Bus\QueryBus;
 use App\Application\Contracts\CommandBusInterface;
 use App\Application\Contracts\QueryBusInterface;
+use App\Application\Features\Auth\Commands\RegisterUser\RegisterUserCommand;
+use App\Application\Features\Auth\Commands\RegisterUser\RegisterUserCommandHandler;
+use App\Application\Features\Auth\Queries\LoginUser\LoginUserQuery;
+use App\Application\Features\Auth\Queries\LoginUser\LoginUserQueryHandler;
 use App\Domain\Auth\Repositories\UserRepositoryInterface;
 use App\Infrastructure\Auth\Persistence\EloquentUserRepository;
 use Illuminate\Support\ServiceProvider;

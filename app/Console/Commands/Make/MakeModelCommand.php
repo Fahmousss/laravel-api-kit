@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\Make;
 
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Foundation\Console\ModelMakeCommand;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Input\InputArgument;
 
 #[AsCommand(name: 'make:model')]
-class MakeModelCommand extends ModelMakeCommand
+final class MakeModelCommand extends ModelMakeCommand
 {
     /**
      * The console command name.
@@ -22,12 +22,13 @@ class MakeModelCommand extends ModelMakeCommand
     /**
      * Parse the class name and format according to the root namespace.
      *
-     * @param  string  $name
+     * @param string $name
+     *
      * @return string
      */
     protected function qualifyClass($name)
     {
-        $name = ltrim($name, '\\/');
+        $name = mb_ltrim($name, '\\/');
         $name = str_replace('/', '\\', $name);
 
         $rootNamespace = $this->rootNamespace();
@@ -40,10 +41,11 @@ class MakeModelCommand extends ModelMakeCommand
 
         if (count($parts) > 1) {
             $domain = array_shift($parts);
-            return $rootNamespace . 'Infrastructure\\' . $domain . '\\Models\\' . implode('\\', $parts);
+
+            return $rootNamespace.'Infrastructure\\'.$domain.'\\Models\\'.implode('\\', $parts);
         }
 
-        return $rootNamespace . 'Infrastructure\\Shared\\Models\\' . $name;
+        return $rootNamespace.'Infrastructure\\Shared\\Models\\'.$name;
     }
 
     /**
@@ -67,28 +69,30 @@ class MakeModelCommand extends ModelMakeCommand
     /**
      * Build the class with the given name.
      *
-     * @param  string  $name
-     * @return string
+     * @param string $name
      *
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws FileNotFoundException
+     *
+     * @return string
      */
     protected function buildClass($name)
     {
         $stub = parent::buildClass($name);
 
         $customFactoryImport = '';
-        $customUseFactory = '';
+        $customUseFactory    = '';
 
         if ($this->option('factory') || $this->option('all')) {
-            $modelPath = Str::of($this->argument('name'))->studly()->replace('/', '\\')->toString();
-            $factoryNamespace = 'Database\\Factories\\' . $modelPath . 'Factory';
-            $factoryBasename = class_basename($factoryNamespace);
-            
+            $modelPath        = Str::of($this->argument('name'))->studly()->replace('/', '\\')->toString();
+            $factoryNamespace = 'Database\\Factories\\'.$modelPath.'Factory';
+            $factoryBasename  = class_basename($factoryNamespace);
+
             $customFactoryImport = "use {$factoryNamespace};\nuse Illuminate\\Database\\Eloquent\\Attributes\\UseFactory;";
-            $customUseFactory = "#[UseFactory({$factoryBasename}::class)]";
+            $customUseFactory    = sprintf('#[UseFactory(%s::class)]', $factoryBasename);
         }
 
         $stub = str_replace('{{ customFactoryImport }}', $customFactoryImport, $stub);
+
         return str_replace('{{ customUseFactory }}', $customUseFactory, $stub);
     }
 }

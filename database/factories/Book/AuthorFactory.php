@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories\Book;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Infrastructure\Book\Models\Author>
+ * @extends Factory<\App\Infrastructure\Book\Models\Author>
  */
-class AuthorFactory extends Factory
+final class AuthorFactory extends Factory
 {
     /**
      * Define the model's default state.

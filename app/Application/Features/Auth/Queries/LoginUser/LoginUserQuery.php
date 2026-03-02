@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Auth\Queries;
+namespace App\Application\Features\Auth\Queries\LoginUser;
 
 final readonly class LoginUserQuery
 {

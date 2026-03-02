@@ -10,7 +10,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
 #[AsCommand(name: 'make:infrastructure')]
-class MakeInfrastructureCommand extends GeneratorCommand
+final class MakeInfrastructureCommand extends GeneratorCommand
 {
     /**
      * The console command name.
@@ -36,33 +36,33 @@ class MakeInfrastructureCommand extends GeneratorCommand
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $domain = (string) $this->argument('domain');
         $entity = (string) $this->argument('entity');
-        $force = (bool) $this->option('force');
+        $force  = (bool) $this->option('force');
 
         // 1. Call make:model -m -f
-        $this->info("Scaffolding Model, Migration, and Factory...");
+        $this->info('Scaffolding Model, Migration, and Factory...');
         $this->call('make:model', [
-            'name' => "{$domain}/{$entity}",
+            'name'        => sprintf('%s/%s', $domain, $entity),
             '--migration' => true,
-            '--factory' => true,
+            '--factory'   => true,
         ]);
 
         // 2. Call make:repository
-        $this->info("Scaffolding Eloquent Repository...");
+        $this->info('Scaffolding Eloquent Repository...');
         $this->call('make:repository', array_filter([
-            'domain' => $domain,
-            'entity' => $entity,
+            'domain'  => $domain,
+            'entity'  => $entity,
             '--force' => $force,
         ]));
 
         // 3. Manage the Service Provider
-        $this->info("Configuring Service Provider bindings...");
+        $this->info('Configuring Service Provider bindings...');
         $this->createOrUpdateProvider($domain, $entity);
 
-        $this->info("Infrastructure for [{$domain}/{$entity}] scaffolded successfully.");
+        $this->info(sprintf('Infrastructure for [%s/%s] scaffolded successfully.', $domain, $entity));
     }
 
     /**
@@ -102,8 +102,8 @@ class MakeInfrastructureCommand extends GeneratorCommand
 
     private function createOrUpdateProvider(string $domain, string $entity): void
     {
-        $providerName = "{$domain}ServiceProvider";
-        $providerPath = app_path("Infrastructure/{$domain}/Providers/{$providerName}.php");
+        $providerName = $domain.'ServiceProvider';
+        $providerPath = app_path(sprintf('Infrastructure/%s/Providers/%s.php', $domain, $providerName));
 
         if (! file_exists($providerPath)) {
             $this->createProviderFile($domain, $providerName, $providerPath);
@@ -139,26 +139,27 @@ final class {$providerName} extends ServiceProvider
 
 PHP;
         file_put_contents($path, $stub);
-        $this->info("Created Provider [{$path}]");
+        $this->info(sprintf('Created Provider [%s]', $path));
     }
 
     private function registerProviderInBootstrap(string $domain, string $providerName): void
     {
         $bootstrapPath = base_path('bootstrap/providers.php');
-        
+
         if (! file_exists($bootstrapPath)) {
-            $this->warn("bootstrap/providers.php not found. Cannot auto-register $providerName.");
+            $this->warn(sprintf('bootstrap/providers.php not found. Cannot auto-register %s.', $providerName));
+
             return;
         }
 
-        $content = file_get_contents($bootstrapPath);
-        $providerClass = "App\Infrastructure\\{$domain}\Providers\\{$providerName}::class";
+        $content       = file_get_contents($bootstrapPath);
+        $providerClass = sprintf('App\Infrastructure\%s\Providers\%s::class', $domain, $providerName);
 
         if (! str_contains($content, $providerClass)) {
             // Insert it right before the closing bracket of the return array
             $content = preg_replace('/];/', "    {$providerClass},\n];", $content);
             file_put_contents($bootstrapPath, $content);
-            $this->info("Registered {$providerName} in bootstrap/providers.php");
+            $this->info(sprintf('Registered %s in bootstrap/providers.php', $providerName));
         }
     }
 
@@ -166,20 +167,21 @@ PHP;
     {
         $content = file_get_contents($path);
 
-        $interfaceClass = "App\Domain\\{$domain}\Repositories\\{$entity}RepositoryInterface";
-        $repositoryClass = "App\Infrastructure\\{$domain}\Persistence\Eloquent{$entity}Repository";
+        $interfaceClass  = sprintf('App\Domain\%s\Repositories\%sRepositoryInterface', $domain, $entity);
+        $repositoryClass = sprintf('App\Infrastructure\%s\Persistence\Eloquent%sRepository', $domain, $entity);
 
-        if (str_contains($content, $interfaceClass) && str_contains($content, "Eloquent{$entity}Repository")) {
-            $this->info("Binding for {$entity} already exists in {$domain}ServiceProvider.");
+        if (str_contains($content, $interfaceClass) && str_contains($content, sprintf('Eloquent%sRepository', $entity))) {
+            $this->info(sprintf('Binding for %s already exists in %sServiceProvider.', $entity, $domain));
+
             return;
         }
 
         // Add use statements after the namespace declaration
         $useStatements = "use {$interfaceClass};\nuse {$repositoryClass};";
-        
+
         if (! str_contains($content, $useStatements)) {
             $content = preg_replace(
-                '/namespace App\\\\Infrastructure\\\\' . $domain . '\\\\Providers;/',
+                '/namespace App\\\\Infrastructure\\\\'.$domain.'\\\\Providers;/',
                 "namespace App\\Infrastructure\\{$domain}\\Providers;\n\n{$useStatements}",
                 $content
             );
@@ -187,16 +189,18 @@ PHP;
 
         // Add binding inside the register method
         $bindingCode = "        \$this->app->bind({$entity}RepositoryInterface::class, Eloquent{$entity}Repository::class);\n";
-        
+
         if (! str_contains($content, $bindingCode)) {
             $content = preg_replace(
                 '/public function register\(\):\s*void\s*\{/',
-                "public function register(): void\n    {\n{$bindingCode}",
+                'public function register(): void
+    {
+'.$bindingCode,
                 $content
             );
         }
 
         file_put_contents($path, $content);
-        $this->info("Bound {$entity}RepositoryInterface in {$domain}ServiceProvider.");
+        $this->info(sprintf('Bound %sRepositoryInterface in %sServiceProvider.', $entity, $domain));
     }
 }
