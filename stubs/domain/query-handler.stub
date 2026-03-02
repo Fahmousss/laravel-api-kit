@@ -1,0 +1,13 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ namespace }};
+
+final class {{ class }}
+{
+    public function handle({{ query }} $query): mixed
+    {
+        // TODO: implement query handling logic
+    }
+}

@@ -1,0 +1,27 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ namespace }};
+
+use App\Domain\{{ domain }}\Entities\{{ entity }}Entity;
+use App\Domain\{{ domain }}\Repositories\{{ entity }}RepositoryInterface;
+use App\Infrastructure\{{ domain }}\Models\{{ entity }};
+use App\Infrastructure\Shared\Traits\EntityMapper;
+
+final class {{ class }} implements {{ entity }}RepositoryInterface
+{
+    use EntityMapper;
+
+    public function findById(int $id): ?{{ entity }}Entity
+    {
+        // TODO: implement
+        return null;
+    }
+
+    public function save({{ entity }}Entity $entity): {{ entity }}Entity
+    {
+        // TODO: implement
+        return $entity;
+    }
+}

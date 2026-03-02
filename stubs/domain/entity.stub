@@ -1,0 +1,16 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ namespace }};
+
+/**
+ * Pure domain entity — no framework dependencies.
+ */
+final class {{ class }}
+{
+    public function __construct(
+        public readonly ?int $id,
+        // TODO: add your properties here
+    ) {}
+}
