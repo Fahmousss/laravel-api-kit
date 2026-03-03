@@ -10,7 +10,7 @@ namespace {{ namespace }};
 final class {{ class }}
 {
     public function __construct(
-        public readonly ?int $id,
+        public readonly ?{{ idType }} $id,
         // TODO: add your properties here
     ) {}
 }

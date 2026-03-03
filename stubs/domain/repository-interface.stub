@@ -8,7 +8,7 @@ use App\Domain\{{ domain }}\Entities\{{ entity }}Entity;
 
 interface {{ class }}
 {
-    public function findById(int $id): ?{{ entity }}Entity;
+    public function findById({{ idType }} $id): ?{{ entity }}Entity;
 
-    public function save({{ entity }}Entity $entity): {{ entity }}Entity;
+    public function save({{ entity }}Entity ${{ entityVar }}): {{ entity }}Entity;
 }

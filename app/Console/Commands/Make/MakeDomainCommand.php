@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Console\Commands\Make;
 
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -60,6 +61,7 @@ final class MakeDomainCommand extends GeneratorCommand
     {
         return [
             ['force', 'f', InputOption::VALUE_NONE, 'Overwrite existing files.'],
+            ['uuid', null, InputOption::VALUE_NONE, 'Use string UUIDs instead of int increments for IDs.'],
         ];
     }
 
@@ -71,7 +73,11 @@ final class MakeDomainCommand extends GeneratorCommand
 
         $content = $this->buildClassFromStub(
             base_path('stubs/domain/entity.stub'),
-            ['{{ namespace }}' => $namespace, '{{ class }}' => $entity]
+            [
+                '{{ namespace }}' => $namespace,
+                '{{ class }}'     => $entity,
+                '{{ idType }}'    => $this->option('uuid') ? 'string' : 'int',
+            ]
         );
 
         $this->writeFile($path, $content, sprintf('Domain/Entity [%s]', $entity));
@@ -85,7 +91,14 @@ final class MakeDomainCommand extends GeneratorCommand
 
         $content = $this->buildClassFromStub(
             base_path('stubs/domain/repository-interface.stub'),
-            ['{{ namespace }}' => $namespace, '{{ class }}' => $class, '{{ domain }}' => $domain, '{{ entity }}' => $entity]
+            [
+                '{{ namespace }}' => $namespace,
+                '{{ class }}'     => $class,
+                '{{ domain }}'    => $domain,
+                '{{ entity }}'    => $entity,
+                '{{ idType }}'    => $this->option('uuid') ? 'string' : 'int',
+                '{{ entityVar }}' => Str::camel($entity),
+            ]
         );
 
         $this->writeFile($path, $content, sprintf('Domain/RepositoryInterface [%s]', $class));

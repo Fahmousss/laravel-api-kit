@@ -129,6 +129,8 @@ final class MakeUseCaseCommand extends GeneratorCommand
             $handlerContent,
             $handlerClass
         );
+
+        $this->registerUseCaseInServiceProvider($domain, $name, $dtoClass, $handlerClass, $suffix);
     }
 
     /**
@@ -145,13 +147,74 @@ final class MakeUseCaseCommand extends GeneratorCommand
     {
         $this->makeDirectory($path);
 
-        if ($this->files->exists($path) && ! $this->option('force')) {
-            $this->components->warn(sprintf('[%s] already exists. Skipping.', $label));
+        $this->files->put($path, $content);
+        $this->components->info(sprintf('Created [%s]', $label));
+    }
+
+    private function registerUseCaseInServiceProvider(string $domain, string $name, string $dtoClass, string $handlerClass, string $type): void
+    {
+        $providerPath = app_path(sprintf('Infrastructure/%s/Providers/%sServiceProvider.php', $domain, $domain));
+
+        if (! $this->files->exists($providerPath)) {
+            $this->components->warn(sprintf('Service Provider not found at [%s]. Cannot automatically register use-case.', $providerPath));
 
             return;
         }
 
-        $this->files->put($path, $content);
-        $this->components->info(sprintf('Created [%s]', $label));
+        $content = $this->files->get($providerPath);
+        $folder  = $type === 'Command' ? 'Commands' : 'Queries';
+
+        $baseNamespace = sprintf('App\\Application\\Features\\%s\\%s\\%s\\', $domain, $folder, $name);
+        $useDto        = 'use '.$baseNamespace.$dtoClass.';';
+        $useHandler    = 'use '.$baseNamespace.$handlerClass.';';
+
+        // 1. Add Use Statements
+        if (! str_contains($content, $useDto)) {
+            // Find the last use statement block
+            $pattern = '/^use\s+[^;]+;/m';
+            if (preg_match_all($pattern, $content, $matches, PREG_OFFSET_CAPTURE)) {
+                $lastMatch = end($matches[0]);
+                $insertPos = $lastMatch[1] + mb_strlen($lastMatch[0]);
+
+                $insertion = "\n".$useDto."\n".$useHandler;
+                $content   = substr_replace($content, $insertion, $insertPos, 0);
+            } else {
+                // Fallback to inserting after the namespace declaration
+                $namespacePattern = '/^namespace\s+.*Providers;$/m';
+                if (preg_match($namespacePattern, $content, $matches, PREG_OFFSET_CAPTURE)) {
+                    $insertPos = $matches[0][1] + mb_strlen($matches[0][0]);
+                    $insertion = "\n\n".$useDto."\n".$useHandler;
+                    $content   = substr_replace($content, $insertion, $insertPos, 0);
+                }
+            }
+        }
+
+        // 2. Add Registration Line
+        $busVar       = '$bus';
+        $registerLine = sprintf(
+            '            %s->register(%s::class, %s::class);',
+            $busVar,
+            $dtoClass,
+            $handlerClass
+        );
+
+        if (! str_contains($content, $registerLine)) {
+            $busInterface = $type === 'Command' ? 'CommandBusInterface' : 'QueryBusInterface';
+            $pattern      = '/\$this->app->singleton\(function \(\): '.$busInterface.' \{.*?return \$bus;/s';
+
+            if (preg_match($pattern, $content, $matches, PREG_OFFSET_CAPTURE)) {
+                $block       = $matches[0][0];
+                $blockOffset = $matches[0][1];
+
+                $returnPos = mb_strpos($block, 'return $bus;');
+                if ($returnPos !== false) {
+                    $insertPos = $blockOffset + $returnPos;
+                    $content   = substr_replace($content, $registerLine."\n\n", $insertPos, 0);
+                }
+            }
+        }
+
+        $this->files->put($providerPath, $content);
+        $this->components->info(sprintf('Registered [%s] in [%sServiceProvider]', $dtoClass, $domain));
     }
 }

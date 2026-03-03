@@ -72,7 +72,7 @@ final class MakeInfrastructureCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        return '';
+        return base_path('stubs/domain/provider.stub');
     }
 
     /**
@@ -120,25 +120,14 @@ final class MakeInfrastructureCommand extends GeneratorCommand
             mkdir($dir, 0755, true);
         }
 
-        $stub = <<<PHP
-<?php
+        $stub_content = file_get_contents($this->getStub());
+        $stub_content = str_replace(
+            ['{{ domain }}', '{{ providerName }}'],
+            [$domain, $providerName],
+            $stub_content
+        );
 
-declare(strict_types=1);
-
-namespace App\Infrastructure\\{$domain}\Providers;
-
-use Illuminate\Support\ServiceProvider;
-
-final class {$providerName} extends ServiceProvider
-{
-    public function register(): void
-    {
-        // Bind repositories
-    }
-}
-
-PHP;
-        file_put_contents($path, $stub);
+        file_put_contents($path, $stub_content);
         $this->info(sprintf('Created Provider [%s]', $path));
     }
 

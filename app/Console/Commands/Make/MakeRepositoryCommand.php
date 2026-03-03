@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Console\Commands\Make;
 
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -36,8 +37,8 @@ final class MakeRepositoryCommand extends GeneratorCommand
 
         $stub    = $this->files->get($this->getStub());
         $content = str_replace(
-            ['{{ namespace }}', '{{ class }}', '{{ domain }}', '{{ entity }}'],
-            [$namespace, $class, $domain, $entity],
+            ['{{ namespace }}', '{{ class }}', '{{ domain }}', '{{ entity }}', '{{ idType }}', '{{ entityVar }}'],
+            [$namespace, $class, $domain, $entity, $this->option('uuid') ? 'string' : 'int', Str::camel($entity)],
             $stub
         );
 
@@ -75,6 +76,7 @@ final class MakeRepositoryCommand extends GeneratorCommand
     {
         return [
             ['force', 'f', InputOption::VALUE_NONE, 'Overwrite existing Repository.'],
+            ['uuid', null, InputOption::VALUE_NONE, 'Use string UUIDs instead of int increments for IDs.'],
         ];
     }
 }
