@@ -12,25 +12,27 @@ trait ApiResponse
     protected function success(
         mixed $data = null,
         string $message = 'Success',
-        int $code = Response::HTTP_OK
+        int $code = Response::HTTP_OK,
+        array $headers = []
     ): JsonResponse {
         return response()->json([
             'success' => true,
             'message' => $message,
             'data'    => $data,
-        ], $code);
+        ], $code, $headers);
     }
 
     protected function created(
         mixed $data = null,
-        string $message = 'Resource created successfully'
+        string $message = 'Resource created successfully',
+        array $headers = []
     ): JsonResponse {
-        return $this->success($data, $message, Response::HTTP_CREATED);
+        return $this->success($data, $message, Response::HTTP_CREATED, $headers);
     }
 
-    protected function noContent(): JsonResponse
+    protected function noContent(array $headers = []): JsonResponse
     {
-        return response()->json(null, Response::HTTP_NO_CONTENT);
+        return response()->json(null, Response::HTTP_NO_CONTENT, $headers);
     }
 
     /**
@@ -39,7 +41,8 @@ trait ApiResponse
     protected function error(
         string $message = 'Error',
         int $code = Response::HTTP_BAD_REQUEST,
-        array $errors = []
+        array $errors = [],
+        array $headers = []
     ): JsonResponse {
         $response = [
             'success' => false,
@@ -50,29 +53,29 @@ trait ApiResponse
             $response['errors'] = $errors;
         }
 
-        return response()->json($response, $code);
+        return response()->json($response, $code, $headers);
     }
 
-    protected function notFound(string $message = 'Resource not found'): JsonResponse
+    protected function notFound(string $message = 'Resource not found', array $headers = []): JsonResponse
     {
-        return $this->error($message, Response::HTTP_NOT_FOUND);
+        return $this->error($message, Response::HTTP_NOT_FOUND, [], $headers);
     }
 
-    protected function unauthorized(string $message = 'Unauthorized'): JsonResponse
+    protected function unauthorized(string $message = 'Unauthorized', array $headers = []): JsonResponse
     {
-        return $this->error($message, Response::HTTP_UNAUTHORIZED);
+        return $this->error($message, Response::HTTP_UNAUTHORIZED, [], $headers);
     }
 
-    protected function forbidden(string $message = 'Forbidden'): JsonResponse
+    protected function forbidden(string $message = 'Forbidden', array $headers = []): JsonResponse
     {
-        return $this->error($message, Response::HTTP_FORBIDDEN);
+        return $this->error($message, Response::HTTP_FORBIDDEN, [], $headers);
     }
 
     /**
      * @param array<string, mixed> $errors
      */
-    protected function validationError(array $errors, string $message = 'Validation failed'): JsonResponse
+    protected function validationError(array $errors, string $message = 'Validation failed', array $headers = []): JsonResponse
     {
-        return $this->error($message, Response::HTTP_UNPROCESSABLE_ENTITY, $errors);
+        return $this->error($message, Response::HTTP_UNPROCESSABLE_ENTITY, $errors, $headers);
     }
 }
