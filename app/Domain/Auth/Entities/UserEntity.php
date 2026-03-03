@@ -14,6 +14,9 @@ final readonly class UserEntity
         public string $name,
         public string $email,
         public string $password,
+        public ?string $emailVerifiedAt = null,
+        public ?string $createdAt = null,
+        public ?string $updatedAt = null,
     ) {}
 
     public static function create(string $name, string $email, string $password): self
@@ -23,6 +26,9 @@ final readonly class UserEntity
             name: $name,
             email: $email,
             password: $password,
+            emailVerifiedAt: null,
+            createdAt: now()->toIso8601String(),
+            updatedAt: now()->toIso8601String(),
         );
     }
 }

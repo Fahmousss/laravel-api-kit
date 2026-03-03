@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace App\Application\Features\Auth\Queries\LoginUser;
 
+use App\Application\Auth\Common\Interfaces\AuthTokenServiceInterface;
 use App\Application\Features\Auth\DTOs\UserDTO;
 use App\Domain\Auth\Entities\UserEntity;
 use App\Domain\Auth\Repositories\UserRepositoryInterface;
-use App\Infrastructure\Auth\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 final readonly class LoginUserQueryHandler
 {
     public function __construct(
         private UserRepositoryInterface $userRepository,
+        private AuthTokenServiceInterface $tokenService,
     ) {}
 
     public function handle(LoginUserQuery $query): ?UserDTO
@@ -28,17 +29,15 @@ final readonly class LoginUserQueryHandler
             return null;
         }
 
-        /** @var User $model */
-        $model = User::query()->findOrFail($entity->id);
-        $token = $model->createToken('auth-token')->plainTextToken;
+        $token = $this->tokenService->generateForUser($entity->id);
 
         return new UserDTO(
             id: $entity->id,
             name: $entity->name,
             email: $entity->email,
-            emailVerifiedAt: $model->email_verified_at?->toIso8601String(),
-            createdAt: $model->created_at?->toIso8601String() ?? now()->toIso8601String(),
-            updatedAt: $model->updated_at?->toIso8601String() ?? now()->toIso8601String(),
+            emailVerifiedAt: $entity->emailVerifiedAt,
+            createdAt: $entity->createdAt ?? now()->toIso8601String(),
+            updatedAt: $entity->updatedAt ?? now()->toIso8601String(),
             token: $token,
         );
     }

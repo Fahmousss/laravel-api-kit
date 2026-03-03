@@ -104,20 +104,21 @@ curl -X POST http://localhost:8080/api/v1/register \
 ```
 
 **Response:**
+
 ```json
 {
-  "success": true,
-  "message": "User registered successfully. Please check your email to verify your account.",
-  "data": {
-    "user": {
-      "id": 1,
-      "name": "John Doe",
-      "email": "john@example.com",
-      "email_verified_at": null,
-      "created_at": "2025-01-15T10:30:00+00:00"
-    },
-    "token": "1|abc123..."
-  }
+    "success": true,
+    "message": "User registered successfully. Please check your email to verify your account.",
+    "data": {
+        "user": {
+            "id": 1,
+            "name": "John Doe",
+            "email": "john@example.com",
+            "email_verified_at": null,
+            "created_at": "2025-01-15T10:30:00+00:00"
+        },
+        "token": "1|abc123..."
+    }
 }
 ```
 
@@ -156,6 +157,7 @@ curl -X POST http://localhost:8080/api/v1/logout \
 After registration, users receive a verification email. The kit integrates with Laravel's `MustVerifyEmail` contract.
 
 **Verify Email (via signed URL from email):**
+
 ```bash
 curl -X POST "http://localhost:8080/api/v1/email/verify/{id}/{hash}?signature=..." \
   -H "Authorization: Bearer 1|abc123..." \
@@ -163,6 +165,7 @@ curl -X POST "http://localhost:8080/api/v1/email/verify/{id}/{hash}?signature=..
 ```
 
 **Resend Verification Email:**
+
 ```bash
 curl -X POST http://localhost:8080/api/v1/email/resend \
   -H "Authorization: Bearer 1|abc123..." \
@@ -172,17 +175,19 @@ curl -X POST http://localhost:8080/api/v1/email/resend \
 ```
 
 **Response:**
+
 ```json
 {
-  "success": true,
-  "message": "Verification email sent successfully",
-  "data": null
+    "success": true,
+    "message": "Verification email sent successfully",
+    "data": null
 }
 ```
 
 ### Password Reset
 
 **Request Password Reset Link:**
+
 ```bash
 curl -X POST http://localhost:8080/api/v1/forgot-password \
   -H "Content-Type: application/json" \
@@ -191,15 +196,17 @@ curl -X POST http://localhost:8080/api/v1/forgot-password \
 ```
 
 **Response:**
+
 ```json
 {
-  "success": true,
-  "message": "Password reset link sent to your email",
-  "data": null
+    "success": true,
+    "message": "Password reset link sent to your email",
+    "data": null
 }
 ```
 
 **Reset Password (with token from email):**
+
 ```bash
 curl -X POST http://localhost:8080/api/v1/reset-password \
   -H "Content-Type: application/json" \
@@ -213,11 +220,12 @@ curl -X POST http://localhost:8080/api/v1/reset-password \
 ```
 
 **Response:**
+
 ```json
 {
-  "success": true,
-  "message": "Password reset successfully",
-  "data": null
+    "success": true,
+    "message": "Password reset successfully",
+    "data": null
 }
 ```
 
@@ -227,16 +235,16 @@ curl -X POST http://localhost:8080/api/v1/reset-password \
 
 ### Version 1 (`/api/v1`)
 
-| Method | Endpoint                     | Auth | Description                   | Rate Limit |
-|--------|------------------------------|------|-------------------------------|------------|
-| POST   | /register                    | No   | Register new user             | 5/min      |
-| POST   | /login                       | No   | Get authentication token      | 5/min      |
-| POST   | /logout                      | Yes  | Revoke current token          | 120/min    |
-| GET    | /me                          | Yes  | Get current user profile      | 120/min    |
-| POST   | /email/verify/{id}/{hash}    | Yes  | Verify email address          | 120/min    |
-| POST   | /email/resend                | Yes  | Resend verification email     | 6/min      |
-| POST   | /forgot-password             | No   | Request password reset link   | 6/min      |
-| POST   | /reset-password              | No   | Reset password with token     | 6/min      |
+| Method | Endpoint                  | Auth | Description                 | Rate Limit |
+| ------ | ------------------------- | ---- | --------------------------- | ---------- |
+| POST   | /register                 | No   | Register new user           | 5/min      |
+| POST   | /login                    | No   | Get authentication token    | 5/min      |
+| POST   | /logout                   | Yes  | Revoke current token        | 120/min    |
+| GET    | /me                       | Yes  | Get current user profile    | 120/min    |
+| POST   | /email/verify/{id}/{hash} | Yes  | Verify email address        | 120/min    |
+| POST   | /email/resend             | Yes  | Resend verification email   | 6/min      |
+| POST   | /forgot-password          | No   | Request password reset link | 6/min      |
+| POST   | /reset-password           | No   | Reset password with token   | 6/min      |
 
 ## Response Format
 
@@ -246,11 +254,11 @@ All API responses follow a consistent format:
 
 ```json
 {
-  "success": true,
-  "message": "Operation successful",
-  "data": {
-    // Response data here
-  }
+    "success": true,
+    "message": "Operation successful",
+    "data": {
+        // Response data here
+    }
 }
 ```
 
@@ -258,55 +266,40 @@ All API responses follow a consistent format:
 
 ```json
 {
-  "success": false,
-  "message": "Error description",
-  "errors": {
-    "field": ["Validation error message"]
-  }
+    "success": false,
+    "message": "Error description",
+    "errors": {
+        "field": ["Validation error message"]
+    }
 }
 ```
 
 ### HTTP Status Codes
 
-| Code | Description |
-|------|-------------|
-| 200  | Success |
-| 201  | Resource created |
-| 204  | No content |
-| 400  | Bad request |
-| 401  | Unauthorized |
-| 403  | Forbidden |
-| 404  | Not found |
-| 422  | Validation error |
+| Code | Description       |
+| ---- | ----------------- |
+| 200  | Success           |
+| 201  | Resource created  |
+| 204  | No content        |
+| 400  | Bad request       |
+| 401  | Unauthorized      |
+| 403  | Forbidden         |
+| 404  | Not found         |
+| 422  | Validation error  |
 | 429  | Too many requests |
-| 500  | Server error |
+| 500  | Server error      |
 
 ## Project Structure
 
 ```
 laravel-api-kit/
 ├── app/
-│   ├── Actions/                    # Single-purpose action classes
-│   ├── DTOs/                       # Data Transfer Objects (spatie/laravel-data)
-│   ├── Http/
-│   │   ├── Controllers/
-│   │   │   └── Api/
-│   │   │       ├── ApiController.php      # Base controller with ApiResponse
-│   │   │       └── V1/                    # Version 1 controllers
-│   │   │           └── AuthController.php
-│   │   ├── Requests/
-│   │   │   └── Api/V1/                    # Form Requests per version
-│   │   │       ├── LoginRequest.php
-│   │   │       └── RegisterRequest.php
-│   │   └── Resources/                     # API Resources
-│   │       └── UserResource.php
-│   ├── Models/
-│   │   └── User.php                       # With HasApiTokens trait
-│   ├── Providers/
-│   │   └── AppServiceProvider.php         # Rate limiting config
-│   ├── Services/                          # Business logic services
-│   └── Traits/
-│       └── ApiResponse.php                # Standardized responses
+│   ├── Application/                # Application logic (Use Cases/CQRS, Bus, DTOs)
+│   ├── Console/                    # Artisan commands (including custom Make commands)
+│   ├── Domain/                     # Core business logic (Entities, Value Objects, Repository Interfaces)
+│   ├── Infrastructure/             # External boundaries (Persistence, Third-party APIs, Service Providers)
+│   ├── Presentation/               # HTTP Entry points (Controllers, Requests, Resources)
+│   └── Providers/                  # Global Service Providers
 ├── config/
 │   ├── apiroute.php                       # API versioning config
 │   ├── cors.php                           # CORS settings
@@ -401,6 +394,7 @@ return UserResource::collection($users);
 ```
 
 **Request examples:**
+
 ```
 GET /api/v1/users?filter[name]=john
 GET /api/v1/users?sort=-created_at
@@ -437,11 +431,11 @@ public function store(UserData $data): JsonResponse
 
 Configured in `app/Providers/AppServiceProvider.php`:
 
-| Limiter | Limit | Use Case |
-|---------|-------|----------|
-| `api` | 60/min | Default for all API routes |
-| `auth` | 5/min | Login/register (brute force protection) |
-| `authenticated` | 120/min | Logged-in users |
+| Limiter         | Limit   | Use Case                                |
+| --------------- | ------- | --------------------------------------- |
+| `api`           | 60/min  | Default for all API routes              |
+| `auth`          | 5/min   | Login/register (brute force protection) |
+| `authenticated` | 120/min | Logged-in users                         |
 
 ### Applying Rate Limiters
 
@@ -476,16 +470,19 @@ The following packages are **suggested** (not required) and can be installed ind
 [grazulex/laravel-api-idempotency](https://github.com/Grazulex/laravel-api-idempotency) provides RFC-compliant idempotency for your API endpoints. It prevents duplicate operations when clients retry requests (critical for payments, order creation, etc.).
 
 **Install:**
+
 ```bash
 composer require grazulex/laravel-api-idempotency
 ```
 
 **Publish config (optional):**
+
 ```bash
 php artisan vendor:publish --tag="api-idempotency-config"
 ```
 
 **Usage — apply the middleware to mutation routes:**
+
 ```php
 // routes/api/v1.php
 Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function () {
@@ -498,6 +495,7 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
 ```
 
 **Client-side — include the `Idempotency-Key` header:**
+
 ```bash
 curl -X POST http://localhost:8080/api/v1/orders \
   -H "Authorization: Bearer 1|abc123..." \
@@ -507,6 +505,7 @@ curl -X POST http://localhost:8080/api/v1/orders \
 ```
 
 > **Attention:**
+>
 > - Only apply the `idempotent` middleware to mutation routes (POST, PUT, PATCH). GET requests are naturally idempotent.
 > - The default storage driver is `cache`. For production with multiple servers, use the `redis` or `database` driver.
 > - Keys are scoped per user by default. Two different users can use the same key without conflict.
@@ -518,16 +517,19 @@ curl -X POST http://localhost:8080/api/v1/orders \
 [grazulex/laravel-api-throttle-smart](https://github.com/Grazulex/laravel-api-throttle-smart) provides plan-aware rate limiting with quotas, multiple algorithms (fixed window, sliding window, token bucket), and multi-tenant support. Ideal for SaaS APIs with subscription tiers.
 
 **Install:**
+
 ```bash
 composer require grazulex/laravel-api-throttle-smart
 ```
 
 **Publish config:**
+
 ```bash
 php artisan vendor:publish --tag="throttle-smart-config"
 ```
 
 **Usage — apply to routes where plan-based limiting is needed:**
+
 ```php
 // routes/api/v1.php
 Route::middleware(['auth:sanctum', 'throttle.smart'])->group(function () {
@@ -536,6 +538,7 @@ Route::middleware(['auth:sanctum', 'throttle.smart'])->group(function () {
 ```
 
 > **Attention:**
+>
 > - This package **coexists** with Laravel's built-in `throttle:` middleware. You do not need to remove the existing rate limiters.
 > - If you want to **replace** the native throttle on specific routes, swap `throttle:authenticated` with `throttle.smart` on those routes only.
 > - Do **not** apply both `throttle:authenticated` and `throttle.smart` on the same route group — choose one per group to avoid double rate limiting.
@@ -550,11 +553,11 @@ The kit includes three production-ready middleware patterns that you can apply t
 
 ### Available Middleware
 
-| Alias | Class | Description |
-|-------|-------|-------------|
-| `force.json` | `ForceJsonResponse` | Ensures all responses are JSON formatted |
-| `log.api` | `LogApiRequests` | Logs API requests with timing information |
-| `verified` | `EnsureEmailVerified` | Requires verified email to access route |
+| Alias        | Class                 | Description                               |
+| ------------ | --------------------- | ----------------------------------------- |
+| `force.json` | `ForceJsonResponse`   | Ensures all responses are JSON formatted  |
+| `log.api`    | `LogApiRequests`      | Logs API requests with timing information |
+| `verified`   | `EnsureEmailVerified` | Requires verified email to access route   |
 
 ### ForceJsonResponse
 
@@ -573,6 +576,7 @@ Logs API requests with detailed information and adds `X-Response-Time` header to
 **Logged data:** timestamp, method, URL, IP, user ID, status code, duration (ms), user agent.
 
 **Enable logging via environment:**
+
 ```env
 APP_LOG_API_REQUESTS=true
 ```
@@ -594,10 +598,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 ```
 
 **Response when email not verified:**
+
 ```json
 {
-  "success": false,
-  "message": "Your email address is not verified. Please verify your email to continue."
+    "success": false,
+    "message": "Your email address is not verified. Please verify your email to continue."
 }
 ```
 
@@ -658,11 +663,11 @@ This kit includes strict code quality tools configured following [nunomaduro/lar
 
 ### Tools
 
-| Tool | Purpose | Config |
-|------|---------|--------|
+| Tool                                                                               | Purpose                     | Config         |
+| ---------------------------------------------------------------------------------- | --------------------------- | -------------- |
 | [PHPStan](https://phpstan.org/) + [Larastan](https://github.com/larastan/larastan) | Static analysis (level max) | `phpstan.neon` |
-| [Rector](https://getrector.com/) | Automated refactoring | `rector.php` |
-| [Pint](https://laravel.com/docs/pint) | Code style (strict rules) | `pint.json` |
+| [Rector](https://getrector.com/)                                                   | Automated refactoring       | `rector.php`   |
+| [Pint](https://laravel.com/docs/pint)                                              | Code style (strict rules)   | `pint.json`    |
 
 ### Composer Scripts
 
@@ -718,6 +723,27 @@ docker compose run --rm app php artisan ide-helper:models -N
 
 # Export OpenAPI spec to file
 docker compose run --rm app php artisan scramble:export
+```
+
+### DDD Scaffolding Commands
+
+Use the custom commands developed for this architecture to scaffold classes in their appropriate layers:
+
+```bash
+# Scaffold a new domain (Entity, RepositoryInterface, Exception)
+php artisan make:domain <domain> <entity>
+
+# Scaffold an Infrastructure layer (Model, Migration, Factory, Repository, Provider Binding)
+php artisan make:infrastructure <domain> <entity>
+
+# Scaffold an Eloquent repository
+php artisan make:repository <domain> <entity>
+
+# Scaffold a CQRS use-case (DTO + Handler)
+php artisan make:use-case <domain> <name> [--command|--query]
+
+# Scaffold a typed DTO in the Application layer
+php artisan make:data <domain> <name>
 ```
 
 ## Environment Configuration
@@ -787,91 +813,77 @@ COPY docker/php/php.ini /usr/local/etc/php/conf.d/
 
 ## Extending the Kit
 
-### Adding a New Resource (CRUD Example)
+### Adding a New Domain Component (CRUD Example)
 
-1. **Create Model & Migration:**
+Using the custom DDD commands, building out a feature like `Blog` with a `Post` entity ensures your code stays organized out-of-the-box.
+
+1. **Scaffold the Domain Layer:**
+
 ```bash
-docker compose run --rm app php artisan make:model Post -m
+docker compose run --rm app php artisan make:domain Blog Post
+# Generates App\Domain\Blog\Entities\PostEntity
+# Generates App\Domain\Blog\Repositories\PostRepositoryInterface
+# Generates App\Domain\Blog\Exceptions\PostNotFoundException
 ```
 
-2. **Create Controller:**
-```php
-// app/Http/Controllers/Api/V1/PostController.php
-namespace App\Http\Controllers\Api\V1;
+2. **Scaffold the Infrastructure Layer:**
 
-use App\Http\Controllers\Api\ApiController;
-use App\Http\Resources\PostResource;
-use App\Models\Post;
-use Spatie\QueryBuilder\QueryBuilder;
+```bash
+docker compose run --rm app php artisan make:infrastructure Blog Post
+# Generates App\Infrastructure\Blog\Models\Post
+# Generates App\Infrastructure\Blog\Persistence\EloquentPostRepository
+# Generates Database\Factories\PostFactory
+# Generates Database\Migrations\..._create_posts_table.php
+# Auto-registers BlogServiceProvider and binds PostRepositoryInterface
+```
+
+3. **Scaffold Use Cases (Application Layer):**
+
+```bash
+docker compose run --rm app php artisan make:use-case Blog CreatePost --command
+# Generates App\Application\Features\Blog\Commands\CreatePost\CreatePostCommand
+# Generates App\Application\Features\Blog\Commands\CreatePost\CreatePostCommandHandler
+```
+
+_(Optionally use `make:data Blog CreatePostData` to create DTOs separately, if prefered)._
+
+4. **Create Controller & Form Request (Presentation Layer):**
+
+```bash
+docker compose run --rm app php artisan make:controller Presentation/Controllers/Api/V1/Blog/PostController
+docker compose run --rm app php artisan make:request Presentation/Requests/Api/V1/Blog/CreatePostRequest
+```
+
+5. **Wire the Presentation to the Application Layer:**
+
+```php
+// app/Presentation/Controllers/Api/V1/Blog/PostController.php
+namespace App\Presentation\Controllers\Api\V1\Blog;
+
+use App\Application\Features\Blog\Commands\CreatePost\CreatePostCommand;
+use App\Presentation\Controllers\Api\ApiController;
+use App\Presentation\Requests\Api\V1\Blog\CreatePostRequest;
+use Illuminate\Http\JsonResponse;
 
 class PostController extends ApiController
 {
-    public function index()
+    public function store(CreatePostRequest $request): JsonResponse
     {
-        $posts = QueryBuilder::for(Post::class)
-            ->allowedFilters(['title', 'status'])
-            ->allowedSorts(['title', 'created_at'])
-            ->allowedIncludes(['author', 'comments'])
-            ->paginate();
+        $command = new CreatePostCommand(
+            title: $request->validated('title'),
+            content: $request->validated('content'),
+        );
 
-        return $this->success(PostResource::collection($posts));
-    }
+        $post = $this->commandBus->dispatch($command);
 
-    public function show(Post $post)
-    {
-        return $this->success(new PostResource($post));
-    }
-
-    // ... store, update, destroy methods
-}
-```
-
-3. **Create Resource:**
-```php
-// app/Http/Resources/PostResource.php
-namespace App\Http\Resources;
-
-use Illuminate\Http\Resources\Json\JsonResource;
-
-class PostResource extends JsonResource
-{
-    public function toArray($request): array
-    {
-        return [
-            'id' => $this->id,
-            'title' => $this->title,
-            'content' => $this->content,
-            'author' => new UserResource($this->whenLoaded('author')),
-            'created_at' => $this->created_at?->toIso8601String(),
-        ];
+        return $this->created(['id' => $post->id, 'title' => $post->title]);
     }
 }
 ```
 
-4. **Add Routes:**
-```php
-// routes/api/v1.php
-Route::middleware('auth:sanctum')->group(function () {
-    // ... existing routes
-    Route::apiResource('posts', PostController::class);
-});
-```
-
-5. **Create Tests:**
-```php
-// tests/Feature/Api/V1/PostTest.php
-uses(RefreshDatabase::class);
-
-it('lists posts', function () {
-    $user = User::factory()->create();
-    Post::factory()->count(3)->create();
-
-    $this->actingAs($user)
-        ->getJson('/api/v1/posts')
-        ->assertStatus(200)
-        ->assertJsonCount(3, 'data');
-});
-```
+6. **Add Routes & Tests:**
+   Define API routes in `routes/api/v1.php` mapping to your `Presentation` controllers.
+   Use Pest to build out feature tests testing through the HTTP layer to the Infrastructure.
 
 ## Contributing
 

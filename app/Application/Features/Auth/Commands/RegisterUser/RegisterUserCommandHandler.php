@@ -4,16 +4,19 @@ declare(strict_types=1);
 
 namespace App\Application\Features\Auth\Commands\RegisterUser;
 
+use App\Application\Auth\Common\Interfaces\AuthTokenServiceInterface;
+use App\Application\Auth\Common\Interfaces\VerifyEmailNotificationServiceInterface;
 use App\Application\Features\Auth\DTOs\UserDTO;
 use App\Domain\Auth\Entities\UserEntity;
 use App\Domain\Auth\Repositories\UserRepositoryInterface;
-use App\Infrastructure\Auth\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 final readonly class RegisterUserCommandHandler
 {
     public function __construct(
         private UserRepositoryInterface $userRepository,
+        private VerifyEmailNotificationServiceInterface $notificationService,
+        private AuthTokenServiceInterface $tokenService,
     ) {}
 
     public function handle(RegisterUserCommand $command): UserDTO
@@ -26,19 +29,17 @@ final readonly class RegisterUserCommandHandler
 
         $savedEntity = $this->userRepository->save($entity);
 
-        /** @var User $model */
-        $model = User::query()->findOrFail($savedEntity->id);
-        $model->sendEmailVerificationNotification();
+        $this->notificationService->sendVerificationEmail($savedEntity->id);
 
-        $token = $model->createToken('auth-token')->plainTextToken;
+        $token = $this->tokenService->generateForUser($savedEntity->id);
 
         return new UserDTO(
             id: $savedEntity->id,
             name: $savedEntity->name,
             email: $savedEntity->email,
-            emailVerifiedAt: null,
-            createdAt: $model->created_at?->toIso8601String() ?? now()->toIso8601String(),
-            updatedAt: $model->updated_at?->toIso8601String() ?? now()->toIso8601String(),
+            emailVerifiedAt: $savedEntity->emailVerifiedAt,
+            createdAt: $savedEntity->createdAt ?? now()->toIso8601String(),
+            updatedAt: $savedEntity->updatedAt ?? now()->toIso8601String(),
             token: $token,
         );
     }
