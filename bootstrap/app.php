@@ -22,6 +22,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'force.json' => ForceJsonResponse::class,
             'log.api'    => LogApiRequests::class,
             'verified'   => EnsureEmailVerified::class,
+            'role' => \Spatie\Permission\Middleware\RoleMiddleware::class
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

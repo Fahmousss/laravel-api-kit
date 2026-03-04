@@ -26,6 +26,7 @@ final class RegisterController extends ApiController
             name: $request->name,
             email: $request->email,
             password: $request->password,
+            role: $request->role,
         ));
 
         $user = User::query()->findOrFail($result->id);

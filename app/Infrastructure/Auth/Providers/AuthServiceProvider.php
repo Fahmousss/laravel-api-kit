@@ -31,19 +31,11 @@ final class AuthServiceProvider extends ServiceProvider
         $this->app->bind(AuthTokenServiceInterface::class, SanctumTokenService::class);
         $this->app->bind(VerifyEmailNotificationServiceInterface::class, VerifyEmailNotificationService::class);
 
-        // Bind buses as singletons
-        $this->app->singleton(function (): CommandBusInterface {
-            $bus = new CommandBus($this->app);
-            $bus->register(RegisterUserCommand::class, RegisterUserCommandHandler::class);
+    }
 
-            return $bus;
-        });
-
-        $this->app->singleton(function (): QueryBusInterface {
-            $bus = new QueryBus($this->app);
-            $bus->register(LoginUserQuery::class, LoginUserQueryHandler::class);
-
-            return $bus;
-        });
+    public function boot(CommandBusInterface $commandBus, QueryBusInterface $queryBus): void
+    {
+        $commandBus->register(RegisterUserCommand::class, RegisterUserCommandHandler::class);
+        $queryBus->register(LoginUserQuery::class, LoginUserQueryHandler::class);
     }
 }

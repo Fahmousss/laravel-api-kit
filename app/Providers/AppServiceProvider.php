@@ -19,7 +19,8 @@ final class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(\App\Application\Contracts\CommandBusInterface::class, \App\Application\Bus\CommandBus::class);
+        $this->app->singleton(\App\Application\Contracts\QueryBusInterface::class, \App\Application\Bus\QueryBus::class);
     }
 
     /**

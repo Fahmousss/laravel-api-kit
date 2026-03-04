@@ -17,9 +17,10 @@ final readonly class UserEntity
         public ?string $emailVerifiedAt = null,
         public ?string $createdAt = null,
         public ?string $updatedAt = null,
+        public ?string $role = null,
     ) {}
 
-    public static function create(string $name, string $email, string $password): self
+    public static function create(string $name, string $email, string $password, string $role): self
     {
         return new self(
             id: null,
@@ -29,6 +30,7 @@ final readonly class UserEntity
             emailVerifiedAt: null,
             createdAt: now()->toIso8601String(),
             updatedAt: now()->toIso8601String(),
+            role: $role,
         );
     }
 }

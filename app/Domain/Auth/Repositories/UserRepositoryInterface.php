@@ -13,4 +13,6 @@ interface UserRepositoryInterface
     public function findById(int $id): ?UserEntity;
 
     public function save(UserEntity $user): UserEntity;
+
+    public function assignRole(int $userId, string $role): void;
 }

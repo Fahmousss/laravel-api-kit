@@ -25,9 +25,12 @@ final readonly class RegisterUserCommandHandler
             name: $command->name,
             email: $command->email,
             password: Hash::make($command->password),
+            role: $command->role,
         );
 
         $savedEntity = $this->userRepository->save($entity);
+
+        $this->userRepository->assignRole($savedEntity->id, $command->role);
 
         $this->notificationService->sendVerificationEmail($savedEntity->id);
 
@@ -41,6 +44,7 @@ final readonly class RegisterUserCommandHandler
             createdAt: $savedEntity->createdAt ?? now()->toIso8601String(),
             updatedAt: $savedEntity->updatedAt ?? now()->toIso8601String(),
             token: $token,
+            role: $command->role,
         );
     }
 }

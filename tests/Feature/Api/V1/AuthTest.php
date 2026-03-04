@@ -3,22 +3,29 @@
 declare(strict_types=1);
 
 use App\Infrastructure\Auth\Models\User;
+use Database\Seeders\RoleAndPermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\getJson;
 use function Pest\Laravel\postJson;
+use function Pest\Laravel\seed;
 use function Pest\Laravel\withHeader;
 
 uses(RefreshDatabase::class);
 
 describe('Registration', function (): void {
+    beforeEach(function (): void {
+        seed(RoleAndPermissionSeeder::class);
+    });
+
     it('registers a new user successfully', function (): void {
         $response = postJson('/api/v1/register', [
             'name'                  => 'Test User',
             'email'                 => 'test@example.com',
             'password'              => 'password123',
             'password_confirmation' => 'password123',
+            'role'                  => 'cadre',
         ]);
 
         $response->assertStatus(201)
@@ -26,7 +33,7 @@ describe('Registration', function (): void {
                 'success',
                 'message',
                 'data' => [
-                    'user' => ['id', 'name', 'email'],
+                    'user' => ['id', 'name', 'email', 'roles'],
                     'token',
                 ],
             ])
@@ -38,6 +45,43 @@ describe('Registration', function (): void {
         assertDatabaseHas('users', [
             'email' => 'test@example.com',
         ]);
+    });
+
+    it('assigns the given role on registration', function (): void {
+        postJson('/api/v1/register', [
+            'name'                  => 'Cadre User',
+            'email'                 => 'cadre@example.com',
+            'password'              => 'password123',
+            'password_confirmation' => 'password123',
+            'role'                  => 'cadre',
+        ]);
+
+        $user = User::query()->where('email', 'cadre@example.com')->firstOrFail();
+
+        expect($user->hasRole('cadre'))->toBeTrue();
+    });
+
+    it('fails registration without a role', function (): void {
+        $response = postJson('/api/v1/register', [
+            'name'                  => 'No Role User',
+            'email'                 => 'norole@example.com',
+            'password'              => 'password123',
+            'password_confirmation' => 'password123',
+        ]);
+
+        $response->assertStatus(422);
+    });
+
+    it('fails registration with an invalid role', function (): void {
+        $response = postJson('/api/v1/register', [
+            'name'                  => 'Bad Role User',
+            'email'                 => 'badrole@example.com',
+            'password'              => 'password123',
+            'password_confirmation' => 'password123',
+            'role'                  => 'superuser',
+        ]);
+
+        $response->assertStatus(422);
     });
 
     it('fails registration with invalid data', function (): void {
@@ -58,6 +102,7 @@ describe('Registration', function (): void {
             'email'                 => 'existing@example.com',
             'password'              => 'password123',
             'password_confirmation' => 'password123',
+            'role'                  => 'cadre',
         ]);
 
         $response->assertStatus(422);

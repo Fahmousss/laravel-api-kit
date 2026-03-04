@@ -21,7 +21,7 @@ final class EloquentUserRepository implements UserRepositoryInterface
             return null;
         }
 
-        return $this->mapToEntity($model, UserEntity::class);
+        return $this->toEntity($model);
     }
 
     public function findById(int $id): ?UserEntity
@@ -32,7 +32,7 @@ final class EloquentUserRepository implements UserRepositoryInterface
             return null;
         }
 
-        return $this->mapToEntity($model, UserEntity::class);
+        return $this->toEntity($model);
     }
 
     public function save(UserEntity $user): UserEntity
@@ -52,6 +52,35 @@ final class EloquentUserRepository implements UserRepositoryInterface
             ]);
         }
 
-        return $this->mapToEntity($model, UserEntity::class);
+        return new UserEntity(
+            id: $model->id,
+            name: $model->name,
+            email: $model->email,
+            password: $model->password,
+            emailVerifiedAt: $model->email_verified_at?->toIso8601String(),
+            createdAt: $model->created_at?->toIso8601String(),
+            updatedAt: $model->updated_at?->toIso8601String(),
+            role: $model->getRoleNames()->first(),
+        );
+    }
+
+    public function assignRole(int $userId, string $role): void
+    {
+        $model = User::query()->findOrFail($userId);
+        $model->assignRole($role);
+    }
+
+    private function toEntity(User $model): UserEntity
+    {
+        return new UserEntity(
+            id: $model->id,
+            name: $model->name,
+            email: $model->email,
+            password: $model->password,
+            emailVerifiedAt: $model->email_verified_at?->toIso8601String(),
+            createdAt: $model->created_at?->toIso8601String(),
+            updatedAt: $model->updated_at?->toIso8601String(),
+            role: $model->getRoleNames()->first(),
+        );
     }
 }

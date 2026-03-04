@@ -16,5 +16,6 @@ final class UserDTO extends Data
         public readonly string $createdAt,
         public readonly string $updatedAt,
         public readonly ?string $token = null,
+        public readonly ?string $role = null,
     ) {}
 }

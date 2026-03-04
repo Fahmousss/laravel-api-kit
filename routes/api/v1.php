@@ -8,6 +8,7 @@ use App\Presentation\Controllers\Api\V1\Auth\LogoutController;
 use App\Presentation\Controllers\Api\V1\Auth\MeController;
 use App\Presentation\Controllers\Api\V1\Auth\PasswordResetController;
 use App\Presentation\Controllers\Api\V1\Auth\RegisterController;
+use App\Presentation\Controllers\Api\V1\Location\StuntingClusterController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -37,6 +38,16 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
     Route::post('email/resend', [EmailVerificationController::class, 'resend'])
         ->middleware('throttle:6,1')
         ->name('verification.send');
+
+    // Geo-Tagging System Operations
+    Route::middleware('role:admin|cadre')->group(function () {
+        Route::post('children', \App\Presentation\Controllers\Api\V1\Child\RegisterChildController::class);
+        Route::post('measurements', \App\Presentation\Controllers\Api\V1\Child\LogMeasurementController::class);
+    });
+
+    Route::middleware('role:admin|stakeholder')->group(function () {
+        Route::get('clusters', StuntingClusterController::class);
+    });
 });
 
 // Password reset routes (public with rate limiting)
