@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Auth\Services;
 
-use App\Application\Auth\Common\Interfaces\AuthTokenServiceInterface;
+use App\Application\Features\Auth\Common\Interfaces\AuthTokenServiceInterface;
 use App\Infrastructure\Auth\Models\User;
 
 final class SanctumTokenService implements AuthTokenServiceInterface

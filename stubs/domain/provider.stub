@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\Infrastructure\{{ domain }}\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\Application\Bus\CommandBus;
-use App\Application\Bus\QueryBus;
 use App\Application\Contracts\CommandBusInterface;
 use App\Application\Contracts\QueryBusInterface;
 
@@ -14,16 +12,11 @@ final class {{ providerName }} extends ServiceProvider
 {
     public function register(): void
     {
-        $this->app->singleton(function (): CommandBusInterface {
-            $bus = new CommandBus($this->app);
+        
+    }
 
-            return $bus;
-        });
-
-        $this->app->singleton(function (): QueryBusInterface {
-            $bus = new QueryBus($this->app);
-
-            return $bus;
-        });
+    public function boot(CommandBusInterface $commandBus, QueryBusInterface $queryBus): void
+    {
+        
     }
 }

@@ -190,27 +190,22 @@ final class MakeUseCaseCommand extends GeneratorCommand
         }
 
         // 2. Add Registration Line
-        $busVar       = '$bus';
+        $busVar       = $type === 'Command' ? '$commandBus' : '$queryBus';
         $registerLine = sprintf(
-            '            %s->register(%s::class, %s::class);',
+            '        %s->register(%s::class, %s::class);',
             $busVar,
             $dtoClass,
             $handlerClass
         );
 
         if (! str_contains($content, $registerLine)) {
-            $busInterface = $type === 'Command' ? 'CommandBusInterface' : 'QueryBusInterface';
-            $pattern      = '/\$this->app->singleton\(function \(\): '.$busInterface.' \{.*?return \$bus;/s';
+            $pattern = '/public function boot\([^)]*\):\s*void\s*\{/';
 
             if (preg_match($pattern, $content, $matches, PREG_OFFSET_CAPTURE)) {
-                $block       = $matches[0][0];
                 $blockOffset = $matches[0][1];
+                $insertPos   = $blockOffset + mb_strlen($matches[0][0]);
 
-                $returnPos = mb_strpos($block, 'return $bus;');
-                if ($returnPos !== false) {
-                    $insertPos = $blockOffset + $returnPos;
-                    $content   = substr_replace($content, $registerLine."\n\n", $insertPos, 0);
-                }
+                $content = substr_replace($content, "\n".$registerLine, $insertPos, 0);
             }
         }
 

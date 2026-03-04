@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Application\Features\Auth\Commands\RegisterUser;
 
-use App\Application\Auth\Common\Interfaces\AuthTokenServiceInterface;
-use App\Application\Auth\Common\Interfaces\VerifyEmailNotificationServiceInterface;
+use App\Application\Features\Auth\Common\Interfaces\AuthTokenServiceInterface;
+use App\Application\Features\Auth\Common\Interfaces\VerifyEmailNotificationServiceInterface;
 use App\Application\Features\Auth\DTOs\UserDTO;
 use App\Domain\Auth\Entities\UserEntity;
 use App\Domain\Auth\Repositories\UserRepositoryInterface;
