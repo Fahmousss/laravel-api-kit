@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Location\Providers;
 
-use App\Application\Bus\QueryBus;
 use App\Application\Contracts\QueryBusInterface;
 use App\Application\Features\Location\Queries\GetStuntingClusters\GetStuntingClustersQuery;
 use App\Application\Features\Location\Queries\GetStuntingClusters\GetStuntingClustersQueryHandler;
@@ -21,12 +20,10 @@ final class LocationServiceProvider extends ServiceProvider
     {
         $this->app->bind(PosyanduRepositoryInterface::class, EloquentPosyanduRepository::class);
 
-        $this->app->singleton(function() : QueryBusInterface {
-            $bus = new QueryBus($this->app);
+    }
 
-            $bus->register(GetStuntingClustersQuery::class, GetStuntingClustersQueryHandler::class);
-
-            return $bus;
-        });
+    public function boot(QueryBusInterface $queryBus): void
+    {
+        $queryBus->register(GetStuntingClustersQuery::class, GetStuntingClustersQueryHandler::class);
     }
 }

@@ -14,14 +14,15 @@ use Illuminate\Support\ServiceProvider;
 
 final class AppServiceProvider extends ServiceProvider
 {
+    public $singletons = [
+        \App\Application\Contracts\CommandBusInterface::class => \App\Application\Bus\CommandBus::class,
+        \App\Application\Contracts\QueryBusInterface::class   => \App\Application\Bus\QueryBus::class,
+    ];
+
     /**
      * Register any application services.
      */
-    public function register(): void
-    {
-        $this->app->singleton(\App\Application\Contracts\CommandBusInterface::class, \App\Application\Bus\CommandBus::class);
-        $this->app->singleton(\App\Application\Contracts\QueryBusInterface::class, \App\Application\Bus\QueryBus::class);
-    }
+    public function register(): void {}
 
     /**
      * Bootstrap any application services.

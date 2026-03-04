@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Child\Providers;
 
-use App\Application\Bus\CommandBus;
-use App\Application\Bus\QueryBus;
 use App\Application\Contracts\CommandBusInterface;
 use App\Application\Contracts\QueryBusInterface;
 use App\Application\Features\Child\Commands\ImportHistoricalData\ImportHistoricalDataCommand;
