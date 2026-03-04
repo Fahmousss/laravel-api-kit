@@ -8,6 +8,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
@@ -52,6 +53,22 @@ final class User extends Authenticatable implements MustVerifyEmail
         'password',
         'remember_token',
     ];
+
+    /**
+     * The roles assigned to the user.
+     * We use a pivot table, but we cast the `role` column to the Domain Enum.
+     *
+     * @return BelongsToMany<User>
+     */
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            related: self::class, // Dummy related model because there is no 'Role' model
+            table: 'role_user',
+            foreignPivotKey: 'user_id',
+            // We only need the string value from the pivot table
+        )->withPivot('role');
+    }
 
     /**
      * Get the attributes that should be cast.

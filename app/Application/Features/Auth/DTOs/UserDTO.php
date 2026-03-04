@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\Features\Auth\DTOs;
 
+use App\Domain\Auth\Enums\Role;
 use Spatie\LaravelData\Data;
 
 final class UserDTO extends Data
@@ -16,5 +17,9 @@ final class UserDTO extends Data
         public readonly string $createdAt,
         public readonly string $updatedAt,
         public readonly ?string $token = null,
+        /**
+         * @var Role[]
+         */
+        public readonly array $roles = [],
     ) {}
 }

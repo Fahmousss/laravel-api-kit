@@ -4,44 +4,54 @@ declare(strict_types=1);
 
 namespace App\Presentation\Controllers\Api\V1\Auth;
 
-use App\Infrastructure\Auth\Models\User;
+use App\Application\Contracts\CommandBusInterface;
+use App\Application\Contracts\QueryBusInterface;
+use App\Application\Features\Auth\Commands\ResendVerificationEmail\ResendVerificationEmailCommand;
+use App\Application\Features\Auth\Commands\VerifyEmail\VerifyEmailCommand;
+use App\Application\Features\Auth\Queries\GetUserById\GetUserByIdQuery;
+use App\Domain\Auth\Exceptions\UserNotFoundException;
 use App\Presentation\Controllers\Api\ApiController;
 use App\Presentation\Requests\Api\V1\ResendVerificationRequest;
 use App\Presentation\Requests\Api\V1\VerifyEmailRequest;
-use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
+use InvalidArgumentException;
 
 final class EmailVerificationController extends ApiController
 {
+    public function __construct(
+        private readonly CommandBusInterface $commandBus,
+        private readonly QueryBusInterface $queryBus
+    ) {}
+
     public function verify(VerifyEmailRequest $request): JsonResponse
     {
-        /** @var User $user */
-        $user = $request->user();
+        $userId = $request->user()?->id;
+        throw_if($userId === null, UserNotFoundException::class);
 
-        if ($user->hasVerifiedEmail()) {
+        $userDto = $this->queryBus->dispatch(new GetUserByIdQuery($userId));
+
+        Log::info($userDto);
+        throw_if($userDto === null, UserNotFoundException::class, (string) $userId);
+
+        if ($userDto->emailVerifiedAt !== null) {
             return $this->success(message: 'Email already verified');
         }
 
-        if ($user->markEmailAsVerified()) {
-            event(new Verified($user));
-        }
+        $this->commandBus->dispatch(new VerifyEmailCommand($userId));
 
         return $this->success(message: 'Email verified successfully');
     }
 
     public function resend(ResendVerificationRequest $request): JsonResponse
     {
-        $user = User::query()->where('email', $request->email)->first();
-
-        if (! $user) {
-            return $this->notFound('User not found');
+        try {
+            $this->commandBus->dispatch(new ResendVerificationEmailCommand($request->email));
+        } catch (UserNotFoundException) {
+            return $this->notFound(message: 'User not found');
+        } catch (InvalidArgumentException) {
+            return $this->error(message: 'Email already verified');
         }
-
-        if ($user->hasVerifiedEmail()) {
-            return $this->error('Email already verified', 400);
-        }
-
-        $user->sendEmailVerificationNotification();
 
         return $this->success(message: 'Verification email sent successfully');
     }

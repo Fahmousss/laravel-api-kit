@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Application\Bus\CommandBus;
+use App\Application\Bus\QueryBus;
+use App\Application\Contracts\CommandBusInterface;
+use App\Application\Contracts\QueryBusInterface;
 use Dedoc\Scramble\Scramble;
 use Dedoc\Scramble\Support\Generator\OpenApi;
 use Dedoc\Scramble\Support\Generator\SecurityScheme;
@@ -15,8 +19,8 @@ use Illuminate\Support\ServiceProvider;
 final class AppServiceProvider extends ServiceProvider
 {
     public $singletons = [
-        \App\Application\Contracts\CommandBusInterface::class => \App\Application\Bus\CommandBus::class,
-        \App\Application\Contracts\QueryBusInterface::class   => \App\Application\Bus\QueryBus::class,
+        CommandBusInterface::class => CommandBus::class,
+        QueryBusInterface::class   => QueryBus::class,
     ];
 
     /**

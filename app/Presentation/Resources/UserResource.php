@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Presentation\Resources;
 
-use App\Infrastructure\Auth\Models\User;
+use App\Application\Features\Auth\DTOs\UserDTO;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin User
+ * @mixin UserDTO
  */
 final class UserResource extends JsonResource
 {
@@ -22,9 +22,10 @@ final class UserResource extends JsonResource
             'id'                => $this->id,
             'name'              => $this->name,
             'email'             => $this->email,
-            'email_verified_at' => $this->email_verified_at?->toIso8601String(),
-            'created_at'        => $this->created_at?->toIso8601String(),
-            'updated_at'        => $this->updated_at?->toIso8601String(),
+            'email_verified_at' => $this->emailVerifiedAt,
+            'created_at'        => $this->createdAt,
+            'updated_at'        => $this->updatedAt,
+            'roles'             => array_map(fn ($r) => $r->value, $this->roles),
         ];
     }
 }

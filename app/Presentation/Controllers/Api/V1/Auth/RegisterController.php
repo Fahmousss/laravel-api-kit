@@ -7,7 +7,6 @@ namespace App\Presentation\Controllers\Api\V1\Auth;
 use App\Application\Contracts\CommandBusInterface;
 use App\Application\Features\Auth\Commands\RegisterUser\RegisterUserCommand;
 use App\Application\Features\Auth\DTOs\UserDTO;
-use App\Infrastructure\Auth\Models\User;
 use App\Presentation\Controllers\Api\ApiController;
 use App\Presentation\Requests\Api\V1\RegisterRequest;
 use App\Presentation\Resources\UserResource;
@@ -28,10 +27,8 @@ final class RegisterController extends ApiController
             password: $request->password,
         ));
 
-        $user = User::query()->findOrFail($result->id);
-
         return $this->created([
-            'user'  => new UserResource($user),
+            'user'  => new UserResource($result),
             'token' => $result->token,
         ], 'User registered successfully. Please check your email to verify your account.');
     }

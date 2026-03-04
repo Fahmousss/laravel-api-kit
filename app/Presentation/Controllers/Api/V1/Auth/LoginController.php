@@ -7,7 +7,6 @@ namespace App\Presentation\Controllers\Api\V1\Auth;
 use App\Application\Contracts\QueryBusInterface;
 use App\Application\Features\Auth\DTOs\UserDTO;
 use App\Application\Features\Auth\Queries\LoginUser\LoginUserQuery;
-use App\Infrastructure\Auth\Models\User;
 use App\Presentation\Controllers\Api\ApiController;
 use App\Presentation\Requests\Api\V1\LoginRequest;
 use App\Presentation\Resources\UserResource;
@@ -31,10 +30,8 @@ final class LoginController extends ApiController
             return $this->unauthorized('Invalid credentials');
         }
 
-        $user = User::query()->findOrFail($result->id);
-
         return $this->success([
-            'user'  => new UserResource($user),
+            'user'  => new UserResource($result),
             'token' => $result->token,
         ], 'Login successful');
     }

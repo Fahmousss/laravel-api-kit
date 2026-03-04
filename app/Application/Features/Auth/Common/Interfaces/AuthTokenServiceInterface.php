@@ -10,4 +10,9 @@ interface AuthTokenServiceInterface
      * Generate an authentication token for the given user ID.
      */
     public function generateForUser(int $userId): string;
+
+    /**
+     * Revoke the given bearer token.
+     */
+    public function revokeToken(string $token): void;
 }

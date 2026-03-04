@@ -6,15 +6,33 @@ namespace App\Infrastructure\Auth\Providers;
 
 use App\Application\Contracts\CommandBusInterface;
 use App\Application\Contracts\QueryBusInterface;
+use App\Application\Features\Auth\Commands\AssignRole\AssignRoleCommand;
+use App\Application\Features\Auth\Commands\AssignRole\AssignRoleCommandHandler;
+use App\Application\Features\Auth\Commands\LogoutUser\LogoutUserCommand;
+use App\Application\Features\Auth\Commands\LogoutUser\LogoutUserCommandHandler;
 use App\Application\Features\Auth\Commands\RegisterUser\RegisterUserCommand;
 use App\Application\Features\Auth\Commands\RegisterUser\RegisterUserCommandHandler;
+use App\Application\Features\Auth\Commands\ResendVerificationEmail\ResendVerificationEmailCommand;
+use App\Application\Features\Auth\Commands\ResendVerificationEmail\ResendVerificationEmailCommandHandler;
+use App\Application\Features\Auth\Commands\ResetPassword\ResetPasswordCommand;
+use App\Application\Features\Auth\Commands\ResetPassword\ResetPasswordCommandHandler;
+use App\Application\Features\Auth\Commands\SendPasswordResetLink\SendPasswordResetLinkCommand;
+use App\Application\Features\Auth\Commands\SendPasswordResetLink\SendPasswordResetLinkCommandHandler;
+use App\Application\Features\Auth\Commands\VerifyEmail\VerifyEmailCommand;
+use App\Application\Features\Auth\Commands\VerifyEmail\VerifyEmailCommandHandler;
 use App\Application\Features\Auth\Common\Interfaces\AuthTokenServiceInterface;
+use App\Application\Features\Auth\Common\Interfaces\PasswordResetServiceInterface;
+use App\Application\Features\Auth\Common\Interfaces\UserVerifiedEventDispatcherInterface;
 use App\Application\Features\Auth\Common\Interfaces\VerifyEmailNotificationServiceInterface;
+use App\Application\Features\Auth\Queries\GetUserById\GetUserByIdQuery;
+use App\Application\Features\Auth\Queries\GetUserById\GetUserByIdQueryHandler;
 use App\Application\Features\Auth\Queries\LoginUser\LoginUserQuery;
 use App\Application\Features\Auth\Queries\LoginUser\LoginUserQueryHandler;
 use App\Domain\Auth\Repositories\UserRepositoryInterface;
 use App\Infrastructure\Auth\Persistence\EloquentUserRepository;
+use App\Infrastructure\Auth\Services\PasswordResetService;
 use App\Infrastructure\Auth\Services\SanctumTokenService;
+use App\Infrastructure\Auth\Services\UserVerifiedDispatcherService;
 use App\Infrastructure\Auth\Services\VerifyEmailNotificationService;
 use Illuminate\Support\ServiceProvider;
 
@@ -28,12 +46,23 @@ final class AuthServiceProvider extends ServiceProvider
         // Bind application services
         $this->app->bind(AuthTokenServiceInterface::class, SanctumTokenService::class);
         $this->app->bind(VerifyEmailNotificationServiceInterface::class, VerifyEmailNotificationService::class);
+        $this->app->bind(PasswordResetServiceInterface::class, PasswordResetService::class);
+        $this->app->bind(UserVerifiedEventDispatcherInterface::class, UserVerifiedDispatcherService::class);
 
+        $this->app->register(AuthorizationServiceProvider::class);
     }
 
     public function boot(CommandBusInterface $commandBus, QueryBusInterface $queryBus): void
     {
+        $commandBus->register(ResetPasswordCommand::class, ResetPasswordCommandHandler::class);
+        $commandBus->register(SendPasswordResetLinkCommand::class, SendPasswordResetLinkCommandHandler::class);
+        $commandBus->register(ResendVerificationEmailCommand::class, ResendVerificationEmailCommandHandler::class);
+        $commandBus->register(VerifyEmailCommand::class, VerifyEmailCommandHandler::class);
+        $commandBus->register(LogoutUserCommand::class, LogoutUserCommandHandler::class);
+
+        $queryBus->register(GetUserByIdQuery::class, GetUserByIdQueryHandler::class);
         $commandBus->register(RegisterUserCommand::class, RegisterUserCommandHandler::class);
         $queryBus->register(LoginUserQuery::class, LoginUserQueryHandler::class);
+        $commandBus->register(AssignRoleCommand::class, AssignRoleCommandHandler::class);
     }
 }
