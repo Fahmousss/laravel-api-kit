@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\Dashboard\Providers;
 
 use App\Application\Contracts\QueryBusInterface;
@@ -7,7 +9,7 @@ use App\Application\Features\Dashboards\Queries\GetGeoTaggedStuntingSummary\GetG
 use App\Application\Features\Dashboards\Queries\GetGeoTaggedStuntingSummary\GetGeoTaggedStuntingSummaryQueryHandler;
 use Illuminate\Support\ServiceProvider;
 
-class DashboardServiceProviders extends ServiceProvider
+final class DashboardServiceProviders extends ServiceProvider
 {
     public function boot(QueryBusInterface $queryBus): void
     {

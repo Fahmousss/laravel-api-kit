@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Shared\Traits;
 
+use App\Domain\Shared\Pagination\PaginatedResult;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -82,11 +83,11 @@ trait ApiResponse
     /**
      * Returns a standard success wrapper for a custom Domain PaginatedResult collection.
      *
-     * @param \App\Domain\Shared\Pagination\PaginatedResult $paginatedResult The Custom Domain Pagination object
-     * @param string                                        $resourceClass   The API Resource class name to map items into (e.g. PosyanduResource::class)
+     * @param PaginatedResult $paginatedResult The Custom Domain Pagination object
+     * @param string          $resourceClass   The API Resource class name to map items into (e.g. PosyanduResource::class)
      */
     protected function paginated(
-        \App\Domain\Shared\Pagination\PaginatedResult $paginatedResult,
+        PaginatedResult $paginatedResult,
         string $resourceClass,
         string $message = 'Success',
         int $code = Response::HTTP_OK,

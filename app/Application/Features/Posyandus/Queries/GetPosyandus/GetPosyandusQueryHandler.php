@@ -6,6 +6,7 @@ namespace App\Application\Features\Posyandus\Queries\GetPosyandus;
 
 use App\Application\Features\Posyandus\DTOs\PosyanduDTO;
 use App\Domain\Posyandus\Repositories\PosyanduRepositoryInterface;
+use App\Domain\Shared\Pagination\PaginatedResult;
 
 final readonly class GetPosyandusQueryHandler
 {
@@ -13,14 +14,14 @@ final readonly class GetPosyandusQueryHandler
         private PosyanduRepositoryInterface $posyanduRepository,
     ) {}
 
-    public function handle(GetPosyandusQuery $query): \App\Domain\Shared\Pagination\PaginatedResult
+    public function handle(GetPosyandusQuery $query): PaginatedResult
     {
         $paginatedResult = $this->posyanduRepository->getAllPaginated(
             page: $query->page,
             perPage: $query->perPage
         );
 
-        $dtos = array_map(static fn ($entity) => new PosyanduDTO(
+        $dtos = array_map(static fn ($entity): PosyanduDTO => new PosyanduDTO(
             id: $entity->id,
             name: $entity->name,
             district: $entity->district,
@@ -30,7 +31,7 @@ final readonly class GetPosyandusQueryHandler
             createdAt: $entity->createdAt ?? now()->toIso8601String(),
         ), $paginatedResult->items);
 
-        return new \App\Domain\Shared\Pagination\PaginatedResult(
+        return new PaginatedResult(
             items: $dtos,
             total: $paginatedResult->total,
             perPage: $paginatedResult->perPage,

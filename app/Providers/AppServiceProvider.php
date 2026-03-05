@@ -19,8 +19,8 @@ use Illuminate\Support\ServiceProvider;
 final class AppServiceProvider extends ServiceProvider
 {
     public $singletons = [
-        CommandBusInterface::class                                                => CommandBus::class,
-        QueryBusInterface::class                                                  => QueryBus::class,
+        CommandBusInterface::class => CommandBus::class,
+        QueryBusInterface::class   => QueryBus::class,
     ];
 
     /**

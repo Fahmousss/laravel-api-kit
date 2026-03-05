@@ -13,13 +13,13 @@ final readonly class GetGeoTaggedStuntingSummaryQueryHandler
     ) {}
 
     /**
-     * @return array<int, array{id: int, lat: float, lng: float, status: string|null}>
+     * @return array<int, array{id: int, lat: float, lng: float, status: null|string}>
      */
-    public function handle(GetGeoTaggedStuntingSummaryQuery $query): array
+    public function handle(): array
     {
         $entities = $this->measurementRepository->getAllGeoTagged();
 
-        return array_map(static fn ($entity) => [
+        return array_map(static fn ($entity): array => [
             'id'     => $entity->id,
             'lat'    => $entity->lat,
             'lng'    => $entity->lng,

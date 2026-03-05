@@ -9,6 +9,7 @@ use App\Application\Contracts\QueryBusInterface;
 use App\Application\Features\Posyandus\Commands\CreatePosyandu\CreatePosyanduCommand;
 use App\Application\Features\Posyandus\Queries\GetPosyandus\GetPosyandusQuery;
 use App\Presentation\Controllers\Api\ApiController;
+use App\Presentation\Resources\PosyanduResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -26,7 +27,7 @@ final class PosyanduController extends ApiController
 
         $result = $this->queryBus->dispatch(new GetPosyandusQuery(page: $page, perPage: $perPage));
 
-        return $this->paginated($result, \App\Presentation\Resources\PosyanduResource::class, 'Posyandus retrieved successfully');
+        return $this->paginated($result, PosyanduResource::class, 'Posyandus retrieved successfully');
     }
 
     public function store(Request $request): JsonResponse
@@ -47,6 +48,6 @@ final class PosyanduController extends ApiController
             lng: isset($validated['lng']) ? (float) $validated['lng'] : null,
         ));
 
-        return $this->created(new \App\Presentation\Resources\PosyanduResource($result), 'Posyandu created successfully');
+        return $this->created(new PosyanduResource($result), 'Posyandu created successfully');
     }
 }

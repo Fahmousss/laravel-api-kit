@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace App\Application\Features\Measurements\Commands\CreateMeasurement;
 
 use App\Application\Features\Measurements\DTOs\MeasurementDTO;
+use App\Domain\Children\Entities\ChildEntity;
 use App\Domain\Children\Exceptions\ChildrenNotFoundException;
 use App\Domain\Children\Repositories\ChildRepositoryInterface;
 use App\Domain\Measurements\Entities\MeasurementEntity;
 use App\Domain\Measurements\Repositories\MeasurementRepositoryInterface;
 use App\Domain\Measurements\Services\StuntingCalculatorServiceInterface;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 
 final readonly class CreateMeasurementCommandHandler
 {
@@ -25,9 +26,9 @@ final readonly class CreateMeasurementCommandHandler
         // Fetch Child for Gender and DOB
         $child = $this->childRepository->findById($command->childId);
 
-        throw_if($child === null, new ChildrenNotFoundException('Child not found for calculation.'));
+        throw_if(! $child instanceof ChildEntity, ChildrenNotFoundException::class, 'Child not found for calculation.');
 
-        $dob = Carbon::parse($child->dob);
+        $dob = Date::parse($child->dob);
 
         // Calculate Z-Score and Stunting Status
         $evaluation = $this->calculatorService->evaluate(

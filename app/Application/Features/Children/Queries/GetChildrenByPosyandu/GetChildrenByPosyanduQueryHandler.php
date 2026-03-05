@@ -20,7 +20,7 @@ final readonly class GetChildrenByPosyanduQueryHandler
     {
         $entities = $this->childRepository->getByPosyanduId($query->posyanduId);
 
-        return array_map(static fn ($entity) => new ChildDTO(
+        return array_map(static fn ($entity): ChildDTO => new ChildDTO(
             id: $entity->id,
             posyanduId: $entity->posyanduId,
             nik: $entity->nik,

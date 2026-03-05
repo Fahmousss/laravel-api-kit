@@ -6,6 +6,8 @@ namespace App\Infrastructure\Auth\Providers;
 
 use App\Application\Contracts\CommandBusInterface;
 use App\Application\Contracts\QueryBusInterface;
+use App\Application\Features\Auth\Commands\AssignPosyandu\AssignPosyanduCommand;
+use App\Application\Features\Auth\Commands\AssignPosyandu\AssignPosyanduCommandHandler;
 use App\Application\Features\Auth\Commands\AssignRole\AssignRoleCommand;
 use App\Application\Features\Auth\Commands\AssignRole\AssignRoleCommandHandler;
 use App\Application\Features\Auth\Commands\LogoutUser\LogoutUserCommand;
@@ -64,6 +66,6 @@ final class AuthenticationServiceProvider extends ServiceProvider
         $commandBus->register(RegisterUserCommand::class, RegisterUserCommandHandler::class);
         $queryBus->register(LoginUserQuery::class, LoginUserQueryHandler::class);
         $commandBus->register(AssignRoleCommand::class, AssignRoleCommandHandler::class);
-        $commandBus->register(\App\Application\Features\Auth\Commands\AssignPosyandu\AssignPosyanduCommand::class, \App\Application\Features\Auth\Commands\AssignPosyandu\AssignPosyanduCommandHandler::class);
+        $commandBus->register(AssignPosyanduCommand::class, AssignPosyanduCommandHandler::class);
     }
 }

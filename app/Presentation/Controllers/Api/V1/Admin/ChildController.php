@@ -9,6 +9,7 @@ use App\Application\Contracts\QueryBusInterface;
 use App\Application\Features\Children\Commands\CreateChild\CreateChildCommand;
 use App\Application\Features\Children\Queries\GetChildrenByPosyandu\GetChildrenByPosyanduQuery;
 use App\Presentation\Controllers\Api\ApiController;
+use App\Presentation\Resources\ChildResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -23,7 +24,7 @@ final class ChildController extends ApiController
     {
         $result = $this->queryBus->dispatch(new GetChildrenByPosyanduQuery(posyanduId: $posyanduId));
 
-        return $this->success(\App\Presentation\Resources\ChildResource::collection($result), 'Children retrieved successfully');
+        return $this->success(ChildResource::collection($result), 'Children retrieved successfully');
     }
 
     public function store(Request $request): JsonResponse
@@ -46,6 +47,6 @@ final class ChildController extends ApiController
             parentName: $validated['parent_name'],
         ));
 
-        return $this->created(new \App\Presentation\Resources\ChildResource($result), 'Child created successfully');
+        return $this->created(new ChildResource($result), 'Child created successfully');
     }
 }

@@ -2,6 +2,12 @@
 
 declare(strict_types=1);
 
+use App\Presentation\Controllers\Api\V1\Admin\ChildController;
+use App\Presentation\Controllers\Api\V1\Admin\DashboardController;
+use App\Presentation\Controllers\Api\V1\Admin\MeasurementController;
+use App\Presentation\Controllers\Api\V1\Admin\PosyanduController;
+use App\Presentation\Controllers\Api\V1\Admin\ReportController;
+use App\Presentation\Controllers\Api\V1\Admin\UserController;
 use App\Presentation\Controllers\Api\V1\Auth\EmailVerificationController;
 use App\Presentation\Controllers\Api\V1\Auth\LoginController;
 use App\Presentation\Controllers\Api\V1\Auth\LogoutController;
@@ -40,18 +46,18 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
 
     // Admin & Stakeholder Routes
     Route::prefix('admin')->group(function (): void {
-        Route::get('posyandus', [App\Presentation\Controllers\Api\V1\Admin\PosyanduController::class, 'index']);
-        Route::post('posyandus', [App\Presentation\Controllers\Api\V1\Admin\PosyanduController::class, 'store']);
+        Route::get('posyandus', [PosyanduController::class, 'index']);
+        Route::post('posyandus', [PosyanduController::class, 'store']);
 
-        Route::get('posyandus/{posyanduId}/children', [App\Presentation\Controllers\Api\V1\Admin\ChildController::class, 'getByPosyandu']);
-        Route::post('children', [App\Presentation\Controllers\Api\V1\Admin\ChildController::class, 'store']);
+        Route::get('posyandus/{posyanduId}/children', [ChildController::class, 'getByPosyandu']);
+        Route::post('children', [ChildController::class, 'store']);
 
-        Route::post('measurements', [App\Presentation\Controllers\Api\V1\Admin\MeasurementController::class, 'store']);
+        Route::post('measurements', [MeasurementController::class, 'store']);
 
-        Route::get('dashboard/geo-summary', App\Presentation\Controllers\Api\V1\Admin\DashboardController::class);
-        Route::get('reports/monthly', App\Presentation\Controllers\Api\V1\Admin\ReportController::class);
+        Route::get('dashboard/geo-summary', DashboardController::class);
+        Route::get('reports/monthly', ReportController::class);
 
-        Route::post('users/{userId}/assign-posyandu', App\Presentation\Controllers\Api\V1\Admin\UserController::class);
+        Route::post('users/{userId}/assign-posyandu', UserController::class);
     });
 
     // Kader Routes

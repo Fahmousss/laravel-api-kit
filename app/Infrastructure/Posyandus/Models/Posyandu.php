@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\Posyandus\Models;
 
-use App\Infrastructure\Children\Models\Child;
 use App\Infrastructure\Auth\Models\User;
+use App\Infrastructure\Children\Models\Child;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Posyandu extends Model
+final class Posyandu extends Model
 {
     use HasFactory;
 

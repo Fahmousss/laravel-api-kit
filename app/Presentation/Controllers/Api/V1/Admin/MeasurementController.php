@@ -7,9 +7,10 @@ namespace App\Presentation\Controllers\Api\V1\Admin;
 use App\Application\Contracts\CommandBusInterface;
 use App\Application\Features\Measurements\Commands\CreateMeasurement\CreateMeasurementCommand;
 use App\Presentation\Controllers\Api\ApiController;
+use App\Presentation\Resources\MeasurementResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 
 final class MeasurementController extends ApiController
 {
@@ -30,13 +31,13 @@ final class MeasurementController extends ApiController
 
         $result = $this->commandBus->dispatch(new CreateMeasurementCommand(
             childId: (int) $validated['child_id'],
-            measurementDate: Carbon::parse($validated['measurement_date']),
+            measurementDate: Date::parse($validated['measurement_date']),
             heightCm: (float) $validated['height_cm'],
             weightKg: isset($validated['weight_kg']) ? (float) $validated['weight_kg'] : null,
             lat: isset($validated['lat']) ? (float) $validated['lat'] : null,
             lng: isset($validated['lng']) ? (float) $validated['lng'] : null,
         ));
 
-        return $this->created(new \App\Presentation\Resources\MeasurementResource($result), 'Measurement created successfully');
+        return $this->created(new MeasurementResource($result), 'Measurement created successfully');
     }
 }

@@ -6,6 +6,7 @@ namespace App\Infrastructure\Posyandus\Persistence;
 
 use App\Domain\Posyandus\Entities\PosyanduEntity;
 use App\Domain\Posyandus\Repositories\PosyanduRepositoryInterface;
+use App\Domain\Shared\Pagination\PaginatedResult;
 use App\Infrastructure\Posyandus\Models\Posyandu;
 use App\Infrastructure\Shared\Traits\EntityMapper;
 
@@ -13,14 +14,14 @@ final class EloquentPosyanduRepository implements PosyanduRepositoryInterface
 {
     use EntityMapper;
 
-    public function getAllPaginated(int $page = 1, int $perPage = 15): \App\Domain\Shared\Pagination\PaginatedResult
+    public function getAllPaginated(int $page = 1, int $perPage = 15): PaginatedResult
     {
         $paginator = Posyandu::query()->paginate(perPage: $perPage, page: $page);
 
         // Map the items into Entities
         $items = $this->mapToEntity($paginator->getCollection(), PosyanduEntity::class);
 
-        return new \App\Domain\Shared\Pagination\PaginatedResult(
+        return new PaginatedResult(
             items: is_array($items) ? $items : [$items],
             total: $paginator->total(),
             perPage: $paginator->perPage(),

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Presentation\Resources;
 
 use App\Application\Features\Auth\DTOs\UserDTO;
+use App\Domain\Auth\Enums\Role;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -25,7 +26,7 @@ final class UserResource extends JsonResource
             'email_verified_at' => $this->emailVerifiedAt,
             'created_at'        => $this->createdAt,
             'updated_at'        => $this->updatedAt,
-            'roles'             => array_map(fn ($r) => $r->value, $this->roles),
+            'roles'             => array_map(fn (Role $r) => $r->value, $this->roles),
         ];
     }
 }

@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use App\Domain\Auth\Enums\Role;
 use App\Infrastructure\Auth\Models\User;
+use App\Infrastructure\Posyandus\Models\Posyandu;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 final class DatabaseSeeder extends Seeder
 {
@@ -17,7 +20,7 @@ final class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $posyandu = \App\Infrastructure\Posyandus\Models\Posyandu::create([
+        $posyandu = Posyandu::query()->create([
             'name'     => 'Posyandu Melati',
             'district' => 'Kecamatan Sukamaju',
             'location' => 'Balai Desa Sukamaju',
@@ -29,25 +32,25 @@ final class DatabaseSeeder extends Seeder
             'name'  => 'Admin User',
             'email' => 'admin@stunting.local',
         ]);
-        $this->assignRoleToUser($admin->id, \App\Domain\Auth\Enums\Role::Admin);
+        $this->assignRoleToUser($admin->id, Role::Admin);
 
         $kader = User::factory()->create([
             'name'        => 'Kader Siti',
             'email'       => 'kader@stunting.local',
             'posyandu_id' => $posyandu->id,
         ]);
-        $this->assignRoleToUser($kader->id, \App\Domain\Auth\Enums\Role::Kader);
+        $this->assignRoleToUser($kader->id, Role::Kader);
 
         $stakeholder = User::factory()->create([
             'name'  => 'Stakeholder Budi',
             'email' => 'stakeholder@stunting.local',
         ]);
-        $this->assignRoleToUser($stakeholder->id, \App\Domain\Auth\Enums\Role::Stakeholder);
+        $this->assignRoleToUser($stakeholder->id, Role::Stakeholder);
     }
 
-    private function assignRoleToUser(int $userId, \App\Domain\Auth\Enums\Role $role): void
+    private function assignRoleToUser(int $userId, Role $role): void
     {
-        \Illuminate\Support\Facades\DB::table('role_user')->insert([
+        DB::table('role_user')->insert([
             'user_id'    => $userId,
             'role'       => $role->value,
             'created_at' => now(),

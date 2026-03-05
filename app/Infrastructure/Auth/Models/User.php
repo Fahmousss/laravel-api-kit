@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Auth\Models;
 
+use App\Infrastructure\Posyandus\Models\Posyandu;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -72,6 +74,14 @@ final class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * @return BelongsTo<Posyandu, User>
+     */
+    public function posyandu(): BelongsTo
+    {
+        return $this->belongsTo(Posyandu::class);
+    }
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
@@ -82,13 +92,5 @@ final class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password'          => 'hashed',
         ];
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Infrastructure\Posyandus\Models\Posyandu, User>
-     */
-    public function posyandu(): \Illuminate\Database\Eloquent\Relations\BelongsTo
-    {
-        return $this->belongsTo(\App\Infrastructure\Posyandus\Models\Posyandu::class);
     }
 }

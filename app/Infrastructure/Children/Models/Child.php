@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\Children\Models;
 
-use App\Infrastructure\Posyandus\Models\Posyandu;
 use App\Infrastructure\Measurements\Models\Measurement;
+use App\Infrastructure\Posyandus\Models\Posyandu;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Child extends Model
+final class Child extends Model
 {
     use HasFactory;
 
@@ -21,13 +23,6 @@ class Child extends Model
         'gender',
         'parent_name',
     ];
-
-    protected function casts(): array
-    {
-        return [
-            'dob' => 'date',
-        ];
-    }
 
     /**
      * @return BelongsTo<Posyandu, Child>
@@ -43,5 +38,12 @@ class Child extends Model
     public function measurements(): HasMany
     {
         return $this->hasMany(Measurement::class);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'dob' => 'date',
+        ];
     }
 }

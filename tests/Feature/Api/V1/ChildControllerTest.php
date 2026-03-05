@@ -14,8 +14,8 @@ use function Pest\Laravel\assertDatabaseHas;
 
 uses(RefreshDatabase::class);
 
-test('kader can create a child', function () {
-    $posyandu = Posyandu::create([
+test('kader can create a child', function (): void {
+    $posyandu = Posyandu::query()->create([
         'name'     => 'Posyandu Test',
         'district' => 'District A',
     ]);
