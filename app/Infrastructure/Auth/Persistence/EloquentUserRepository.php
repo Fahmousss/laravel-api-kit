@@ -100,4 +100,17 @@ final class EloquentUserRepository implements UserRepositoryInterface
             ]);
         }
     }
+
+    public function assignPosyandu(int $userId, int $posyanduId): void
+    {
+        $model = User::query()->find($userId);
+
+        if ($model === null) {
+            return;
+        }
+
+        $model->update([
+            'posyandu_id' => $posyanduId,
+        ]);
+    }
 }

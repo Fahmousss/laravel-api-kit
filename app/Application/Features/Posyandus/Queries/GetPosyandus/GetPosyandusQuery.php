@@ -6,5 +6,8 @@ namespace App\Application\Features\Posyandus\Queries\GetPosyandus;
 
 final readonly class GetPosyandusQuery
 {
-    // No arguments needed to get all
+    public function __construct(
+        public int $page = 1,
+        public int $perPage = 15,
+    ) {}
 }

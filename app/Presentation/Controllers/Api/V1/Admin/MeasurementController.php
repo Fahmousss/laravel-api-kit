@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Presentation\Controllers\Api\V1;
+namespace App\Presentation\Controllers\Api\V1\Admin;
 
 use App\Application\Contracts\CommandBusInterface;
 use App\Application\Features\Measurements\Commands\CreateMeasurement\CreateMeasurementCommand;
@@ -37,6 +37,6 @@ final class MeasurementController extends ApiController
             lng: isset($validated['lng']) ? (float) $validated['lng'] : null,
         ));
 
-        return $this->created($result, 'Measurement created successfully');
+        return $this->created(new \App\Presentation\Resources\MeasurementResource($result), 'Measurement created successfully');
     }
 }

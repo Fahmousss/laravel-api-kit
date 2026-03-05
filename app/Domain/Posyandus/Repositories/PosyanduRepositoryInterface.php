@@ -8,10 +8,7 @@ use App\Domain\Posyandus\Entities\PosyanduEntity;
 
 interface PosyanduRepositoryInterface
 {
-    /**
-     * @return PosyanduEntity[]
-     */
-    public function getAll(): PosyanduEntity;
+    public function getAllPaginated(int $page = 1, int $perPage = 15): \App\Domain\Shared\Pagination\PaginatedResult;
 
     public function findById(int $id): ?PosyanduEntity;
 

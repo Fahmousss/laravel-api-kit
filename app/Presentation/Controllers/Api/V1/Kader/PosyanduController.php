@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Presentation\Controllers\Api\V1;
+namespace App\Presentation\Controllers\Api\V1\Kader;
 
 use App\Application\Contracts\CommandBusInterface;
 use App\Application\Contracts\QueryBusInterface;
@@ -19,11 +19,14 @@ final class PosyanduController extends ApiController
         private readonly CommandBusInterface $commandBus,
     ) {}
 
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $result = $this->queryBus->dispatch(new GetPosyandusQuery());
+        $page    = (int) $request->query('page', 1);
+        $perPage = (int) $request->query('per_page', 15);
 
-        return $this->success($result, 'Posyandus retrieved successfully');
+        $result = $this->queryBus->dispatch(new GetPosyandusQuery(page: $page, perPage: $perPage));
+
+        return $this->paginated($result, \App\Presentation\Resources\PosyanduResource::class, 'Posyandus retrieved successfully');
     }
 
     public function store(Request $request): JsonResponse
@@ -44,6 +47,6 @@ final class PosyanduController extends ApiController
             lng: isset($validated['lng']) ? (float) $validated['lng'] : null,
         ));
 
-        return $this->created($result, 'Posyandu created successfully');
+        return $this->created(new \App\Presentation\Resources\PosyanduResource($result), 'Posyandu created successfully');
     }
 }

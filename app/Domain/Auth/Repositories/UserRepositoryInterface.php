@@ -18,4 +18,6 @@ interface UserRepositoryInterface
     public function markEmailAsVerified(int $userId): void;
 
     public function assignRole(int $userId, Role $role): void;
+
+    public function assignPosyandu(int $userId, int $posyanduId): void;
 }

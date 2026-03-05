@@ -64,5 +64,6 @@ final class AuthenticationServiceProvider extends ServiceProvider
         $commandBus->register(RegisterUserCommand::class, RegisterUserCommandHandler::class);
         $queryBus->register(LoginUserQuery::class, LoginUserQueryHandler::class);
         $commandBus->register(AssignRoleCommand::class, AssignRoleCommandHandler::class);
+        $commandBus->register(\App\Application\Features\Auth\Commands\AssignPosyandu\AssignPosyanduCommand::class, \App\Application\Features\Auth\Commands\AssignPosyandu\AssignPosyanduCommandHandler::class);
     }
 }

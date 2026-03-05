@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Presentation\Controllers\Api\V1;
+namespace App\Presentation\Controllers\Api\V1\Admin;
 
 use App\Application\Contracts\QueryBusInterface;
 use App\Application\Features\Reports\Queries\GetMonthlyStuntingReport\GetMonthlyStuntingReportQuery;

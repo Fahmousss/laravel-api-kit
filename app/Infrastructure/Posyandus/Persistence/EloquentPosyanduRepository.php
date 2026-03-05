@@ -13,14 +13,20 @@ final class EloquentPosyanduRepository implements PosyanduRepositoryInterface
 {
     use EntityMapper;
 
-    /**
-     * @return PosyanduEntity[]
-     */
-    public function getAll(): PosyanduEntity
+    public function getAllPaginated(int $page = 1, int $perPage = 15): \App\Domain\Shared\Pagination\PaginatedResult
     {
-        $models = Posyandu::all();
+        $paginator = Posyandu::query()->paginate(perPage: $perPage, page: $page);
 
-        return $this->mapToEntity($models, PosyanduEntity::class);
+        // Map the items into Entities
+        $items = $this->mapToEntity($paginator->getCollection(), PosyanduEntity::class);
+
+        return new \App\Domain\Shared\Pagination\PaginatedResult(
+            items: is_array($items) ? $items : [$items],
+            total: $paginator->total(),
+            perPage: $paginator->perPage(),
+            currentPage: $paginator->currentPage(),
+            lastPage: $paginator->lastPage()
+        );
     }
 
     public function findById(int $id): ?PosyanduEntity
