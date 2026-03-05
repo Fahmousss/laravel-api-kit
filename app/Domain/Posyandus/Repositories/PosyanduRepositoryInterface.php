@@ -1,0 +1,23 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Domain\Posyandus\Repositories;
+
+use App\Domain\Posyandus\Entities\PosyanduEntity;
+
+interface PosyanduRepositoryInterface
+{
+    /**
+     * @return PosyanduEntity[]
+     */
+    public function getAll(): PosyanduEntity;
+
+    public function findById(int $id): ?PosyanduEntity;
+
+    public function create(PosyanduEntity $entity): PosyanduEntity;
+
+    public function update(PosyanduEntity $entity): PosyanduEntity;
+
+    public function delete(int $id): bool;
+}

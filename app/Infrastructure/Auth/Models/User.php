@@ -42,6 +42,7 @@ final class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
+        'posyandu_id',
     ];
 
     /**
@@ -81,5 +82,13 @@ final class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password'          => 'hashed',
         ];
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Infrastructure\Posyandus\Models\Posyandu, User>
+     */
+    public function posyandu(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(\App\Infrastructure\Posyandus\Models\Posyandu::class);
     }
 }

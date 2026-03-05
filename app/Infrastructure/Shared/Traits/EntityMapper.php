@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Shared\Traits;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use ReflectionClass;
@@ -19,7 +20,7 @@ trait EntityMapper
      *
      * @return T
      */
-    protected function mapToEntity(Model $model, string $entityClass): object
+    protected function mapToEntity(Model|Collection $model, string $entityClass): object
     {
         $reflection  = new ReflectionClass($entityClass);
         $constructor = $reflection->getConstructor();

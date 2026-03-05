@@ -8,9 +8,11 @@ use App\Domain\Shared\Contracts\DomainPermission;
 
 enum Role: string
 {
-    case Admin   = 'admin';
-    case Manager = 'manager';
-    case User    = 'user';
+    case Admin       = 'admin';
+    case Manager     = 'manager';
+    case User        = 'user';
+    case Kader       = 'kader';
+    case Stakeholder = 'stakeholder';
 
     /**
      * Define the permissions associated with each role.
@@ -25,9 +27,16 @@ enum Role: string
                 UserPermission::ViewUsers,
                 UserPermission::AssignRoles,
                 UserPermission::ManageSettings,
+                // Admin can do everything
             ],
             self::Manager => [
                 UserPermission::ViewUsers,
+            ],
+            self::Kader => [
+                // Kader permissions
+            ],
+            self::Stakeholder => [
+                // Stakeholder permissions
             ],
             self::User => [],
         };

@@ -37,6 +37,18 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
     Route::post('email/resend', [EmailVerificationController::class, 'resend'])
         ->middleware('throttle:6,1')
         ->name('verification.send');
+
+    // Stunting System Routes
+    Route::get('posyandus', [\App\Presentation\Controllers\Api\V1\PosyanduController::class, 'index']);
+    Route::post('posyandus', [\App\Presentation\Controllers\Api\V1\PosyanduController::class, 'store']);
+    
+    Route::get('posyandus/{posyanduId}/children', [\App\Presentation\Controllers\Api\V1\ChildController::class, 'getByPosyandu']);
+    Route::post('children', [\App\Presentation\Controllers\Api\V1\ChildController::class, 'store']);
+    
+    Route::post('measurements', [\App\Presentation\Controllers\Api\V1\MeasurementController::class, 'store']);
+    
+    Route::get('dashboard/geo-summary', [\App\Presentation\Controllers\Api\V1\DashboardController::class, 'geoSummary']);
+    Route::get('reports/monthly', [\App\Presentation\Controllers\Api\V1\ReportController::class, 'monthly']);
 });
 
 // Password reset routes (public with rate limiting)

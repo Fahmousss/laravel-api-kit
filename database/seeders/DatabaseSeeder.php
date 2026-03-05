@@ -17,11 +17,41 @@ final class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $posyandu = \App\Infrastructure\Posyandus\Models\Posyandu::create([
+            'name'     => 'Posyandu Melati',
+            'district' => 'Kecamatan Sukamaju',
+            'location' => 'Balai Desa Sukamaju',
+            'lat'      => -6.200000,
+            'lng'      => 106.816666,
+        ]);
 
-        User::factory()->create([
-            'name'  => 'Test User',
-            'email' => 'test@example.com',
+        $admin = User::factory()->create([
+            'name'  => 'Admin User',
+            'email' => 'admin@stunting.local',
+        ]);
+        $this->assignRoleToUser($admin->id, \App\Domain\Auth\Enums\Role::Admin);
+
+        $kader = User::factory()->create([
+            'name'        => 'Kader Siti',
+            'email'       => 'kader@stunting.local',
+            'posyandu_id' => $posyandu->id,
+        ]);
+        $this->assignRoleToUser($kader->id, \App\Domain\Auth\Enums\Role::Kader);
+
+        $stakeholder = User::factory()->create([
+            'name'  => 'Stakeholder Budi',
+            'email' => 'stakeholder@stunting.local',
+        ]);
+        $this->assignRoleToUser($stakeholder->id, \App\Domain\Auth\Enums\Role::Stakeholder);
+    }
+
+    private function assignRoleToUser(int $userId, \App\Domain\Auth\Enums\Role $role): void
+    {
+        \Illuminate\Support\Facades\DB::table('role_user')->insert([
+            'user_id'    => $userId,
+            'role'       => $role->value,
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
     }
 }

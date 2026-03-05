@@ -36,7 +36,7 @@ use App\Infrastructure\Auth\Services\UserVerifiedDispatcherService;
 use App\Infrastructure\Auth\Services\VerifyEmailNotificationService;
 use Illuminate\Support\ServiceProvider;
 
-final class AuthServiceProvider extends ServiceProvider
+final class AuthenticationServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
