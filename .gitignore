@@ -46,7 +46,6 @@ database/*.sqlite
 AGENTS.md
 boost.json
 gemini.md
-GEMINI.md
 JUNIE.md
 MCP.md
 

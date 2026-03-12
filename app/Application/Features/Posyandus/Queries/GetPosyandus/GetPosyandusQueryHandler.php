@@ -29,6 +29,7 @@ final readonly class GetPosyandusQueryHandler
             lat: $entity->lat,
             lng: $entity->lng,
             createdAt: $entity->createdAt ?? now()->toIso8601String(),
+            updatedAt: $entity->updatedAt ?? now()->toIso8601String(),
         ), $paginatedResult->items);
 
         return new PaginatedResult(

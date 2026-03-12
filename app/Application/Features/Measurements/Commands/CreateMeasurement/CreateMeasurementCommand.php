@@ -12,6 +12,7 @@ final readonly class CreateMeasurementCommand
         public int $childId,
         public Carbon $measurementDate,
         public float $heightCm,
+        public string $position,
         public ?float $weightKg = null,
         public ?float $lat = null,
         public ?float $lng = null,

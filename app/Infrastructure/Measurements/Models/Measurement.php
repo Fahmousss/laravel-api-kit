@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\Measurements\Models;
 
 use App\Infrastructure\Children\Models\Child;
+use Database\Factories\MeasurementFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,6 +18,7 @@ final class Measurement extends Model
         'child_id',
         'date',
         'height',
+        'position',
         'weight',
         'lat',
         'lng',
@@ -30,6 +32,11 @@ final class Measurement extends Model
     public function child(): BelongsTo
     {
         return $this->belongsTo(Child::class);
+    }
+
+    protected static function newFactory()
+    {
+        return MeasurementFactory::new();
     }
 
     protected function casts(): array

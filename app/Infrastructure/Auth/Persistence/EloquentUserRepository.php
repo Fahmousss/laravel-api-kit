@@ -8,6 +8,7 @@ use App\Domain\Auth\Entities\UserEntity;
 use App\Domain\Auth\Enums\Role;
 use App\Domain\Auth\Exceptions\UserNotFoundException;
 use App\Domain\Auth\Repositories\UserRepositoryInterface;
+use App\Domain\Shared\Pagination\PaginatedResult;
 use App\Infrastructure\Auth\Models\User;
 use App\Infrastructure\Shared\Traits\EntityMapper;
 use App\Infrastructure\Shared\Traits\RoleMapper;
@@ -21,7 +22,7 @@ final class EloquentUserRepository implements UserRepositoryInterface
 
     public function findByEmail(string $email): ?UserEntity
     {
-        $model = User::query()->with('roles')->where('email', $email)->first();
+        $model = User::query()->with('roleModels')->where('email', $email)->first();
 
         if ($model === null) {
             return null;
@@ -32,7 +33,7 @@ final class EloquentUserRepository implements UserRepositoryInterface
 
     public function findById(int $id): ?UserEntity
     {
-        $model = User::query()->with('roles')->find($id);
+        $model = User::query()->with('roleModels')->find($id);
 
         Log::info($model);
 
@@ -101,6 +102,20 @@ final class EloquentUserRepository implements UserRepositoryInterface
         }
     }
 
+    public function revokeRole(int $userId, Role $role): void
+    {
+        $model = User::query()->find($userId);
+
+        if ($model === null) {
+            return;
+        }
+
+        DB::table('role_user')
+            ->where('user_id', $userId)
+            ->where('role', $role->value)
+            ->delete();
+    }
+
     public function assignPosyandu(int $userId, int $posyanduId): void
     {
         $model = User::query()->find($userId);
@@ -112,5 +127,23 @@ final class EloquentUserRepository implements UserRepositoryInterface
         $model->update([
             'posyandu_id' => $posyanduId,
         ]);
+    }
+
+    public function getAllPaginated(int $page, int $perPage): PaginatedResult
+    {
+        $paginator = User::with('roleModels')->paginate(perPage: $perPage, page: $page);
+
+        $entities = array_map(
+            fn (User $model): array|object => $this->mapToEntity($model, UserEntity::class),
+            $paginator->items()
+        );
+
+        return new PaginatedResult(
+            items: $entities,
+            total: $paginator->total(),
+            perPage: $paginator->perPage(),
+            currentPage: $paginator->currentPage(),
+            lastPage: $paginator->lastPage()
+        );
     }
 }

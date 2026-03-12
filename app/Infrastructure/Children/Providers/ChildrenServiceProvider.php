@@ -8,6 +8,8 @@ use App\Application\Contracts\CommandBusInterface;
 use App\Application\Contracts\QueryBusInterface;
 use App\Application\Features\Children\Commands\CreateChild\CreateChildCommand;
 use App\Application\Features\Children\Commands\CreateChild\CreateChildCommandHandler;
+use App\Application\Features\Children\Queries\GetAllChildren\GetAllChildrenQuery;
+use App\Application\Features\Children\Queries\GetAllChildren\GetAllChildrenQueryHandler;
 use App\Application\Features\Children\Queries\GetChildrenByPosyandu\GetChildrenByPosyanduQuery;
 use App\Application\Features\Children\Queries\GetChildrenByPosyandu\GetChildrenByPosyanduQueryHandler;
 use App\Domain\Children\Repositories\ChildRepositoryInterface;
@@ -23,6 +25,7 @@ final class ChildrenServiceProvider extends ServiceProvider
 
     public function boot(CommandBusInterface $commandBus, QueryBusInterface $queryBus): void
     {
+        $queryBus->register(GetAllChildrenQuery::class, GetAllChildrenQueryHandler::class);
         $commandBus->register(CreateChildCommand::class, CreateChildCommandHandler::class);
 
         $queryBus->register(GetChildrenByPosyanduQuery::class, GetChildrenByPosyanduQueryHandler::class);

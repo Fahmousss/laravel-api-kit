@@ -18,6 +18,8 @@ use App\Application\Features\Auth\Commands\ResendVerificationEmail\ResendVerific
 use App\Application\Features\Auth\Commands\ResendVerificationEmail\ResendVerificationEmailCommandHandler;
 use App\Application\Features\Auth\Commands\ResetPassword\ResetPasswordCommand;
 use App\Application\Features\Auth\Commands\ResetPassword\ResetPasswordCommandHandler;
+use App\Application\Features\Auth\Commands\RevokeRole\RevokeRoleCommand;
+use App\Application\Features\Auth\Commands\RevokeRole\RevokeRoleCommandHandler;
 use App\Application\Features\Auth\Commands\SendPasswordResetLink\SendPasswordResetLinkCommand;
 use App\Application\Features\Auth\Commands\SendPasswordResetLink\SendPasswordResetLinkCommandHandler;
 use App\Application\Features\Auth\Commands\VerifyEmail\VerifyEmailCommand;
@@ -26,6 +28,8 @@ use App\Application\Features\Auth\Common\Interfaces\AuthTokenServiceInterface;
 use App\Application\Features\Auth\Common\Interfaces\PasswordResetServiceInterface;
 use App\Application\Features\Auth\Common\Interfaces\UserVerifiedEventDispatcherInterface;
 use App\Application\Features\Auth\Common\Interfaces\VerifyEmailNotificationServiceInterface;
+use App\Application\Features\Auth\Queries\GetAllUsers\GetAllUsersQuery;
+use App\Application\Features\Auth\Queries\GetAllUsers\GetAllUsersQueryHandler;
 use App\Application\Features\Auth\Queries\GetUserById\GetUserByIdQuery;
 use App\Application\Features\Auth\Queries\GetUserById\GetUserByIdQueryHandler;
 use App\Application\Features\Auth\Queries\LoginUser\LoginUserQuery;
@@ -63,9 +67,12 @@ final class AuthenticationServiceProvider extends ServiceProvider
         $commandBus->register(LogoutUserCommand::class, LogoutUserCommandHandler::class);
 
         $queryBus->register(GetUserByIdQuery::class, GetUserByIdQueryHandler::class);
+        $queryBus->register(GetAllUsersQuery::class, GetAllUsersQueryHandler::class);
+
         $commandBus->register(RegisterUserCommand::class, RegisterUserCommandHandler::class);
         $queryBus->register(LoginUserQuery::class, LoginUserQueryHandler::class);
         $commandBus->register(AssignRoleCommand::class, AssignRoleCommandHandler::class);
+        $commandBus->register(RevokeRoleCommand::class, RevokeRoleCommandHandler::class);
         $commandBus->register(AssignPosyanduCommand::class, AssignPosyanduCommandHandler::class);
     }
 }

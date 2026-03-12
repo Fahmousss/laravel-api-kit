@@ -6,6 +6,7 @@ namespace App\Infrastructure\Measurements\Persistence;
 
 use App\Domain\Measurements\Entities\MeasurementEntity;
 use App\Domain\Measurements\Repositories\MeasurementRepositoryInterface;
+use App\Domain\Shared\Pagination\PaginatedResult;
 use App\Infrastructure\Measurements\Models\Measurement;
 use App\Infrastructure\Shared\Traits\EntityMapper;
 
@@ -16,24 +17,37 @@ final class EloquentMeasurementRepository implements MeasurementRepositoryInterf
     /**
      * @return MeasurementEntity[]
      */
-    public function getByChildId(int $childId): MeasurementEntity
+    public function getByChildId(int $childId): array
     {
         $models = Measurement::query()->where('child_id', $childId)->get();
 
-        return $this->mapToEntity($models, MeasurementEntity::class);
+        return $models->map(fn (Measurement $model): object|array => $this->mapToEntity($model, MeasurementEntity::class))->all();
     }
 
     /**
      * @return MeasurementEntity[]
      */
-    public function getAllGeoTagged(): MeasurementEntity
+    public function getAllGeoTagged(?int $posyanduId = null, ?string $kelurahan = null): array
     {
-        $models = Measurement::query()
+        $query = Measurement::query()
             ->whereNotNull('lat')
-            ->whereNotNull('lng')
-            ->get();
+            ->whereNotNull('lng');
 
-        return $this->mapToEntity($models, MeasurementEntity::class);
+        if ($posyanduId !== null) {
+            $query->whereHas('child', function ($q) use ($posyanduId): void {
+                $q->where('posyandu_id', $posyanduId);
+            });
+        }
+
+        if ($kelurahan !== null) {
+            $query->whereHas('child.posyandu', function ($q) use ($kelurahan): void {
+                $q->where('location', $kelurahan);
+            });
+        }
+
+        $models = $query->get();
+
+        return $models->map(fn (Measurement $model): object|array => $this->mapToEntity($model, MeasurementEntity::class))->all();
     }
 
     public function findById(int $id): ?MeasurementEntity
@@ -84,5 +98,23 @@ final class EloquentMeasurementRepository implements MeasurementRepositoryInterf
     public function delete(int $id): bool
     {
         return (bool) Measurement::query()->where('id', $id)->delete();
+    }
+
+    public function getAllPaginated(int $page, int $perPage): PaginatedResult
+    {
+        $paginator = Measurement::query()->with('child')->latest('date')->paginate(perPage: $perPage, page: $page);
+
+        $entities = array_map(
+            fn (Measurement $model): array|object => $this->mapToEntity($model, MeasurementEntity::class),
+            $paginator->items()
+        );
+
+        return new PaginatedResult(
+            items: $entities,
+            total: $paginator->total(),
+            perPage: $paginator->perPage(),
+            currentPage: $paginator->currentPage(),
+            lastPage: $paginator->lastPage()
+        );
     }
 }

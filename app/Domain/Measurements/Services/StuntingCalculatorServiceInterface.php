@@ -11,7 +11,7 @@ interface StuntingCalculatorServiceInterface
     /**
      * Calculate Z-Score for Height-for-Age (TB/U)
      */
-    public function calculateZScore(float $heightCm, string $gender, Carbon $dob, Carbon $measurementDate): float;
+    public function calculateZScore(float $heightCm, string $position, string $gender, Carbon $dob, Carbon $measurementDate): float;
 
     /**
      * Determine stunting status based on Z-Score
@@ -23,5 +23,5 @@ interface StuntingCalculatorServiceInterface
      *
      * @return array{z_score: float, status: string}
      */
-    public function evaluate(float $heightCm, string $gender, Carbon $dob, Carbon $measurementDate): array;
+    public function evaluate(float $heightCm, string $position, string $gender, Carbon $dob, Carbon $measurementDate): array;
 }

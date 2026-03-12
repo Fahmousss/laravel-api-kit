@@ -12,10 +12,14 @@ trait RoleMapper
     /**
      * Map the roles relation array to Domain Enums securely during Entity hydration.
      */
-    protected function mapCustomAttribute(Model $model, string $name, mixed $default = null): mixed
+    public function mapCustomAttribute(Model $model, string $name, mixed $default = null): mixed
     {
-        if ($name === 'roles' && $model->relationLoaded('roles')) {
-            return $model->roles->map(fn ($roleModel) => Role::tryFrom($roleModel->pivot->role))->filter()->values()->all();
+        if ($name === 'roles') {
+            if ($model->relationLoaded('roleModels')) {
+                return $model->roleModels->map(fn ($roleModel) => Role::tryFrom($roleModel->role))->filter()->values()->all();
+            }
+
+            return [];
         }
 
         return $default;

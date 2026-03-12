@@ -36,6 +36,7 @@ final class AppServiceProvider extends ServiceProvider
         $this->configureRateLimiting();
         $this->configureScrambleAuthentication();
         $this->configureScrambleApi();
+
     }
 
     /**

@@ -33,6 +33,7 @@ final readonly class CreateMeasurementCommandHandler
         // Calculate Z-Score and Stunting Status
         $evaluation = $this->calculatorService->evaluate(
             heightCm: $command->heightCm,
+            position: $command->position,
             gender: $child->gender,
             dob: $dob,
             measurementDate: $command->measurementDate,
@@ -42,6 +43,7 @@ final readonly class CreateMeasurementCommandHandler
             childId: $command->childId,
             date: $command->measurementDate->toDateString(),
             height: $command->heightCm,
+            position: $command->position,
             weight: $command->weightKg,
             lat: $command->lat,
             lng: $command->lng,

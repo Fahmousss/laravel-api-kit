@@ -6,6 +6,7 @@ namespace App\Infrastructure\Children\Persistence;
 
 use App\Domain\Children\Entities\ChildEntity;
 use App\Domain\Children\Repositories\ChildRepositoryInterface;
+use App\Domain\Shared\Pagination\PaginatedResult;
 use App\Infrastructure\Children\Models\Child;
 use App\Infrastructure\Shared\Traits\EntityMapper;
 
@@ -16,7 +17,7 @@ final class EloquentChildRepository implements ChildRepositoryInterface
     /**
      * @return ChildEntity[]
      */
-    public function getByPosyanduId(int $posyanduId): ChildEntity
+    public function getByPosyanduId(int $posyanduId): array
     {
         $models = Child::query()->where('posyandu_id', $posyanduId)->get();
 
@@ -67,5 +68,23 @@ final class EloquentChildRepository implements ChildRepositoryInterface
     public function delete(int $id): bool
     {
         return (bool) Child::query()->where('id', $id)->delete();
+    }
+
+    public function getAllPaginated(int $page, int $perPage): PaginatedResult
+    {
+        $paginator = Child::query()->with('posyandu')->latest()->paginate(perPage: $perPage, page: $page);
+
+        $entities = array_map(
+            fn (Child $model): array|object => $this->mapToEntity($model, ChildEntity::class),
+            $paginator->items()
+        );
+
+        return new PaginatedResult(
+            items: $entities,
+            total: $paginator->total(),
+            perPage: $paginator->perPage(),
+            currentPage: $paginator->currentPage(),
+            lastPage: $paginator->lastPage()
+        );
     }
 }

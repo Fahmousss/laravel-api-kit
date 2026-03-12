@@ -10,6 +10,8 @@ use App\Application\Features\Posyandus\Commands\CreatePosyandu\CreatePosyanduCom
 use App\Application\Features\Posyandus\Commands\CreatePosyandu\CreatePosyanduCommandHandler;
 use App\Application\Features\Posyandus\Queries\GetPosyandus\GetPosyandusQuery;
 use App\Application\Features\Posyandus\Queries\GetPosyandus\GetPosyandusQueryHandler;
+use App\Application\Features\Posyandus\Queries\GetPosyandusByUserId\GetPosyandusByUserIdQuery;
+use App\Application\Features\Posyandus\Queries\GetPosyandusByUserId\GetPosyandusByUserIdQueryHandler;
 use App\Domain\Posyandus\Repositories\PosyanduRepositoryInterface;
 use App\Infrastructure\Posyandus\Persistence\EloquentPosyanduRepository;
 use Illuminate\Support\ServiceProvider;
@@ -26,6 +28,8 @@ final class PosyanduServiceProvider extends ServiceProvider
 
     public function boot(CommandBusInterface $commandBus, QueryBusInterface $queryBus): void
     {
+        $queryBus->register(GetPosyandusByUserIdQuery::class, GetPosyandusByUserIdQueryHandler::class);
+
         $commandBus->register(CreatePosyanduCommand::class, CreatePosyanduCommandHandler::class);
         $queryBus->register(GetPosyandusQuery::class, GetPosyandusQueryHandler::class);
     }

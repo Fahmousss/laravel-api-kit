@@ -34,6 +34,7 @@ final readonly class CreatePosyanduCommandHandler
             lat: $savedEntity->lat,
             lng: $savedEntity->lng,
             createdAt: $savedEntity->createdAt ?? now()->toIso8601String(),
+            updatedAt: $savedEntity->updatedAt ?? now()->toIso8601String(),
         );
     }
 }

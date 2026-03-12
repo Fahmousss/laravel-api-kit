@@ -6,6 +6,7 @@ namespace App\Domain\Auth\Repositories;
 
 use App\Domain\Auth\Entities\UserEntity;
 use App\Domain\Auth\Enums\Role;
+use App\Domain\Shared\Pagination\PaginatedResult;
 
 interface UserRepositoryInterface
 {
@@ -19,5 +20,9 @@ interface UserRepositoryInterface
 
     public function assignRole(int $userId, Role $role): void;
 
+    public function revokeRole(int $userId, Role $role): void;
+
     public function assignPosyandu(int $userId, int $posyanduId): void;
+
+    public function getAllPaginated(int $page, int $perPage): PaginatedResult;
 }

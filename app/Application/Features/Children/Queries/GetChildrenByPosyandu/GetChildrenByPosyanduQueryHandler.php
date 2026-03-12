@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Application\Features\Children\Queries\GetChildrenByPosyandu;
 
 use App\Application\Features\Children\DTOs\ChildDTO;
+use App\Domain\Children\Entities\ChildEntity;
 use App\Domain\Children\Repositories\ChildRepositoryInterface;
 
 final readonly class GetChildrenByPosyanduQueryHandler
@@ -20,7 +21,7 @@ final readonly class GetChildrenByPosyanduQueryHandler
     {
         $entities = $this->childRepository->getByPosyanduId($query->posyanduId);
 
-        return array_map(static fn ($entity): ChildDTO => new ChildDTO(
+        return array_map(static fn (ChildEntity $entity): ChildDTO => new ChildDTO(
             id: $entity->id,
             posyanduId: $entity->posyanduId,
             nik: $entity->nik,

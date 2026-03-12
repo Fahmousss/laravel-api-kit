@@ -14,5 +14,6 @@ final readonly class PosyanduDTO
         public ?float $lat,
         public ?float $lng,
         public string $createdAt,
+        public string $updatedAt,
     ) {}
 }

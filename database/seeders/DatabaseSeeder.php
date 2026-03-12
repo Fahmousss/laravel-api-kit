@@ -46,6 +46,8 @@ final class DatabaseSeeder extends Seeder
             'email' => 'stakeholder@stunting.local',
         ]);
         $this->assignRoleToUser($stakeholder->id, Role::Stakeholder);
+        $this->call(GeoTaggingSeeder::class);
+        $this->call(AnthropometryStandardSeeder::class);
     }
 
     private function assignRoleToUser(int $userId, Role $role): void
