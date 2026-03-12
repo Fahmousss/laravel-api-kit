@@ -39,14 +39,7 @@ trait EntityMapper
             $name          = $parameter->getName();
             $attributeName = Str::snake($name);
 
-            // Allow matching Eloquent attributes (including mutators and casts)
-            // Eloquent attributes are typically snake_case
             $value = $model->getAttribute($attributeName) ?? $model->getAttribute($name);
-
-            // Allow an implementing class to hook into and override attribute mapping
-            if (method_exists($this, 'mapCustomAttribute')) {
-                $value = $this->mapCustomAttribute($model, $name, $value);
-            }
 
             $args[$name] = $value;
         }

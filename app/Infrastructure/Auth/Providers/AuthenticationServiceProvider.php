@@ -55,7 +55,6 @@ final class AuthenticationServiceProvider extends ServiceProvider
         $this->app->bind(PasswordResetServiceInterface::class, PasswordResetService::class);
         $this->app->bind(UserVerifiedEventDispatcherInterface::class, UserVerifiedDispatcherService::class);
 
-        $this->app->register(AuthorizationServiceProvider::class);
     }
 
     public function boot(CommandBusInterface $commandBus, QueryBusInterface $queryBus): void
@@ -71,8 +70,5 @@ final class AuthenticationServiceProvider extends ServiceProvider
 
         $commandBus->register(RegisterUserCommand::class, RegisterUserCommandHandler::class);
         $queryBus->register(LoginUserQuery::class, LoginUserQueryHandler::class);
-        $commandBus->register(AssignRoleCommand::class, AssignRoleCommandHandler::class);
-        $commandBus->register(RevokeRoleCommand::class, RevokeRoleCommandHandler::class);
-        $commandBus->register(AssignPosyanduCommand::class, AssignPosyanduCommandHandler::class);
-    }
+        }
 }

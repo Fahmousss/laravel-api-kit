@@ -39,7 +39,6 @@ final readonly class LoginUserQueryHandler
             createdAt: $entity->createdAt ?? now()->toIso8601String(),
             updatedAt: $entity->updatedAt ?? now()->toIso8601String(),
             token: $token,
-            roles: $entity->roles,
         );
     }
 }

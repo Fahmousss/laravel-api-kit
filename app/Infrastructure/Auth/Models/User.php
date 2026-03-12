@@ -4,13 +4,10 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Auth\Models;
 
-use App\Infrastructure\Posyandus\Models\Posyandu;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
@@ -56,25 +53,6 @@ final class User extends Authenticatable implements MustVerifyEmail
         'password',
         'remember_token',
     ];
-
-    /**
-     * The roles assigned to the user.
-     * We use a one-to-many mapping with the UserRole model.
-     *
-     * @return HasMany<UserRole, User>
-     */
-    public function roleModels(): HasMany
-    {
-        return $this->hasMany(UserRole::class);
-    }
-
-    /**
-     * @return BelongsTo<Posyandu, User>
-     */
-    public function posyandu(): BelongsTo
-    {
-        return $this->belongsTo(Posyandu::class);
-    }
 
     /**
      * Get the attributes that should be cast.

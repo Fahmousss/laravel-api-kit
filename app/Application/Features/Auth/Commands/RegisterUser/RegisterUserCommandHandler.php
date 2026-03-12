@@ -41,7 +41,6 @@ final readonly class RegisterUserCommandHandler
             createdAt: $savedEntity->createdAt ?? now()->toIso8601String(),
             updatedAt: $savedEntity->updatedAt ?? now()->toIso8601String(),
             token: $token,
-            roles: $savedEntity->roles,
         );
     }
 }
