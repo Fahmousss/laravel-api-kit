@@ -6,10 +6,6 @@ namespace App\Infrastructure\Auth\Providers;
 
 use App\Application\Contracts\CommandBusInterface;
 use App\Application\Contracts\QueryBusInterface;
-use App\Application\Features\Auth\Commands\AssignPosyandu\AssignPosyanduCommand;
-use App\Application\Features\Auth\Commands\AssignPosyandu\AssignPosyanduCommandHandler;
-use App\Application\Features\Auth\Commands\AssignRole\AssignRoleCommand;
-use App\Application\Features\Auth\Commands\AssignRole\AssignRoleCommandHandler;
 use App\Application\Features\Auth\Commands\LogoutUser\LogoutUserCommand;
 use App\Application\Features\Auth\Commands\LogoutUser\LogoutUserCommandHandler;
 use App\Application\Features\Auth\Commands\RegisterUser\RegisterUserCommand;
@@ -18,8 +14,6 @@ use App\Application\Features\Auth\Commands\ResendVerificationEmail\ResendVerific
 use App\Application\Features\Auth\Commands\ResendVerificationEmail\ResendVerificationEmailCommandHandler;
 use App\Application\Features\Auth\Commands\ResetPassword\ResetPasswordCommand;
 use App\Application\Features\Auth\Commands\ResetPassword\ResetPasswordCommandHandler;
-use App\Application\Features\Auth\Commands\RevokeRole\RevokeRoleCommand;
-use App\Application\Features\Auth\Commands\RevokeRole\RevokeRoleCommandHandler;
 use App\Application\Features\Auth\Commands\SendPasswordResetLink\SendPasswordResetLinkCommand;
 use App\Application\Features\Auth\Commands\SendPasswordResetLink\SendPasswordResetLinkCommandHandler;
 use App\Application\Features\Auth\Commands\VerifyEmail\VerifyEmailCommand;
@@ -70,5 +64,5 @@ final class AuthenticationServiceProvider extends ServiceProvider
 
         $commandBus->register(RegisterUserCommand::class, RegisterUserCommandHandler::class);
         $queryBus->register(LoginUserQuery::class, LoginUserQueryHandler::class);
-        }
+    }
 }
