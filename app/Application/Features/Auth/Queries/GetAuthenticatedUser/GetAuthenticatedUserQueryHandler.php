@@ -2,22 +2,28 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Features\Auth\Queries\GetUserById;
+namespace App\Application\Features\Auth\Queries\GetAuthenticatedUser;
 
+use App\Application\Features\Auth\Common\Interfaces\SessionServiceInterface;
 use App\Application\Features\Auth\DTOs\UserDTO;
 use App\Domain\Auth\Entities\UserEntity;
 use App\Domain\Auth\Repositories\UserRepositoryInterface;
 
-final readonly class GetUserByIdQueryHandler
+final readonly class GetAuthenticatedUserQueryHandler
 {
     public function __construct(
-        private UserRepositoryInterface $userRepository
+        private SessionServiceInterface $sessionService,
+        private UserRepositoryInterface $userRepository,
     ) {}
 
-    public function handle(GetUserByIdQuery $query): ?UserDTO
+    public function handle(): ?UserDTO
     {
-        $entity = $this->userRepository->findById($query->id);
+        $id = $this->sessionService->id();
+        if ($id === null) {
+            return null;
+        }
 
+        $entity = $this->userRepository->findById($id);
         if (! $entity instanceof UserEntity) {
             return null;
         }

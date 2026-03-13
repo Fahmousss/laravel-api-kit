@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Presentation\ViewModels\Auth;
 
 use App\Application\Features\Auth\DTOs\UserDTO;
-use App\Domain\Auth\Enums\Role;
 use Illuminate\Support\Facades\Date;
 
 /**
@@ -24,13 +23,6 @@ final readonly class UserViewModel
 
     public bool $isEmailVerified;
 
-    public string $primaryRole;
-
-    /**
-     * @var Role[]
-     */
-    public array $rawRoles;
-
     public function __construct(UserDTO $dto)
     {
         $this->id              = $dto->id;
@@ -38,23 +30,5 @@ final readonly class UserViewModel
         $this->email           = $dto->email;
         $this->memberSince     = Date::parse($dto->createdAt)->format('d M Y');
         $this->isEmailVerified = $dto->emailVerifiedAt !== null;
-        $this->primaryRole     = $this->resolvePrimaryRole($dto->roles);
-        $this->rawRoles        = $dto->roles;
-    }
-
-    /**
-     * @param Role[] $roles
-     */
-    private function resolvePrimaryRole(array $roles): string
-    {
-        $priority = [Role::Admin, Role::Manager, Role::Kader, Role::Stakeholder, Role::User];
-
-        foreach ($priority as $role) {
-            if (in_array($role, $roles, true)) {
-                return ucfirst($role->value);
-            }
-        }
-
-        return 'Member';
     }
 }

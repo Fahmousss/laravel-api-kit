@@ -32,7 +32,7 @@ describe('Login submission', function (): void {
         post('/login', [
             'email'    => $user->email,
             'password' => 'password123',
-        ])->assertRedirect(route('web.dashboard'));
+        ])->assertRedirect(route('dashboard'));
 
         assertAuthenticated();
     });
@@ -59,7 +59,7 @@ describe('Logout', function (): void {
 
         actingAs($user)
             ->post('/logout')
-            ->assertRedirect(route('web.login'));
+            ->assertRedirect(route('login'));
 
         assertGuest();
     });
@@ -67,7 +67,7 @@ describe('Logout', function (): void {
 
 describe('Dashboard', function (): void {
     it('redirects guests to login', function (): void {
-        get('/dashboard')->assertRedirect(route('web.login'));
+        get('/dashboard')->assertRedirect(route('login'));
     });
 
     it('shows the dashboard to authenticated users', function (): void {

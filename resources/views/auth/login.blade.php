@@ -8,7 +8,7 @@
         <h1 class="text-2xl font-bold mb-1.5 text-emerald-950">Welcome back</h1>
         <p class="text-slate-500 text-sm mb-8">Sign in to your account</p>
 
-        <form method="POST" action="{{ route('web.login.store') }}" class="space-y-5">
+        <form method="POST" action="{{ route('login.store') }}" class="space-y-5">
             @csrf
 
             <x-form.input

@@ -4,20 +4,21 @@ declare(strict_types=1);
 
 namespace App\Presentation\Controllers\Web\Auth;
 
+use App\Application\Contracts\CommandBusInterface;
+use App\Application\Features\Auth\Commands\LogoutUser\LogoutUserCommand;
 use App\Presentation\Controllers\Web\WebController;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 final class LogoutController extends WebController
 {
-    public function __invoke(Request $request): RedirectResponse
+    public function __construct(
+        private readonly CommandBusInterface $commandBus,
+    ) {}
+
+    public function __invoke(): RedirectResponse
     {
-        Auth::logout();
+        $this->commandBus->dispatch(new LogoutUserCommand());
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return to_route('web.login');
+        return to_route('login');
     }
 }

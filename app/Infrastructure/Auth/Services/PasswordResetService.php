@@ -19,13 +19,16 @@ final class PasswordResetService implements PasswordResetServiceInterface
     public function resetPassword(string $email, string $password, string $passwordConfirmation, string $token): string
     {
         return Password::reset(
-            ['email' => $email, 'password' => $password, 'password_confirmation' => $passwordConfirmation, 'token' => $token],
+            [
+                'email'                 => $email,
+                'password'              => $password,
+                'password_confirmation' => $passwordConfirmation,
+                'token'                 => $token,
+            ],
             function (User $user, string $password): void {
                 $user->forceFill([
                     'password' => $password,
                 ])->save();
-
-                $user->tokens()->delete();
 
                 event(new PasswordReset($user));
             }

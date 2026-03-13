@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace App\Application\Features\Auth\Commands\LogoutUser;
 
-use App\Application\Features\Auth\Common\Interfaces\AuthTokenServiceInterface;
+use App\Application\Features\Auth\Common\Interfaces\SessionServiceInterface;
 
 final readonly class LogoutUserCommandHandler
 {
     public function __construct(
-        private AuthTokenServiceInterface $tokenService
+        private SessionServiceInterface $sessionService
     ) {}
 
-    public function handle(LogoutUserCommand $command): void
+    public function handle(): void
     {
-        $this->tokenService->revokeToken($command->token);
+        $this->sessionService->logout();
+        $this->sessionService->refresh();
     }
 }

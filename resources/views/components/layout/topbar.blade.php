@@ -4,10 +4,10 @@
     </div>
     @auth
     <div class="flex items-center gap-6">
-        <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full uppercase tracking-widest border border-emerald-200">
-            {{ \Illuminate\Support\Str::headline(auth()->user()->primary_role ?? 'User') }}
+        <span class="text-sm font-medium text-slate-700">
+            {{ $authenticatedUser->displayName }}
         </span>
-        <form method="POST" action="{{ route('web.logout') }}">
+        <form method="POST" action="{{ route('logout') }}">
             @csrf
             <button type="submit" class="bg-transparent border border-slate-300 text-slate-500 px-4 py-1.5 rounded-md text-sm font-medium hover:text-slate-800 hover:border-emerald-300 hover:bg-slate-50 transition-all">
                 Logout

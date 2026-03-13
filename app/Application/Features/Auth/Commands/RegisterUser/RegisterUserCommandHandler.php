@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\Features\Auth\Commands\RegisterUser;
 
-use App\Application\Features\Auth\Common\Interfaces\AuthTokenServiceInterface;
+use App\Application\Features\Auth\Common\Interfaces\SessionServiceInterface;
 use App\Application\Features\Auth\Common\Interfaces\VerifyEmailNotificationServiceInterface;
 use App\Application\Features\Auth\DTOs\UserDTO;
 use App\Domain\Auth\Entities\UserEntity;
@@ -16,7 +16,7 @@ final readonly class RegisterUserCommandHandler
     public function __construct(
         private UserRepositoryInterface $userRepository,
         private VerifyEmailNotificationServiceInterface $notificationService,
-        private AuthTokenServiceInterface $tokenService,
+        private SessionServiceInterface $sessionService,
     ) {}
 
     public function handle(RegisterUserCommand $command): UserDTO
@@ -31,7 +31,9 @@ final readonly class RegisterUserCommandHandler
 
         $this->notificationService->sendVerificationEmail($savedEntity->id);
 
-        $token = $this->tokenService->generateForUser($savedEntity->id);
+        // Auto-login after registration
+        $this->sessionService->loginById($savedEntity->id);
+        $this->sessionService->regenerate();
 
         return new UserDTO(
             id: $savedEntity->id,
@@ -40,8 +42,6 @@ final readonly class RegisterUserCommandHandler
             emailVerifiedAt: $savedEntity->emailVerifiedAt,
             createdAt: $savedEntity->createdAt ?? now()->toIso8601String(),
             updatedAt: $savedEntity->updatedAt ?? now()->toIso8601String(),
-            token: $token,
-            roles: $savedEntity->roles,
         );
     }
 }
