@@ -66,6 +66,9 @@
         },
         "alerts": {
             "installationTime": 1773388342
+        },
+        "toast": {
+            "installationTime": 1773392024
         }
     }
 }
