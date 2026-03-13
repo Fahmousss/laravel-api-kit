@@ -1,0 +1,71 @@
+{
+    "project_hash": "41a71966-c65b-4c43-b769-5889c1a9c326",
+    "components": {
+        "button": {
+            "installationTime": 1773381589
+        },
+        "icon": {
+            "installationTime": 1773381600
+        },
+        "input": {
+            "installationTime": 1773381591
+        },
+        "card": {
+            "installationTime": 1773381592
+        },
+        "badge": {
+            "installationTime": 1773381594
+        },
+        "dropdown": {
+            "installationTime": 1773381595
+        },
+        "label": {
+            "installationTime": 1773381602
+        },
+        "error": {
+            "installationTime": 1773381605
+        },
+        "select": {
+            "installationTime": 1773381596
+        },
+        "popup": {
+            "installationTime": 1773381596
+        },
+        "text": {
+            "installationTime": 1773381607
+        },
+        "textarea": {
+            "installationTime": 1773381598
+        },
+        "kbd": {
+            "installationTime": 1773381606
+        },
+        "layout": {
+            "installationTime": 1773382722
+        },
+        "sidebar": {
+            "installationTime": 1773382724
+        },
+        "navlist": {
+            "installationTime": 1773382725
+        },
+        "navbar": {
+            "installationTime": 1773382727
+        },
+        "theme-switcher": {
+            "installationTime": 1773383801
+        },
+        "heading": {
+            "installationTime": 1773384713
+        },
+        "avatar": {
+            "installationTime": 1773386621
+        },
+        "separator": {
+            "installationTime": 1773387260
+        },
+        "alerts": {
+            "installationTime": 1773388342
+        }
+    }
+}

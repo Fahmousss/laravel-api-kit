@@ -1,5 +1,5 @@
 @props(['label' => 'Submit'])
 
-<button type="submit" {{ $attributes->merge(['class' => 'btn btn-primary w-full']) }}>
+<x-ui.button type="submit" variant="primary" {{ $attributes->merge(['class' => 'w-full']) }}>
     {{ $label }}
-</button>
+</x-ui.button>

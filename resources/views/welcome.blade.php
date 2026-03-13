@@ -1,112 +1,106 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{{ config('app.name') }}</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+        @vite(['resources/css/app.css'])
 
-@section('title', 'Laravel Onion Starter - Clean DDD & CQRS Architecture')
-
-@section('content')
-<div class="min-h-screen bg-base-200">
-    <!-- Hero Section -->
-    <div class="hero min-h-[70vh] bg-base-100 border-b border-base-300">
-        <div class="hero-content text-center">
-            <div class="max-w-3xl">
-                <h1 class="text-5xl font-extrabold tracking-tight sm:text-6xl lg:text-7xl">
-                    Laravel <span class="bg-clip-text text-transparent bg-linear-to-r from-primary to-secondary">Onion Starter</span>
-                </h1>
-                <p class="py-8 text-lg text-base-content/70 leading-8">
-                    Empower your development with a rigorously structured starter kit. 
-                    Built with <strong>Domain-Driven Design</strong>, <strong>CQRS</strong>, and <strong>Onion Architecture</strong> for maximum scalability and maintainability.
-                </p>
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <a href="{{ route('login') }}" class="btn btn-primary btn-lg shadow-lg">
-                        Get Started
-                        <svg class="w-5 h-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                        </svg>
-                    </a>
-                    <a href="https://github.com/Fahmousss/laravel-api-kit" class="btn btn-outline btn-lg">
-                        View on GitHub
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Architecture Breakdown -->
-    <div class="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div class="text-center mb-16">
-            <h2 class="text-primary font-bold tracking-wide uppercase text-sm">Architecture</h2>
-            <p class="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl text-base-content">
-                Engineered for Clean Code
-            </p>
-        </div>
-
-        <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            <!-- Domain Layer -->
-            <div class="card bg-base-100 shadow-sm border border-base-300 hover:shadow-md transition-shadow">
-                <div class="card-body">
-                    <div class="w-12 h-12 bg-success/10 text-success rounded-lg flex items-center justify-center mb-4 text-2xl font-bold">
-                        1
+        <script>
+        // Load dark mode before page renders to prevent flicker
+        const loadDarkMode = () => {
+            const theme = localStorage.getItem('theme') ?? 'system'
+            
+            if (
+                theme === 'dark' ||
+                (theme === 'system' &&
+                    window.matchMedia('(prefers-color-scheme: dark)')
+                    .matches)
+            ) {
+                document.documentElement.classList.add('dark')
+            }
+        }
+                
+        // Initialize on page load
+        loadDarkMode();
+    </script>
+    </head>
+    <body class="antialiased bg-white dark:bg-neutral-950 font-['Plus_Jakarta_Sans',sans-serif]">
+        <div class="relative min-h-screen">
+            <header class="p-6 flex items-center justify-between max-w-7xl mx-auto w-full absolute top-0 left-0 right-0 z-10">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
+                        <x-ui.icon name="bolt" variant="solid" class="w-5 h-5 text-white" />
                     </div>
-                    <h3 class="card-title text-base-content">Domain Layer</h3>
-                    <p class="text-sm text-base-content/70">
-                        Absolute core business logic. Pure PHP with zero framework dependencies. Entities, Enums, and Repository Interfaces.
-                    </p>
+                    <span class="font-bold text-lg tracking-tight text-zinc-900 dark:text-white">{{ config('app.name') }}</span>
                 </div>
-            </div>
 
-            <!-- Application Layer -->
-            <div class="card bg-base-100 shadow-sm border border-base-300 hover:shadow-md transition-shadow">
-                <div class="card-body">
-                    <div class="w-12 h-12 bg-info/10 text-info rounded-lg flex items-center justify-center mb-4 text-2xl font-bold">
-                        2
-                    </div>
-                    <h3 class="card-title text-base-content">Application Layer</h3>
-                    <p class="text-sm text-base-content/70">
-                        Use-case orchestration via Commands and Queries. Decoupled handlers that translate domain logic into real-world actions.
-                    </p>
-                </div>
-            </div>
+                <div class="flex items-center gap-4">
 
-            <!-- Infrastructure Layer -->
-            <div class="card bg-base-100 shadow-sm border border-base-300 hover:shadow-md transition-shadow">
-                <div class="card-body">
-                    <div class="w-12 h-12 bg-primary/10 text-primary rounded-lg flex items-center justify-center mb-4 text-2xl font-bold">
-                        3
-                    </div>
-                    <h3 class="card-title text-base-content">Infrastructure</h3>
-                    <p class="text-sm text-base-content/70">
-                        The framework layer. Eloquent models, migrations, service implementations, and external integrations live here.
-                    </p>
-                </div>
-            </div>
+                    @auth
+                            <x-ui.button variant="ghost" size="sm" href="{{url('dashboard')}}">Dashboard</x-ui.button>
 
-            <!-- Presentation Layer -->
-            <div class="card bg-base-100 shadow-sm border border-base-300 hover:shadow-md transition-shadow">
-                <div class="card-body">
-                    <div class="w-12 h-12 bg-warning/10 text-warning rounded-lg flex items-center justify-center mb-4 text-2xl font-bold">
-                        4
-                    </div>
-                    <h3 class="card-title text-base-content">Presentation</h3>
-                    <p class="text-sm text-base-content/70">
-                        Bus-only Controllers and ViewComposers. Decoupled from logic, focusing purely on dispatching and UI transformation.
-                    </p>
+                    @else
+                        <a href="{{ route('login') }}">
+                            <x-ui.button variant="ghost" size="sm">Sign in</x-ui.button>
+                        </a>
+                        <a href="{{ route('register') }}">
+                            <x-ui.button variant="primary" size="sm">Get Started</x-ui.button>
+                        </a>
+                    @endauth
                 </div>
-            </div>
+            </header>
+
+            <main class="flex items-center justify-center min-h-screen p-6">
+                <div class="max-w-2xl w-full text-center space-y-8">
+                    <div class="space-y-4">
+                        <x-ui.badge variant="outline" color="emerald" class="uppercase tracking-widest text-[10px] py-1 px-3">
+                            <span class="relative flex size-2 mr-2">
+                                <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+                                <span class="relative inline-flex size-2 rounded-full bg-emerald-500"></span>
+                            </span>
+                            Available Now</x-ui.badge>
+                        <h1 class="text-5xl sm:text-7xl font-extrabold text-zinc-900 dark:text-white leading-[1.1]">
+                            Build faster with <span class="text-transparent bg-clip-text bg-linear-to-r from-emerald-600 to-teal-500">Modern Architecture</span>
+                        </h1>
+                        <p class="text-zinc-500 dark:text-neutral-400 text-lg max-w-lg mx-auto leading-relaxed">
+                            The ultimate Laravel starter kit with Domain-Driven Design, CQRS, and Sheaf UI.
+                        </p>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+                        <x-ui.button size="lg" icon-after="arrow-right" >
+                            Start Building Now
+                        </x-ui.button>
+                        <x-ui.button variant="outline" size="lg" >
+                            View Documentation
+                        </x-ui.button>
+                    </div>
+
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-8 pt-12">
+                        <div class="space-y-1">
+                            <span class="block text-2xl font-bold text-zinc-900 dark:text-white">100%</span>
+                            <span class="text-xs text-zinc-400 uppercase tracking-widest font-semibold">Type Safe</span>
+                        </div>
+                        <div class="space-y-1">
+                            <span class="block text-2xl font-bold text-zinc-900 dark:text-white">Onion</span>
+                            <span class="text-xs text-zinc-400 uppercase tracking-widest font-semibold">Architecture</span>
+                        </div>
+                        <div class="space-y-1 col-span-2 md:col-span-1">
+                            <span class="block text-2xl font-bold text-zinc-900 dark:text-white">Alpine.js</span>
+                            <span class="text-xs text-zinc-400 uppercase tracking-widest font-semibold">Driven UI</span>
+                        </div>
+                    </div>
+                </div>
+            </main>
         </div>
-    </div>
 
-    <!-- Final CTA -->
-    <div class="bg-base-100 py-24 border-t border-base-300">
-        <div class="max-w-4xl mx-auto px-4 text-center">
-            <h2 class="text-3xl font-extrabold text-base-content">Ready to build something great?</h2>
-            <p class="mt-4 text-lg text-base-content/60">
-                Kickstart your next enterprise Laravel application with the structure it deserves.
-            </p>
-            <div class="mt-10">
-                <a href="{{ route('register') }}" class="btn btn-primary btn-wide btn-lg shadow-lg">
-                    Create your account
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
-@endsection
+        @vite(['resources/js/app.js'])
+        <script>
+            loadDarkMode()
+        </script>
+    </body>
+</html>

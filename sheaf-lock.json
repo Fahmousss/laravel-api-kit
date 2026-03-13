@@ -1,0 +1,46 @@
+{
+    "files": {
+        "resources/js/utils.js": [
+            "dark-theme"
+        ]
+    },
+    "helpers": {
+        "popup": [
+            "select"
+        ]
+    },
+    "internalDependencies": {
+        "icon": [
+            "button",
+            "input",
+            "badge",
+            "dropdown",
+            "error",
+            "select",
+            "navlist",
+            "sidebar",
+            "navbar",
+            "alerts"
+        ],
+        "button": [
+            "badge",
+            "navlist",
+            "sidebar",
+            "navbar",
+            "theme-switcher"
+        ],
+        "text": [
+            "select"
+        ],
+        "badge": [
+            "navlist",
+            "navbar"
+        ],
+        "navlist": [
+            "sidebar"
+        ],
+        "dropdown": [
+            "theme-switcher"
+        ]
+    }
+}

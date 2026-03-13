@@ -4,89 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "85ceac9037234d7283b15a422306bb28",
+    "content-hash": "9e55ee275853c85de555a8bf478b082f",
     "packages": [
-        {
-            "name": "blade-ui-kit/blade-icons",
-            "version": "1.9.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/driesvints/blade-icons.git",
-                "reference": "caa92fde675d7a651c38bf73ca582ddada56f318"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/driesvints/blade-icons/zipball/caa92fde675d7a651c38bf73ca582ddada56f318",
-                "reference": "caa92fde675d7a651c38bf73ca582ddada56f318",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/contracts": "^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
-                "illuminate/filesystem": "^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
-                "illuminate/support": "^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
-                "illuminate/view": "^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
-                "php": "^7.4|^8.0",
-                "symfony/console": "^5.3|^6.0|^7.0|^8.0",
-                "symfony/finder": "^5.3|^6.0|^7.0|^8.0"
-            },
-            "require-dev": {
-                "mockery/mockery": "^1.5.1",
-                "orchestra/testbench": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0",
-                "phpunit/phpunit": "^9.0|^10.5|^11.0"
-            },
-            "bin": [
-                "bin/blade-icons-generate"
-            ],
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "BladeUI\\Icons\\BladeIconsServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "files": [
-                    "src/helpers.php"
-                ],
-                "psr-4": {
-                    "BladeUI\\Icons\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Dries Vints",
-                    "homepage": "https://driesvints.com"
-                }
-            ],
-            "description": "A package to easily make use of icons in your Laravel Blade views.",
-            "homepage": "https://github.com/driesvints/blade-icons",
-            "keywords": [
-                "blade",
-                "icons",
-                "laravel",
-                "svg"
-            ],
-            "support": {
-                "issues": "https://github.com/driesvints/blade-icons/issues",
-                "source": "https://github.com/driesvints/blade-icons"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/sponsors/driesvints",
-                    "type": "github"
-                },
-                {
-                    "url": "https://www.paypal.com/paypalme/driesvints",
-                    "type": "paypal"
-                }
-            ],
-            "time": "2026-02-23T10:42:23+00:00"
-        },
         {
             "name": "brick/math",
             "version": "0.14.8",
@@ -3377,6 +3296,66 @@
             "time": "2025-12-14T04:43:48+00:00"
         },
         {
+            "name": "sheaf/cli",
+            "version": "v1.3.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sheafui/cli.git",
+                "reference": "4bf1d1959f7a4c18b0d1388e6bb3509ce6253f79"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sheafui/cli/zipball/4bf1d1959f7a4c18b0d1388e6bb3509ce6253f79",
+                "reference": "4bf1d1959f7a4c18b0d1388e6bb3509ce6253f79",
+                "shasum": ""
+            },
+            "require-dev": {
+                "orchestra/testbench": "^10.4",
+                "pestphp/pest": "^3.8",
+                "pestphp/pest-plugin-laravel": "^3.2"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Sheaf\\Cli\\ServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Sheaf\\Cli\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Youssef ACHCHIRAJ",
+                    "email": "achchiraj.youssef@gmail.com",
+                    "homepage": "https://youssef-achchiraj.com",
+                    "role": "Full Stack Developer"
+                }
+            ],
+            "description": "A CLI tool for Sheaf UI",
+            "homepage": "https://github.com/sheaf/cli",
+            "keywords": [
+                "artisan-command",
+                "cli",
+                "laravel",
+                "laravel-package",
+                "package",
+                "sheaf"
+            ],
+            "support": {
+                "issues": "https://github.com/sheafui/cli/issues",
+                "source": "https://github.com/sheafui/cli/tree/v1.3.4"
+            },
+            "time": "2025-11-30T14:34:29+00:00"
+        },
+        {
             "name": "symfony/clock",
             "version": "v7.4.0",
             "source": {
@@ -6089,6 +6068,135 @@
                 }
             ],
             "time": "2024-11-21T01:49:47+00:00"
+        },
+        {
+            "name": "wireui/heroicons",
+            "version": "v2.9.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wireui/heroicons.git",
+                "reference": "b318b8cbbfb3e3bea841c0eaf2ff9e0ab1b8ee5e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wireui/heroicons/zipball/b318b8cbbfb3e3bea841c0eaf2ff9e0ab1b8ee5e",
+                "reference": "b318b8cbbfb3e3bea841c0eaf2ff9e0ab1b8ee5e",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "^9.16|^10.0|^11.0|^12.0",
+                "php": "^8.1|^8.2|^8.3|^8.4"
+            },
+            "require-dev": {
+                "larastan/larastan": "^3.0",
+                "laravel/pint": "^1.6",
+                "orchestra/testbench": "^10.0",
+                "pestphp/pest": "^3.0"
+            },
+            "type": "library",
+            "extra": {
+                "aliases": [],
+                "laravel": {
+                    "providers": [
+                        "WireUi\\Heroicons\\HeroiconsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "WireUi\\Heroicons\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Pedro Oliveira",
+                    "email": "pedrolivertwd@gmail.com"
+                }
+            ],
+            "description": "The Tailwind Heroicons for laravel blade by WireUI",
+            "keywords": [
+                "blade components",
+                "blade heroicons",
+                "laravel components",
+                "livewire icons",
+                "livewire icons components",
+                "wireui"
+            ],
+            "support": {
+                "issues": "https://github.com/wireui/heroicons/issues",
+                "source": "https://github.com/wireui/heroicons/tree/v2.9.1"
+            },
+            "time": "2026-03-04T13:02:21+00:00"
+        },
+        {
+            "name": "wireui/phosphoricons",
+            "version": "v2.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wireui/phosphoricons.git",
+                "reference": "a4d4ed73adf760a34878f561edb982ace0aa31ef"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wireui/phosphoricons/zipball/a4d4ed73adf760a34878f561edb982ace0aa31ef",
+                "reference": "a4d4ed73adf760a34878f561edb982ace0aa31ef",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "^9.52|^10.0|^11.0|^12.0",
+                "php": "^8.1|^8.2|^8.3|^8.4"
+            },
+            "require-dev": {
+                "larastan/larastan": "^3.0",
+                "laravel/pint": "^1.6",
+                "mockery/mockery": "^1.5",
+                "orchestra/testbench": "^10.0",
+                "pestphp/pest": "^3.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": [],
+                    "providers": [
+                        "WireUi\\PhosphorIcons\\PhosphorIconsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "WireUi\\PhosphorIcons\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "ph7jack",
+                    "email": "pedro@wireui.dev"
+                }
+            ],
+            "description": "The phosphoricons made for laravel blade by WireUI",
+            "keywords": [
+                "Blade Icons",
+                "blade components",
+                "blade phosphoricons",
+                "laravel components",
+                "livewire icons",
+                "livewire icons components",
+                "wireui",
+                "wireui phosphoricons"
+            ],
+            "support": {
+                "issues": "https://github.com/wireui/phosphoricons/issues",
+                "source": "https://github.com/wireui/phosphoricons/tree/v2.4.0"
+            },
+            "time": "2025-03-02T22:06:11+00:00"
         }
     ],
     "packages-dev": [
