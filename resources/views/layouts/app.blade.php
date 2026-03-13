@@ -20,7 +20,7 @@
         // Load dark mode before page renders to prevent flicker
         const loadDarkMode = () => {
             const theme = localStorage.getItem('theme') ?? 'system'
-
+            
             if (
                 theme === 'dark' ||
                 (theme === 'system' &&
@@ -30,7 +30,7 @@
                 document.documentElement.classList.add('dark')
             }
         }
-
+                
         // Initialize on page load
         loadDarkMode();
     </script>
@@ -49,22 +49,24 @@
                     </x-slot:brand>
 
                     <x-ui.navlist>
-                            <x-ui.navlist.item
-                                icon="home"
-                                label="Dashboard"
-                                :href="route('dashboard')"
+                        <x-ui.navlist.group label="Menu" >
+                            <x-ui.navlist.item 
+                                icon="home" 
+                                label="Dashboard" 
+                                :href="route('dashboard')" 
                                 :active="request()->routeIs('dashboard')"
                             />
-                            <x-ui.navlist.item
-                                icon="user"
-                                label="Profile"
-                                href="#"
+                            <x-ui.navlist.item 
+                                icon="user" 
+                                label="Profile" 
+                                href="#" 
                             />
-                            <x-ui.navlist.item
-                                icon="cog-8-tooth"
-                                label="Settings"
-                                href="#"
+                            <x-ui.navlist.item 
+                                icon="cog-8-tooth" 
+                                label="Settings" 
+                                href="#" 
                             />
+                        </x-ui.navlist.group>
                     </x-ui.navlist>
                 </x-ui.sidebar>
 
@@ -93,11 +95,11 @@
                                         </x-ui.dropdown.item>
 
                                         <x-ui.dropdown.separator />
-
-                                        <x-ui.dropdown.item
+                                        
+                                        <x-ui.dropdown.item 
                                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                             <form method="POST" action="{{ route('logout') }}" id="logout-form">
-                                                @csrf
+                                                @csrf   
                                                 <div class="flex gap-2">
                                                     <x-ui.icon name="arrow-left-on-rectangle" class="text-red-600 dark:text-red-400" />
                                                     <span class="text-red-600 dark:text-red-400">Logout</span>
