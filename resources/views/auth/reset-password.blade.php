@@ -3,30 +3,44 @@
 @section('title', 'Reset Password')
 
 @section('content')
-<div class="min-h-[calc(100vh-150px)] flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8">
-    <div class="sm:mx-auto sm:w-full sm:max-w-md">
-        <h2 class="text-center text-3xl font-extrabold text-emerald-950">
-            Reset your password
-        </h2>
-    </div>
+<div class="min-h-[80vh] flex items-center justify-center p-4">
+    <div class="card w-full max-w-md bg-base-100 shadow-xl border border-base-300">
+        <div class="card-body">
+            <h1 class="card-title text-2xl font-bold mb-1 text-base-content">Reset password</h1>
+            <p class="text-base-content/60 text-sm mb-6">Choose a secure new password</p>
 
-    <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10 border border-slate-100">
-            <form method="POST" action="{{ route('password.update') }}" class="space-y-6">
+            <form method="POST" action="{{ route('password.update') }}">
                 @csrf
 
                 <input type="hidden" name="token" value="{{ $token }}">
 
-                <x-form.input name="email" label="Email address" type="email" :value="old('email', $email)" required autofocus />
+                <x-form.input 
+                    name="email" 
+                    label="Email address" 
+                    type="email" 
+                    :value="old('email', $email)" 
+                    required 
+                    autofocus 
+                />
 
-                <x-form.input name="password" label="New Password" type="password" required />
+                <x-form.input 
+                    name="password" 
+                    label="New Password" 
+                    type="password" 
+                    placeholder="••••••••"
+                    required 
+                />
 
-                <x-form.input name="password_confirmation" label="Confirm New Password" type="password" required />
+                <x-form.input 
+                    name="password_confirmation" 
+                    label="Confirm New Password" 
+                    type="password" 
+                    placeholder="••••••••"
+                    required 
+                />
 
-                <div>
-                    <x-form.button class="w-full">
-                        Reset Password
-                    </x-form.button>
+                <div class="card-actions justify-end mt-4">
+                    <x-form.button label="Reset Password" />
                 </div>
             </form>
         </div>
