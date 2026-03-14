@@ -352,5 +352,5 @@ This project is open-sourced software licensed under the [MIT license](LICENSE).
 
 ## Support
 
-- [Issues](https://github.com/grazulex/laravel-api-kit/issues)
-- [Discussions](https://github.com/grazulex/laravel-api-kit/discussions)
+- [Issues](https://github.com/fahmousss/laravel-api-kit/issues)
+- [Discussions](https://github.com/fahmousss/laravel-api-kit/discussions)
