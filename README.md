@@ -1,6 +1,6 @@
-# Laravel API Kit
+# Laravel Web Kit
 
-A production-ready, API-only Laravel 12 starter kit following the 2024-2025 REST API ecosystem best practices. No frontend dependencies - purely headless API for mobile apps, SPAs, or microservices.
+A production-ready Laravel 12 starter kit for building modern, responsive web applications. Featuring a powerful frontend stack with Tailwind CSS v4 and Alpine.js v3, alongside session-based authentication and best-in-class code quality tools.
 
 [![PHP Version](https://img.shields.io/badge/PHP-8.3%2B-blue)](https://php.net)
 [![Laravel Version](https://img.shields.io/badge/Laravel-12.x-red)](https://laravel.com)
@@ -8,26 +8,30 @@ A production-ready, API-only Laravel 12 starter kit following the 2024-2025 REST
 
 ## Features
 
-- **API-Only** - No Blade, Vite, or frontend assets
-- **Token Authentication** - Laravel Sanctum for mobile/SPA auth
-- **Email Verification** - Built-in email verification flow with signed URLs
-- **Password Reset** - Secure password reset with token-based flow
-- **API Versioning** - URI-based versioning with deprecation support via [grazulex/laravel-apiroute](https://github.com/Grazulex/laravel-apiroute)
-- **Query Building** - Filtering, sorting, includes via [spatie/laravel-query-builder](https://github.com/spatie/laravel-query-builder)
-- **Data Objects** - Type-safe DTOs via [spatie/laravel-data](https://github.com/spatie/laravel-data)
-- **Auto Documentation** - Zero-annotation OpenAPI 3.1 via [dedoc/scramble](https://github.com/dedoc/scramble)
-- **Modern Testing** - Pest PHP with Laravel HTTP testing
-- **Code Quality** - PHPStan (max level), Rector, and Pint with strict rules
-- **Rate Limiting** - Configurable per-route rate limiters
-- **Reusable Middleware** - ForceJsonResponse, LogApiRequests, EnsureEmailVerified
-- **Standardized Responses** - Consistent JSON response format
-- **Optional: API Idempotency** - RFC-compliant idempotency via [grazulex/laravel-api-idempotency](https://github.com/Grazulex/laravel-api-idempotency)
-- **Optional: Smart Rate Limiting** - Plan-aware throttling with quotas via [grazulex/laravel-api-throttle-smart](https://github.com/Grazulex/laravel-api-throttle-smart)
+### 🎨 Modern Frontend
+
+- **Tailwind CSS v4** - The latest utility-first CSS framework with Vite integration.
+- **Alpine.js v3** - Lightweight, reactive client-side logic for interactive components.
+- **Icon Libraries** - Built-in support for **Heroicons** and **PhosphorIcons**.
+- **Vite** - Lightning-fast frontend bundling and HMR.
+
+### 🔐 Web Authentication
+
+- **Session-based Auth** - Secure cookie-based authentication via Laravel's native web guard.
+- **Complete Auth Flow** - Login, Registration, Password Reset, and Email Verification.
+- **Dashboard** - Ready-to-use protected user dashboard.
+
+### 🛠️ Core & Quality
+
+- **Modern Testing** - Pest PHP for feature and unit testing.
+- **Code Quality** - PHPStan (max level), Rector, and Pint with strict rules.
+- **DDD Inspired Architecture** - Organized for scalability across Application, Domain, Infrastructure, and Presentation layers.
+- **Docker Ready** - Full development environment with Docker Compose.
 
 ## Requirements
 
 - Docker & Docker Compose
-- Or: PHP 8.3+, Composer 2.x
+- Or: PHP 8.3+, Composer 2.x, Node.js & npm
 
 ## Quick Start
 
@@ -35,8 +39,9 @@ A production-ready, API-only Laravel 12 starter kit following the 2024-2025 REST
 
 ```bash
 # Clone the repository
-git clone https://github.com/grazulex/laravel-api-kit.git
-cd laravel-api-kit
+mkdir laravel-web
+cd laravel-web
+git clone -b laravel-web https://github.com/fahmousss/laravel-api-kit.git .
 
 # Copy environment file
 cp .env.example .env
@@ -45,8 +50,10 @@ cp .env.example .env
 docker compose build
 docker compose up -d
 
-# Install dependencies
+# Install dependencies & Build assets
 docker compose run --rm app composer install
+docker compose run --rm app npm install
+docker compose run --rm app npm run build
 
 # Generate application key
 docker compose run --rm app php artisan key:generate
@@ -54,7 +61,7 @@ docker compose run --rm app php artisan key:generate
 # Run migrations
 docker compose run --rm app php artisan migrate
 
-# Run tests to verify installation
+# Run tests
 docker compose run --rm app ./vendor/bin/pest
 ```
 
@@ -62,9 +69,12 @@ docker compose run --rm app ./vendor/bin/pest
 
 ```bash
 # Clone and install
-git clone https://github.com/grazulex/laravel-api-kit.git
-cd laravel-api-kit
+mkdir laravel-web
+cd laravel-web
+git clone -b laravel-web https://github.com/fahmousss/laravel-api-kit.git .
 composer install
+npm install
+npm run build
 
 # Configure
 cp .env.example .env
@@ -78,532 +88,52 @@ php artisan migrate
 ./vendor/bin/pest
 ```
 
-## API Documentation
-
-Once running, access the auto-generated documentation:
-
-- **Swagger UI**: [http://localhost:8080/docs/api](http://localhost:8080/docs/api)
-- **OpenAPI JSON**: [http://localhost:8080/docs/api.json](http://localhost:8080/docs/api.json)
-
 ## Authentication
 
-This kit uses **Laravel Sanctum** with token-based authentication (ideal for mobile apps and third-party API consumers).
+This kit uses standard Laravel session-based authentication.
 
-### Register a New User
+- **Register**: `http://localhost:8080/register`
+- **Login**: `http://localhost:8080/login`
+- **Dashboard**: `http://localhost:8080/dashboard` (Authenticated only)
+- **Password Reset**: `http://localhost:8080/forgot-password`
 
-```bash
-curl -X POST http://localhost:8080/api/v1/register \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json" \
-  -d '{
-    "name": "John Doe",
-    "email": "john@example.com",
-    "password": "password123",
-    "password_confirmation": "password123"
-  }'
-```
+## Web Routes
 
-**Response:**
-
-```json
-{
-    "success": true,
-    "message": "User registered successfully. Please check your email to verify your account.",
-    "data": {
-        "user": {
-            "id": 1,
-            "name": "John Doe",
-            "email": "john@example.com",
-            "email_verified_at": null,
-            "created_at": "2025-01-15T10:30:00+00:00"
-        },
-        "token": "1|abc123..."
-    }
-}
-```
-
-### Login
-
-```bash
-curl -X POST http://localhost:8080/api/v1/login \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json" \
-  -d '{
-    "email": "john@example.com",
-    "password": "password123"
-  }'
-```
-
-### Using the Token
-
-Include the token in the `Authorization` header for protected routes:
-
-```bash
-curl -X GET http://localhost:8080/api/v1/me \
-  -H "Authorization: Bearer 1|abc123..." \
-  -H "Accept: application/json"
-```
-
-### Logout
-
-```bash
-curl -X POST http://localhost:8080/api/v1/logout \
-  -H "Authorization: Bearer 1|abc123..." \
-  -H "Accept: application/json"
-```
-
-### Email Verification
-
-After registration, users receive a verification email. The kit integrates with Laravel's `MustVerifyEmail` contract.
-
-**Verify Email (via signed URL from email):**
-
-```bash
-curl -X POST "http://localhost:8080/api/v1/email/verify/{id}/{hash}?signature=..." \
-  -H "Authorization: Bearer 1|abc123..." \
-  -H "Accept: application/json"
-```
-
-**Resend Verification Email:**
-
-```bash
-curl -X POST http://localhost:8080/api/v1/email/resend \
-  -H "Authorization: Bearer 1|abc123..." \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json" \
-  -d '{"email": "john@example.com"}'
-```
-
-**Response:**
-
-```json
-{
-    "success": true,
-    "message": "Verification email sent successfully",
-    "data": null
-}
-```
-
-### Password Reset
-
-**Request Password Reset Link:**
-
-```bash
-curl -X POST http://localhost:8080/api/v1/forgot-password \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json" \
-  -d '{"email": "john@example.com"}'
-```
-
-**Response:**
-
-```json
-{
-    "success": true,
-    "message": "Password reset link sent to your email",
-    "data": null
-}
-```
-
-**Reset Password (with token from email):**
-
-```bash
-curl -X POST http://localhost:8080/api/v1/reset-password \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json" \
-  -d '{
-    "email": "john@example.com",
-    "token": "reset-token-from-email",
-    "password": "newpassword123",
-    "password_confirmation": "newpassword123"
-  }'
-```
-
-**Response:**
-
-```json
-{
-    "success": true,
-    "message": "Password reset successfully",
-    "data": null
-}
-```
-
-> **Note:** After a successful password reset, all user tokens are revoked for security.
-
-## API Endpoints
-
-### Version 1 (`/api/v1`)
-
-| Method | Endpoint                  | Auth | Description                 | Rate Limit |
-| ------ | ------------------------- | ---- | --------------------------- | ---------- |
-| POST   | /register                 | No   | Register new user           | 5/min      |
-| POST   | /login                    | No   | Get authentication token    | 5/min      |
-| POST   | /logout                   | Yes  | Revoke current token        | 120/min    |
-| GET    | /me                       | Yes  | Get current user profile    | 120/min    |
-| POST   | /email/verify/{id}/{hash} | Yes  | Verify email address        | 120/min    |
-| POST   | /email/resend             | Yes  | Resend verification email   | 6/min      |
-| POST   | /forgot-password          | No   | Request password reset link | 6/min      |
-| POST   | /reset-password           | No   | Reset password with token   | 6/min      |
-
-## Response Format
-
-All API responses follow a consistent format:
-
-### Success Response
-
-```json
-{
-    "success": true,
-    "message": "Operation successful",
-    "data": {
-        // Response data here
-    }
-}
-```
-
-### Error Response
-
-```json
-{
-    "success": false,
-    "message": "Error description",
-    "errors": {
-        "field": ["Validation error message"]
-    }
-}
-```
-
-### HTTP Status Codes
-
-| Code | Description       |
-| ---- | ----------------- |
-| 200  | Success           |
-| 201  | Resource created  |
-| 204  | No content        |
-| 400  | Bad request       |
-| 401  | Unauthorized      |
-| 403  | Forbidden         |
-| 404  | Not found         |
-| 422  | Validation error  |
-| 429  | Too many requests |
-| 500  | Server error      |
+| Method | Endpoint         | Auth | Description            |
+| ------ | ---------------- | ---- | ---------------------- |
+| GET    | /                | No   | Welcome Home Page      |
+| GET    | /login           | No   | Login Form             |
+| GET    | /register        | No   | Registration Form      |
+| GET    | /dashboard       | Yes  | User Dashboard         |
+| POST   | /logout          | Yes  | Logout (Session)       |
+| GET    | /verify-email    | Yes  | Email Verification UI  |
+| GET    | /forgot-password | No   | Password Recovery Form |
 
 ## Project Structure
 
 ```
 laravel-api-kit/
 ├── app/
-│   ├── Application/                # Application logic (Use Cases/CQRS, Bus, DTOs)
-│   ├── Console/                    # Artisan commands (including custom Make commands)
-│   ├── Domain/                     # Core business logic (Entities, Value Objects, Repository Interfaces)
-│   ├── Infrastructure/             # External boundaries (Persistence, Third-party APIs, Service Providers)
-│   ├── Presentation/               # HTTP Entry points (Controllers, Requests, Resources)
-│   └── Providers/                  # Global Service Providers
-├── config/
-│   ├── apiroute.php                       # API versioning config
-│   ├── cors.php                           # CORS settings
-│   ├── sanctum.php                        # Token auth config
-│   └── scramble.php                       # API docs config
+│   ├── Application/                # Use Cases, Handlers, DTOs
+│   ├── Domain/                     # Entities and Contracts
+│   ├── Infrastructure/             # Repositories and Service Providers
+│   └── Presentation/
+│       ├── Controllers/Web/        # Web Controllers
+│       ├── Requests/               # Form Validation
+│       └── ViewModels/             # View logic and data preparation
+├── resources/
+│   ├── css/                        # Tailwind CSS v4
+│   ├── js/                         # Alpine.js & Scripts
+│   └── views/                      # Blade templates
 ├── routes/
-│   ├── api.php                            # API routes entry point
-│   └── api/
-│       └── v1.php                         # Version 1 routes
+│   ├── web.php                     # Web routes entry
+│   └── console.php                 # Console commands
 ├── tests/
-│   └── Feature/Api/V1/
-│       └── AuthTest.php                   # Authentication tests
+│   ├── Feature/                    # Web Feature tests
+│   └── Unit/                       # Unit tests
 ├── docker-compose.yml
-├── Dockerfile
-└── CLAUDE.md                              # AI assistant instructions
-```
-
-## API Versioning
-
-This kit uses [grazulex/laravel-apiroute](https://github.com/Grazulex/laravel-apiroute) v2.x for API versioning with support for:
-
-- **URI Path** (default): `/api/v1/users`, `/api/v2/users`
-- **Header**: `X-API-Version: 2`
-- **Query Parameter**: `?api_version=2`
-- **Accept Header**: `Accept: application/vnd.api.v2+json`
-
-### Adding a New API Version
-
-1. Create controllers in `app/Http/Controllers/Api/V2/`
-2. Create requests in `app/Http/Requests/Api/V2/`
-3. Create route file `routes/api/v2.php`:
-
-```php
-<?php
-
-use App\Http\Controllers\Api\V2\AuthController;
-use Illuminate\Support\Facades\Route;
-
-Route::post('register', [AuthController::class, 'register']);
-// ... more routes
-```
-
-4. Update `config/apiroute.php`:
-
-```php
-'versions' => [
-    'v1' => [
-        'routes' => base_path('routes/api/v1.php'),
-        'status' => 'deprecated',
-        'deprecated_at' => '2025-06-01',
-        'sunset_at' => '2025-12-01',
-        'successor' => 'v2',
-    ],
-    'v2' => [
-        'routes' => base_path('routes/api/v2.php'),
-        'status' => 'active',
-    ],
-],
-```
-
-### Deprecation Headers
-
-When accessing deprecated versions, responses include RFC-compliant headers:
-
-```http
-Deprecation: Sun, 01 Jun 2025 00:00:00 GMT
-Sunset: Mon, 01 Dec 2025 00:00:00 GMT
-Link: </api/v2>; rel="successor-version"
-```
-
-## Query Building
-
-Use [spatie/laravel-query-builder](https://spatie.be/docs/laravel-query-builder) for filtering, sorting, and including relationships:
-
-```php
-use Spatie\QueryBuilder\QueryBuilder;
-use Spatie\QueryBuilder\AllowedFilter;
-
-// In your controller
-$users = QueryBuilder::for(User::class)
-    ->allowedFilters([
-        'name',
-        'email',
-        AllowedFilter::exact('id'),
-        AllowedFilter::scope('active'),
-    ])
-    ->allowedSorts(['name', 'created_at'])
-    ->allowedIncludes(['posts', 'comments'])
-    ->paginate();
-
-return UserResource::collection($users);
-```
-
-**Request examples:**
-
-```
-GET /api/v1/users?filter[name]=john
-GET /api/v1/users?sort=-created_at
-GET /api/v1/users?include=posts,comments
-GET /api/v1/users?filter[name]=john&sort=name&include=posts
-```
-
-## Data Transfer Objects
-
-Use [spatie/laravel-data](https://spatie.be/docs/laravel-data) for type-safe DTOs:
-
-```php
-// app/DTOs/UserData.php
-use Spatie\LaravelData\Data;
-
-class UserData extends Data
-{
-    public function __construct(
-        public string $name,
-        public string $email,
-        public ?string $password = null,
-    ) {}
-}
-
-// In controller - validates and transforms automatically
-public function store(UserData $data): JsonResponse
-{
-    $user = User::create($data->toArray());
-    return $this->created(UserResource::make($user));
-}
-```
-
-## Rate Limiting
-
-Configured in `app/Providers/AppServiceProvider.php`:
-
-| Limiter         | Limit   | Use Case                                |
-| --------------- | ------- | --------------------------------------- |
-| `api`           | 60/min  | Default for all API routes              |
-| `auth`          | 5/min   | Login/register (brute force protection) |
-| `authenticated` | 120/min | Logged-in users                         |
-
-### Applying Rate Limiters
-
-```php
-// In routes/api.php
-Route::middleware('throttle:auth')->group(function () {
-    Route::post('login', [AuthController::class, 'login']);
-    Route::post('register', [AuthController::class, 'register']);
-});
-
-Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function () {
-    // Protected routes with higher limits
-});
-```
-
-### Rate Limit Headers
-
-Responses include rate limit information:
-
-```http
-X-RateLimit-Limit: 60
-X-RateLimit-Remaining: 59
-Retry-After: 60  # When limit exceeded
-```
-
-## Optional Packages
-
-The following packages are **suggested** (not required) and can be installed individually to extend the kit's capabilities. They are fully opt-in and will not affect existing behavior.
-
-### API Idempotency
-
-[grazulex/laravel-api-idempotency](https://github.com/Grazulex/laravel-api-idempotency) provides RFC-compliant idempotency for your API endpoints. It prevents duplicate operations when clients retry requests (critical for payments, order creation, etc.).
-
-**Install:**
-
-```bash
-composer require grazulex/laravel-api-idempotency
-```
-
-**Publish config (optional):**
-
-```bash
-php artisan vendor:publish --tag="api-idempotency-config"
-```
-
-**Usage — apply the middleware to mutation routes:**
-
-```php
-// routes/api/v1.php
-Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function () {
-    Route::post('orders', [OrderController::class, 'store'])
-        ->middleware('idempotent');
-
-    Route::post('payments', [PaymentController::class, 'store'])
-        ->middleware('idempotent:required'); // Require Idempotency-Key header
-});
-```
-
-**Client-side — include the `Idempotency-Key` header:**
-
-```bash
-curl -X POST http://localhost:8080/api/v1/orders \
-  -H "Authorization: Bearer 1|abc123..." \
-  -H "Idempotency-Key: order_unique_key_123" \
-  -H "Content-Type: application/json" \
-  -d '{"product_id": 1, "quantity": 2}'
-```
-
-> **Attention:**
->
-> - Only apply the `idempotent` middleware to mutation routes (POST, PUT, PATCH). GET requests are naturally idempotent.
-> - The default storage driver is `cache`. For production with multiple servers, use the `redis` or `database` driver.
-> - Keys are scoped per user by default. Two different users can use the same key without conflict.
-
----
-
-### Smart Rate Limiting
-
-[grazulex/laravel-api-throttle-smart](https://github.com/Grazulex/laravel-api-throttle-smart) provides plan-aware rate limiting with quotas, multiple algorithms (fixed window, sliding window, token bucket), and multi-tenant support. Ideal for SaaS APIs with subscription tiers.
-
-**Install:**
-
-```bash
-composer require grazulex/laravel-api-throttle-smart
-```
-
-**Publish config:**
-
-```bash
-php artisan vendor:publish --tag="throttle-smart-config"
-```
-
-**Usage — apply to routes where plan-based limiting is needed:**
-
-```php
-// routes/api/v1.php
-Route::middleware(['auth:sanctum', 'throttle.smart'])->group(function () {
-    Route::apiResource('posts', PostController::class);
-});
-```
-
-> **Attention:**
->
-> - This package **coexists** with Laravel's built-in `throttle:` middleware. You do not need to remove the existing rate limiters.
-> - If you want to **replace** the native throttle on specific routes, swap `throttle:authenticated` with `throttle.smart` on those routes only.
-> - Do **not** apply both `throttle:authenticated` and `throttle.smart` on the same route group — choose one per group to avoid double rate limiting.
-> - The default driver is `cache`. For production, `redis` is recommended for performance and distributed consistency.
-> - Configure your subscription plans in `config/throttle-smart.php` to match your business model (Free, Pro, Enterprise, etc.).
-
----
-
-## Middleware
-
-The kit includes three production-ready middleware patterns that you can apply to your routes as needed.
-
-### Available Middleware
-
-| Alias        | Class                 | Description                               |
-| ------------ | --------------------- | ----------------------------------------- |
-| `force.json` | `ForceJsonResponse`   | Ensures all responses are JSON formatted  |
-| `log.api`    | `LogApiRequests`      | Logs API requests with timing information |
-| `verified`   | `EnsureEmailVerified` | Requires verified email to access route   |
-
-### ForceJsonResponse
-
-Automatically sets `Accept: application/json` header and converts non-JSON responses to JSON format.
-
-```php
-Route::middleware('force.json')->group(function () {
-    // All responses will be JSON
-});
-```
-
-### LogApiRequests
-
-Logs API requests with detailed information and adds `X-Response-Time` header to responses.
-
-**Logged data:** timestamp, method, URL, IP, user ID, status code, duration (ms), user agent.
-
-**Enable logging via environment:**
-
-```env
-APP_LOG_API_REQUESTS=true
-```
-
-```php
-Route::middleware('log.api')->group(function () {
-    // Requests will be logged
-});
-```
-
-### EnsureEmailVerified
-
-Protects routes that require a verified email address. Returns 403 if email is not verified.
-
-```php
-Route::middleware(['auth:sanctum', 'verified'])->group(function () {
-    // Only users with verified emails can access
-});
-```
-
-**Response when email not verified:**
-
-```json
-{
-    "success": false,
-    "message": "Your email address is not verified. Please verify your email to continue."
-}
+├── vite.config.js                  # Frontend build config
+└── CLAUDE.md                       # AI instructions
 ```
 
 ## Testing
@@ -615,7 +145,7 @@ This kit uses [Pest PHP](https://pestphp.com/) for testing:
 docker compose run --rm app ./vendor/bin/pest
 
 # Run specific test file
-docker compose run --rm app ./vendor/bin/pest tests/Feature/Api/V1/AuthTest.php
+docker compose run --rm app ./vendor/bin/pest tests/Feature/Web/AuthTest.php
 
 # Run with coverage
 docker compose run --rm app ./vendor/bin/pest --coverage
@@ -627,33 +157,24 @@ docker compose run --rm app ./vendor/bin/pest --parallel
 ### Writing Tests
 
 ```php
-// tests/Feature/Api/V1/UserTest.php
+// tests/Feature/Web/UserTest.php
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
-it('lists users for authenticated user', function () {
+it('shows the dashboard for authenticated user', function () {
     $user = User::factory()->create();
-    $token = $user->createToken('test')->plainTextToken;
 
-    User::factory()->count(5)->create();
-
-    $response = $this->withHeader('Authorization', "Bearer {$token}")
-        ->getJson('/api/v1/users');
-
-    $response->assertStatus(200)
-        ->assertJsonStructure([
-            'success',
-            'data' => [
-                '*' => ['id', 'name', 'email']
-            ]
-        ]);
+    $this->actingAs($user)
+        ->get('/dashboard')
+        ->assertStatus(200)
+        ->assertSee('Dashboard');
 });
 
-it('requires authentication', function () {
-    $this->getJson('/api/v1/users')
-        ->assertStatus(401);
+it('redirects unauthenticated user from dashboard', function () {
+    $this->get('/dashboard')
+        ->assertRedirect('/login');
 });
 ```
 
@@ -672,7 +193,7 @@ This kit includes strict code quality tools configured following [nunomaduro/lar
 ### Composer Scripts
 
 ```bash
-# Apply all fixes (Rector + Pint)
+# Apply fixes (Rector + Pint)
 composer lint
 
 # Check without fixing (CI mode)
@@ -720,9 +241,6 @@ docker compose run --rm app php artisan optimize:clear
 # Generate IDE helper files (if using Laravel IDE Helper)
 docker compose run --rm app php artisan ide-helper:generate
 docker compose run --rm app php artisan ide-helper:models -N
-
-# Export OpenAPI spec to file
-docker compose run --rm app php artisan scramble:export
 ```
 
 ### DDD Scaffolding Commands
@@ -752,7 +270,7 @@ Key `.env` variables:
 
 ```env
 # Application
-APP_NAME="Laravel API Kit"
+APP_NAME="Laravel Web Kit"
 APP_ENV=local
 APP_DEBUG=true
 APP_URL=http://localhost:8080
@@ -768,19 +286,6 @@ DB_DATABASE=/var/www/database/database.sqlite
 # DB_DATABASE=laravel_api_kit
 # DB_USERNAME=laravel
 # DB_PASSWORD=secret
-
-# Sanctum
-SANCTUM_STATEFUL_DOMAINS=localhost,localhost:3000,127.0.0.1
-
-# API Versioning
-API_VERSION_STRATEGY=uri
-API_DEFAULT_VERSION=latest
-
-# Rate Limiting
-API_RATE_LIMIT=60
-
-# Documentation
-API_DOCS_URL=http://localhost:8080/docs/api
 ```
 
 ## Deployment
@@ -789,13 +294,12 @@ API_DOCS_URL=http://localhost:8080/docs/api
 
 - [ ] Set `APP_ENV=production` and `APP_DEBUG=false`
 - [ ] Configure proper database (MySQL/PostgreSQL)
+- [ ] Run `npm run build` for production assets
 - [ ] Set `APP_URL` to your production URL
-- [ ] Configure `SANCTUM_STATEFUL_DOMAINS` for your frontend domains
 - [ ] Review and tighten CORS settings in `config/cors.php`
-- [ ] Set up proper rate limiting for production load
-- [ ] Configure caching (Redis recommended)
+- [ ] Set up proper caching (Redis recommended)
 - [ ] Set up queue worker for background jobs
-- [ ] Enable HTTPS and update URLs
+- [ ] Enable HTTPS
 
 ### Docker Production
 
@@ -813,77 +317,18 @@ COPY docker/php/php.ini /usr/local/etc/php/conf.d/
 
 ## Extending the Kit
 
-### Adding a New Domain Component (CRUD Example)
+This kit follows the same structural patterns for Web features as it does for the API core.
 
-Using the custom DDD commands, building out a feature like `Blog` with a `Post` entity ensures your code stays organized out-of-the-box.
+### Adding a New Web Feature
 
-1. **Scaffold the Domain Layer:**
-
-```bash
-docker compose run --rm app php artisan make:domain Blog Post
-# Generates App\Domain\Blog\Entities\PostEntity
-# Generates App\Domain\Blog\Repositories\PostRepositoryInterface
-# Generates App\Domain\Blog\Exceptions\PostNotFoundException
-```
-
-2. **Scaffold the Infrastructure Layer:**
-
-```bash
-docker compose run --rm app php artisan make:infrastructure Blog Post
-# Generates App\Infrastructure\Blog\Models\Post
-# Generates App\Infrastructure\Blog\Persistence\EloquentPostRepository
-# Generates Database\Factories\PostFactory
-# Generates Database\Migrations\..._create_posts_table.php
-# Auto-registers BlogServiceProvider and binds PostRepositoryInterface
-```
-
-3. **Scaffold Use Cases (Application Layer):**
-
-```bash
-docker compose run --rm app php artisan make:use-case Blog CreatePost --command
-# Generates App\Application\Features\Blog\Commands\CreatePost\CreatePostCommand
-# Generates App\Application\Features\Blog\Commands\CreatePost\CreatePostCommandHandler
-```
-
-_(Optionally use `make:data Blog CreatePostData` to create DTOs separately, if prefered)._
-
-4. **Create Controller & Form Request (Presentation Layer):**
-
-```bash
-docker compose run --rm app php artisan make:controller Presentation/Controllers/Api/V1/Blog/PostController
-docker compose run --rm app php artisan make:request Presentation/Requests/Api/V1/Blog/CreatePostRequest
-```
-
-5. **Wire the Presentation to the Application Layer:**
-
-```php
-// app/Presentation/Controllers/Api/V1/Blog/PostController.php
-namespace App\Presentation\Controllers\Api\V1\Blog;
-
-use App\Application\Features\Blog\Commands\CreatePost\CreatePostCommand;
-use App\Presentation\Controllers\Api\ApiController;
-use App\Presentation\Requests\Api\V1\Blog\CreatePostRequest;
-use Illuminate\Http\JsonResponse;
-
-class PostController extends ApiController
-{
-    public function store(CreatePostRequest $request): JsonResponse
-    {
-        $command = new CreatePostCommand(
-            title: $request->validated('title'),
-            content: $request->validated('content'),
-        );
-
-        $post = $this->commandBus->dispatch($command);
-
-        return $this->created(['id' => $post->id, 'title' => $post->title]);
-    }
-}
-```
-
-6. **Add Routes & Tests:**
-   Define API routes in `routes/api/v1.php` mapping to your `Presentation` controllers.
-   Use Pest to build out feature tests testing through the HTTP layer to the Infrastructure.
+1. **Scaffold Domain**: `php artisan make:domain Blog Post`
+2. **Infrastructure**: `php artisan make:infrastructure Blog Post`
+3. **Application**: `php artisan make:use-case Blog CreatePost --command`
+4. **Presentation**:
+    - Create a Web Controller: `php artisan make:controller Presentation/Controllers/Web/Blog/PostController`
+    - Create a View: `resources/views/blog/create.blade.php`
+    - Create a ViewModel: `app/Presentation/ViewModels/Blog/PostViewModel.php`
+5. **Routes**: Register in `routes/web.php`.
 
 ## Contributing
 
@@ -900,17 +345,12 @@ This project is open-sourced software licensed under the [MIT license](LICENSE).
 ## Credits
 
 - [Laravel](https://laravel.com) - The PHP Framework
-- [Laravel Sanctum](https://laravel.com/docs/sanctum) - API Token Authentication
-- [grazulex/laravel-apiroute](https://github.com/Grazulex/laravel-apiroute) - API Versioning
-- [spatie/laravel-query-builder](https://github.com/spatie/laravel-query-builder) - Query Building
-- [spatie/laravel-data](https://github.com/spatie/laravel-data) - Data Transfer Objects
-- [dedoc/scramble](https://github.com/dedoc/scramble) - API Documentation
-- [grazulex/laravel-api-idempotency](https://github.com/Grazulex/laravel-api-idempotency) - API Idempotency (optional)
-- [grazulex/laravel-api-throttle-smart](https://github.com/Grazulex/laravel-api-throttle-smart) - Smart Rate Limiting (optional)
+- [Tailwind CSS](https://tailwindcss.com) - Utility-first CSS
+- [Alpine.js](https://alpinejs.dev) - Lightweight JavaScript
 - [Pest PHP](https://pestphp.com) - Testing Framework
+- [sheaf/cli](https://github.com/sheaf-php/cli) - CLI tooling
 
 ## Support
 
-- [Documentation](https://github.com/grazulex/laravel-api-kit/wiki)
 - [Issues](https://github.com/grazulex/laravel-api-kit/issues)
 - [Discussions](https://github.com/grazulex/laravel-api-kit/discussions)
