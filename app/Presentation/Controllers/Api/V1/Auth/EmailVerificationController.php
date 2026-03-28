@@ -31,7 +31,6 @@ final class EmailVerificationController extends ApiController
 
         $userDto = $this->queryBus->dispatch(new GetUserByIdQuery($userId));
 
-        Log::info($userDto);
         throw_if($userDto === null, UserNotFoundException::class, (string) $userId);
 
         if ($userDto->emailVerifiedAt !== null) {
