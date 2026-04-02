@@ -18,18 +18,26 @@ use App\Application\Features\Auth\Commands\SendPasswordResetLink\SendPasswordRes
 use App\Application\Features\Auth\Commands\SendPasswordResetLink\SendPasswordResetLinkCommandHandler;
 use App\Application\Features\Auth\Commands\VerifyEmail\VerifyEmailCommand;
 use App\Application\Features\Auth\Commands\VerifyEmail\VerifyEmailCommandHandler;
+use App\Application\Features\Auth\Common\Interfaces\AuthenticatedUserContextInterface;
 use App\Application\Features\Auth\Common\Interfaces\AuthTokenServiceInterface;
 use App\Application\Features\Auth\Common\Interfaces\PasswordResetServiceInterface;
 use App\Application\Features\Auth\Common\Interfaces\UserVerifiedEventDispatcherInterface;
 use App\Application\Features\Auth\Common\Interfaces\VerifyEmailNotificationServiceInterface;
+use App\Application\Features\Auth\Queries\CheckEmailVerified\CheckEmailVerifiedQuery;
+use App\Application\Features\Auth\Queries\CheckEmailVerified\CheckEmailVerifiedQueryHandler;
 use App\Application\Features\Auth\Queries\GetAllUsers\GetAllUsersQuery;
 use App\Application\Features\Auth\Queries\GetAllUsers\GetAllUsersQueryHandler;
+use App\Application\Features\Auth\Queries\GetAuthToken\GetAuthTokenQuery;
+use App\Application\Features\Auth\Queries\GetAuthToken\GetAuthTokenQueryHandler;
+use App\Application\Features\Auth\Queries\GetAuthUserId\GetAuthUserIdQuery;
+use App\Application\Features\Auth\Queries\GetAuthUserId\GetAuthUserIdQueryHandler;
 use App\Application\Features\Auth\Queries\GetUserById\GetUserByIdQuery;
 use App\Application\Features\Auth\Queries\GetUserById\GetUserByIdQueryHandler;
 use App\Application\Features\Auth\Queries\LoginUser\LoginUserQuery;
 use App\Application\Features\Auth\Queries\LoginUser\LoginUserQueryHandler;
 use App\Domain\Auth\Repositories\UserRepositoryInterface;
 use App\Infrastructure\Auth\Persistence\EloquentUserRepository;
+use App\Infrastructure\Auth\Services\AuthenticatedUserContext;
 use App\Infrastructure\Auth\Services\PasswordResetService;
 use App\Infrastructure\Auth\Services\SanctumTokenService;
 use App\Infrastructure\Auth\Services\UserVerifiedDispatcherService;
@@ -48,6 +56,7 @@ final class AuthenticationServiceProvider extends ServiceProvider
         $this->app->bind(VerifyEmailNotificationServiceInterface::class, VerifyEmailNotificationService::class);
         $this->app->bind(PasswordResetServiceInterface::class, PasswordResetService::class);
         $this->app->bind(UserVerifiedEventDispatcherInterface::class, UserVerifiedDispatcherService::class);
+        $this->app->bind(AuthenticatedUserContextInterface::class, AuthenticatedUserContext::class);
 
     }
 
@@ -64,5 +73,9 @@ final class AuthenticationServiceProvider extends ServiceProvider
 
         $commandBus->register(RegisterUserCommand::class, RegisterUserCommandHandler::class);
         $queryBus->register(LoginUserQuery::class, LoginUserQueryHandler::class);
+
+        $queryBus->register(GetAuthUserIdQuery::class, GetAuthUserIdQueryHandler::class);
+        $queryBus->register(GetAuthTokenQuery::class, GetAuthTokenQueryHandler::class);
+        $queryBus->register(CheckEmailVerifiedQuery::class, CheckEmailVerifiedQueryHandler::class);
     }
 }

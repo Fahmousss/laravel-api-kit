@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Middleware;
 
+use App\Presentation\Shared\Traits\AuthContextTrait;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -11,6 +12,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class LogApiRequests
 {
+    use AuthContextTrait;
+
     /**
      * Log API requests for debugging and monitoring.
      */
@@ -34,7 +37,7 @@ final class LogApiRequests
                 'method'      => $request->method(),
                 'url'         => $request->fullUrl(),
                 'ip'          => $request->ip(),
-                'user_id'     => $request->user()?->id,
+                'user_id'     => $this->getAuthUserId(),
                 'status'      => $response->getStatusCode(),
                 'duration_ms' => $duration,
                 'user_agent'  => $request->userAgent(),

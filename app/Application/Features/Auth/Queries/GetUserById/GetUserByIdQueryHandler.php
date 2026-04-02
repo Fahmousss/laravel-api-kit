@@ -6,6 +6,7 @@ namespace App\Application\Features\Auth\Queries\GetUserById;
 
 use App\Application\Features\Auth\DTOs\UserDTO;
 use App\Domain\Auth\Entities\UserEntity;
+use App\Domain\Auth\Exceptions\UserNotFoundException;
 use App\Domain\Auth\Repositories\UserRepositoryInterface;
 
 final readonly class GetUserByIdQueryHandler
@@ -14,12 +15,12 @@ final readonly class GetUserByIdQueryHandler
         private UserRepositoryInterface $userRepository
     ) {}
 
-    public function handle(GetUserByIdQuery $query): ?UserDTO
+    public function handle(GetUserByIdQuery $query): UserDTO
     {
         $entity = $this->userRepository->findById($query->id);
 
         if (! $entity instanceof UserEntity) {
-            return null;
+            throw new UserNotFoundException((string) $query->id);
         }
 
         return new UserDTO(

@@ -13,12 +13,14 @@ use App\Domain\Auth\Exceptions\UserNotFoundException;
 use App\Presentation\Controllers\Api\ApiController;
 use App\Presentation\Requests\Api\V1\ResendVerificationRequest;
 use App\Presentation\Requests\Api\V1\VerifyEmailRequest;
+use App\Presentation\Shared\Traits\HasAuthenticatedUser;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Log;
 use InvalidArgumentException;
 
 final class EmailVerificationController extends ApiController
 {
+    use HasAuthenticatedUser;
+
     public function __construct(
         private readonly CommandBusInterface $commandBus,
         private readonly QueryBusInterface $queryBus
@@ -26,12 +28,10 @@ final class EmailVerificationController extends ApiController
 
     public function verify(VerifyEmailRequest $request): JsonResponse
     {
-        $userId = $request->user()?->id;
-        throw_if($userId === null, UserNotFoundException::class);
+        $userId = $this->getAuthUserId();
+        abort_if($userId === null, 401, 'Unauthenticated');
 
         $userDto = $this->queryBus->dispatch(new GetUserByIdQuery($userId));
-
-        throw_if($userDto === null, UserNotFoundException::class, (string) $userId);
 
         if ($userDto->emailVerifiedAt !== null) {
             return $this->success(message: 'Email already verified');
