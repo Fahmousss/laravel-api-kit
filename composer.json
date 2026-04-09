@@ -3,13 +3,20 @@
     "name": "grazulex/laravel-api-kit",
     "type": "project",
     "description": "Laravel REST API starter kit with Sanctum, Spatie packages, Scramble docs, and Pest testing.",
-    "keywords": ["laravel", "api", "rest", "starter-kit", "sanctum"],
+    "keywords": [
+        "laravel",
+        "api",
+        "rest",
+        "starter-kit",
+        "sanctum"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.3",
         "dedoc/scramble": "^0.12",
         "grazulex/laravel-apiroute": "^2.0",
         "laravel/framework": "^12.0",
+        "laravel/octane": "^2.17",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.10.1"
     },
