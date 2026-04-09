@@ -16,7 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // web: __DIR__.'/../routes/web.php',
         api: __DIR__.'/../routes/api.php',
         // commands: __DIR__.'/../routes/console.php',
-        health: '/up',
+        // health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
@@ -28,6 +28,6 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
-            fn (Request $request, Throwable $e): bool => $request->is('api/*') || $request->expectsJson()
+            fn (Request $request, Throwable $e): bool => true,
         );
     })->create();
