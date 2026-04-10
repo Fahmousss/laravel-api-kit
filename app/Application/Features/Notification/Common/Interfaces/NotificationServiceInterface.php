@@ -4,7 +4,7 @@ namespace App\Application\Features\Notification\Common\Interfaces;
 
 use App\Domain\Ticket\Entities\Ticket;
 use App\Domain\Comment\Entities\Comment;
-use App\Domain\Shared\Enums\TicketStatus;
+use App\Domain\Ticket\Enums\TicketStatus;
 
 interface NotificationServiceInterface
 {

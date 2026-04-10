@@ -7,4 +7,7 @@ return [
     App\Infrastructure\Authentication\Providers\AuthenticationServiceProvider::class,
     App\Infrastructure\Shared\Providers\RateLimitServiceProvider::class,
     App\Infrastructure\Shared\Providers\DocumentationServiceProvider::class,
+    App\Infrastructure\Project\Providers\ProjectServiceProvider::class,
+    App\Infrastructure\Ticket\Providers\TicketServiceProvider::class,
+    App\Infrastructure\Notification\Providers\NotificationServiceProvider::class,
 ];
