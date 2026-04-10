@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Presentation\Controllers\Api\V1\Auth;
 
 use App\Application\Contracts\CommandBusInterface;
-use App\Application\Features\Auth\Commands\ResetPassword\ResetPasswordCommand;
-use App\Application\Features\Auth\Commands\SendPasswordResetLink\SendPasswordResetLinkCommand;
+use App\Application\Features\Authentication\Commands\ResetPassword\ResetPasswordCommand;
+use App\Application\Features\Authentication\Commands\SendPasswordResetLink\SendPasswordResetLinkCommand;
 use App\Presentation\Controllers\Api\ApiController;
 use App\Presentation\Requests\Api\V1\ForgotPasswordRequest;
 use App\Presentation\Requests\Api\V1\ResetPasswordRequest;

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Presentation\Controllers\Api\V1\Auth;
 
 use App\Application\Contracts\CommandBusInterface;
-use App\Application\Features\Auth\Commands\LogoutUser\LogoutUserCommand;
+use App\Application\Features\Authentication\Commands\LogoutUser\LogoutUserCommand;
 use App\Presentation\Controllers\Api\ApiController;
 use App\Presentation\Shared\Traits\HasAuthenticatedUser;
 use Illuminate\Http\JsonResponse;

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Presentation\Shared\Traits;
 
 use App\Application\Contracts\QueryBusInterface;
-use App\Application\Features\Auth\Queries\CheckEmailVerified\CheckEmailVerifiedQuery;
-use App\Application\Features\Auth\Queries\GetAuthToken\GetAuthTokenQuery;
-use App\Application\Features\Auth\Queries\GetAuthUserId\GetAuthUserIdQuery;
+use App\Application\Features\Authentication\Queries\CheckEmailVerified\CheckEmailVerifiedQuery;
+use App\Application\Features\Authentication\Queries\GetAuthToken\GetAuthTokenQuery;
+use App\Application\Features\Authentication\Queries\GetAuthUserId\GetAuthUserIdQuery;
 
 trait HasAuthenticatedUser
 {

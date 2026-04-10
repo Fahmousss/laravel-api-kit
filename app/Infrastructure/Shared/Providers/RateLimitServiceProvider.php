@@ -19,7 +19,7 @@ final class RateLimitServiceProvider extends ServiceProvider
         // Default API rate limiter - 60 requests per minute
         RateLimiter::for('api', fn (Request $request) => Limit::perMinute(60)->by($request->user()?->id ?: $request->ip()));
 
-        // Auth endpoints - more restrictive (prevent brute force)
+        // Authentication endpoints - more restrictive (prevent brute force)
         RateLimiter::for('auth', fn (Request $request) => Limit::perMinute(5)->by($request->ip()));
 
         // Authenticated user requests - higher limit

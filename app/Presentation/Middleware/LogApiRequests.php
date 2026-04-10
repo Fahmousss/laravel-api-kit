@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Middleware;
 
-use App\Presentation\Shared\Traits\AuthContextTrait;
+use App\Presentation\Shared\Traits\HasAuthenticatedUser;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class LogApiRequests
 {
-    use AuthContextTrait;
+    use HasAuthenticatedUser;
 
     /**
      * Log API requests for debugging and monitoring.

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Presentation\Controllers\Api\V1\Auth;
 
 use App\Application\Contracts\QueryBusInterface;
-use App\Application\Features\Auth\DTOs\UserDTO;
-use App\Application\Features\Auth\Queries\LoginUser\LoginUserQuery;
+use App\Application\Features\Authentication\DTOs\UserDTO;
+use App\Application\Features\Authentication\Queries\LoginUser\LoginUserQuery;
 use App\Presentation\Controllers\Api\ApiController;
 use App\Presentation\Requests\Api\V1\LoginRequest;
 use App\Presentation\Resources\UserResource;

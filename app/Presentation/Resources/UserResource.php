@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Resources;
 
-use App\Application\Features\Auth\DTOs\UserDTO;
+use App\Application\Features\Authentication\DTOs\UserDTO;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 

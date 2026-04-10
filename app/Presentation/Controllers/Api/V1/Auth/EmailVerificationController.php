@@ -6,9 +6,9 @@ namespace App\Presentation\Controllers\Api\V1\Auth;
 
 use App\Application\Contracts\CommandBusInterface;
 use App\Application\Contracts\QueryBusInterface;
-use App\Application\Features\Auth\Commands\ResendVerificationEmail\ResendVerificationEmailCommand;
-use App\Application\Features\Auth\Commands\VerifyEmail\VerifyEmailCommand;
-use App\Application\Features\Auth\Queries\GetUserById\GetUserByIdQuery;
+use App\Application\Features\Authentication\Commands\ResendVerificationEmail\ResendVerificationEmailCommand;
+use App\Application\Features\Authentication\Commands\VerifyEmail\VerifyEmailCommand;
+use App\Application\Features\Authentication\Queries\GetUserById\GetUserByIdQuery;
 use App\Domain\Auth\Exceptions\UserNotFoundException;
 use App\Presentation\Controllers\Api\ApiController;
 use App\Presentation\Requests\Api\V1\ResendVerificationRequest;

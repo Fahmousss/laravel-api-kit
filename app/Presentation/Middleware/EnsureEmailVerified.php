@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Presentation\Middleware;
 
-use App\Presentation\Shared\Traits\AuthContextTrait;
+use App\Presentation\Shared\Traits\HasAuthenticatedUser;
 use Closure;
 use Illuminate\Http\Request;
 
 final class EnsureEmailVerified
 {
-    use AuthContextTrait;
+    use HasAuthenticatedUser;
 
     /**
      * Ensure the user's email is verified before allowing access.
