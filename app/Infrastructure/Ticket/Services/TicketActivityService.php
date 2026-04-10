@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\Ticket\Services;
 
 use App\Application\Features\Ticket\Common\Interfaces\TicketActivityServiceInterface;
 use App\Infrastructure\ActivityLog\Models\ActivityLog as ActivityLogModel;
 
-class TicketActivityService implements TicketActivityServiceInterface
+final class TicketActivityService implements TicketActivityServiceInterface
 {
     public function log(string $ticketId, string $actorId, string $action, array $payload): void
     {

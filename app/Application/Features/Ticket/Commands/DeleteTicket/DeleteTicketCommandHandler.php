@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\Features\Ticket\Commands\DeleteTicket;
 
-use App\Domain\Ticket\Repositories\TicketRepositoryInterface;
-use App\Domain\Ticket\Exceptions\TicketNotFoundException;
 use App\Domain\Authorization\Enums\UserRole;
 use App\Domain\Authorization\Exceptions\UnauthorizedActionException;
+use App\Domain\Ticket\Exceptions\TicketNotFoundException;
+use App\Domain\Ticket\Repositories\TicketRepositoryInterface;
 
-class DeleteTicketCommandHandler
+final class DeleteTicketCommandHandler
 {
     public function __construct(
         private TicketRepositoryInterface $ticketRepository,
@@ -15,10 +17,10 @@ class DeleteTicketCommandHandler
 
     public function handle(DeleteTicketCommand $command): void
     {
-        $role = UserRole::from($command->actorProjectRole);
+        $role = $command->actorProjectRole;
 
         if (! $role->canDeleteTicket()) {
-            throw UnauthorizedActionException::forAction("delete ticket");
+            throw UnauthorizedActionException::forAction('delete ticket');
         }
 
         $ticket = $this->ticketRepository->findById($command->ticketId);

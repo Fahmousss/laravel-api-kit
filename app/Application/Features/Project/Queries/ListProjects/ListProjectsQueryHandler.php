@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\Features\Project\Queries\ListProjects;
 
 use App\Domain\Project\Repositories\ProjectRepositoryInterface;
 use App\Domain\Shared\Pagination\PaginatedResult;
 
-class ListProjectsQueryHandler
+final class ListProjectsQueryHandler
 {
     public function __construct(
         private ProjectRepositoryInterface $projectRepository,

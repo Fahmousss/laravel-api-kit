@@ -13,7 +13,7 @@ final class AuthenticatedUserContext implements AuthenticatedUserContextInterfac
         private readonly Request $request
     ) {}
 
-    public function currentUserId(): ?int
+    public function currentUserId(): ?string
     {
         return $this->request->user()?->id;
     }

@@ -11,8 +11,8 @@ use App\Application\Features\Authentication\Commands\VerifyEmail\VerifyEmailComm
 use App\Application\Features\Authentication\Queries\GetUserById\GetUserByIdQuery;
 use App\Domain\Auth\Exceptions\UserNotFoundException;
 use App\Presentation\Controllers\Api\ApiController;
-use App\Presentation\Requests\Api\V1\ResendVerificationRequest;
-use App\Presentation\Requests\Api\V1\VerifyEmailRequest;
+use App\Presentation\Requests\Api\V1\Authentication\ResendVerificationRequest;
+use App\Presentation\Requests\Api\V1\Authentication\VerifyEmailRequest;
 use App\Presentation\Shared\Traits\HasAuthenticatedUser;
 use Illuminate\Http\JsonResponse;
 use InvalidArgumentException;

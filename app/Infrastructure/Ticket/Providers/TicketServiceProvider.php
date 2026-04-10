@@ -1,32 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\Ticket\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use App\Domain\Ticket\Repositories\TicketRepositoryInterface;
-use App\Infrastructure\Ticket\Persistence\EloquentTicketRepository;
-use App\Application\Features\Ticket\Common\Interfaces\TicketActivityServiceInterface;
-use App\Infrastructure\Ticket\Services\TicketActivityService;
-
-// Commands
-use App\Application\Features\Ticket\Commands\CreateTicket\CreateTicketCommandHandler;
-use App\Application\Features\Ticket\Commands\UpdateTicket\UpdateTicketCommandHandler;
-use App\Application\Features\Ticket\Commands\DeleteTicket\DeleteTicketCommandHandler;
-use App\Application\Features\Ticket\Commands\TransitionStatus\TransitionStatusCommandHandler;
-// Queries
-use App\Application\Features\Ticket\Queries\GetTicket\GetTicketQueryHandler;
-use App\Application\Features\Ticket\Queries\ListTickets\ListTicketsQueryHandler;
-// Command/Query classes (for bus registration)
-use App\Application\Features\Ticket\Commands\CreateTicket\CreateTicketCommand;
-use App\Application\Features\Ticket\Commands\UpdateTicket\UpdateTicketCommand;
-use App\Application\Features\Ticket\Commands\DeleteTicket\DeleteTicketCommand;
-use App\Application\Features\Ticket\Commands\TransitionStatus\TransitionStatusCommand;
-use App\Application\Features\Ticket\Queries\GetTicket\GetTicketQuery;
-use App\Application\Features\Ticket\Queries\ListTickets\ListTicketsQuery;
 use App\Application\Contracts\CommandBusInterface;
 use App\Application\Contracts\QueryBusInterface;
+use App\Application\Features\Ticket\Commands\CreateTicket\CreateTicketCommand;
+use App\Application\Features\Ticket\Commands\CreateTicket\CreateTicketCommandHandler;
+use App\Application\Features\Ticket\Commands\DeleteTicket\DeleteTicketCommand;
+// Commands
+use App\Application\Features\Ticket\Commands\DeleteTicket\DeleteTicketCommandHandler;
+use App\Application\Features\Ticket\Commands\TransitionStatus\TransitionStatusCommand;
+use App\Application\Features\Ticket\Commands\TransitionStatus\TransitionStatusCommandHandler;
+use App\Application\Features\Ticket\Commands\UpdateTicket\UpdateTicketCommand;
+// Queries
+use App\Application\Features\Ticket\Commands\UpdateTicket\UpdateTicketCommandHandler;
+use App\Application\Features\Ticket\Common\Interfaces\TicketActivityServiceInterface;
+// Command/Query classes (for bus registration)
+use App\Application\Features\Ticket\Queries\GetTicket\GetTicketQuery;
+use App\Application\Features\Ticket\Queries\GetTicket\GetTicketQueryHandler;
+use App\Application\Features\Ticket\Queries\ListTickets\ListTicketsQuery;
+use App\Application\Features\Ticket\Queries\ListTickets\ListTicketsQueryHandler;
+use App\Domain\Ticket\Repositories\TicketRepositoryInterface;
+use App\Infrastructure\Ticket\Persistence\EloquentTicketRepository;
+use App\Infrastructure\Ticket\Services\TicketActivityService;
+use Illuminate\Support\ServiceProvider;
 
-class TicketServiceProvider extends ServiceProvider
+final class TicketServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
@@ -36,12 +37,12 @@ class TicketServiceProvider extends ServiceProvider
 
     public function boot(CommandBusInterface $commandBus, QueryBusInterface $queryBus): void
     {
-        $commandBus->register(CreateTicketCommand::class,    CreateTicketCommandHandler::class);
-        $commandBus->register(UpdateTicketCommand::class,    UpdateTicketCommandHandler::class);
-        $commandBus->register(DeleteTicketCommand::class,    DeleteTicketCommandHandler::class);
+        $commandBus->register(CreateTicketCommand::class, CreateTicketCommandHandler::class);
+        $commandBus->register(UpdateTicketCommand::class, UpdateTicketCommandHandler::class);
+        $commandBus->register(DeleteTicketCommand::class, DeleteTicketCommandHandler::class);
         $commandBus->register(TransitionStatusCommand::class, TransitionStatusCommandHandler::class);
 
-        $queryBus->register(GetTicketQuery::class,    GetTicketQueryHandler::class);
-        $queryBus->register(ListTicketsQuery::class,  ListTicketsQueryHandler::class);
+        $queryBus->register(GetTicketQuery::class, GetTicketQueryHandler::class);
+        $queryBus->register(ListTicketsQuery::class, ListTicketsQueryHandler::class);
     }
 }

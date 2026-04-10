@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\Features\Project\Queries\GetProjectMembers;
 
 use App\Domain\Authorization\Enums\UserRole;
@@ -9,7 +11,7 @@ final class GetProjectMemberRoleQueryHandler
 {
     public function __construct(
         private ProjectMemberRepositoryInterface $projectMemberRepository
-    ){}
+    ) {}
 
     public function handle(GetProjectMemberRoleQuery $query): ?UserRole
     {

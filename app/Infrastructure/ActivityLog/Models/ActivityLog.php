@@ -1,16 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\ActivityLog\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
 
-class ActivityLog extends Model
+final class ActivityLog extends Model
 {
     use HasUuids;
 
-    protected $table      = 'activity_logs';
-    public    $timestamps = false;
+    public $timestamps = false;
+
+    protected $table = 'activity_logs';
 
     protected $fillable = [
         'ticket_id', 'actor_id', 'action', 'payload', 'created_at',

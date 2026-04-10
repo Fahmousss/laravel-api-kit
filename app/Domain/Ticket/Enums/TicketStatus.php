@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain\Ticket\Enums;
 
 enum TicketStatus: string
@@ -16,7 +18,7 @@ enum TicketStatus: string
 
     public function label(): string
     {
-        return match($this) {
+        return match ($this) {
             self::OPEN        => 'Open',
             self::IN_PROGRESS => 'In Progress',
             self::IN_REVIEW   => 'In Review',
@@ -29,10 +31,12 @@ enum TicketStatus: string
         };
     }
 
-    /** Returns valid next statuses from current status */
+    /**
+     * Returns valid next statuses from current status
+     */
     public function allowedTransitions(): array
     {
-        return match($this) {
+        return match ($this) {
             self::OPEN        => [self::IN_PROGRESS, self::WONTFIX, self::DUPLICATE],
             self::IN_PROGRESS => [self::IN_REVIEW, self::OPEN, self::BLOCKED],
             self::BLOCKED     => [self::IN_PROGRESS, self::OPEN],

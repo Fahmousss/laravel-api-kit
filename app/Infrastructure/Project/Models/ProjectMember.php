@@ -1,16 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\Project\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
 
-class ProjectMember extends Model
+final class ProjectMember extends Model
 {
     use HasUuids;
 
+    public $timestamps = false;
+
     protected $table = 'project_members';
-    public    $timestamps = false;
 
     protected $fillable = [
         'project_id', 'user_id', 'role', 'joined_at',

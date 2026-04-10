@@ -1,16 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\Notification\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
 
-class Notification extends Model
+final class Notification extends Model
 {
     use HasUuids;
 
-    protected $table   = 'ticket_notifications';
-    public    $timestamps = false;
+    public $timestamps = false;
+
+    protected $table = 'ticket_notifications';
 
     protected $fillable = [
         'user_id', 'ticket_id', 'type', 'payload', 'read', 'created_at',

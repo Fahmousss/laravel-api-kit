@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Presentation\Resources;
+namespace App\Presentation\Resources\Authentication;
 
 use App\Application\Features\Authentication\DTOs\UserDTO;
 use Illuminate\Http\Request;

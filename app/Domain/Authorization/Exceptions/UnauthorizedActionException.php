@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain\Authorization\Exceptions;
 
-class UnauthorizedActionException extends \DomainException
+use DomainException;
+
+final class UnauthorizedActionException extends DomainException
 {
     public static function forAction(string $action): self
     {

@@ -1,18 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\Ticket\Models;
 
+use App\Infrastructure\ActivityLog\Models\ActivityLogModel;
+use App\Infrastructure\Comment\Models\CommentModel;
+use App\Infrastructure\Project\Models\Project;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use App\Infrastructure\Project\Models\Project;
-use App\Infrastructure\Comment\Models\CommentModel;
-use App\Infrastructure\ActivityLog\Models\ActivityLogModel;
 
 #[UseFactory(TicketFactory::class)]
-class Ticket extends Model
+final class Ticket extends Model
 {
     use HasUuids;
 

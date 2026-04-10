@@ -1,21 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\Features\Ticket\DTOs;
 
-use App\Domain\Ticket\Enums\TicketType;
 use App\Domain\Ticket\Enums\TicketPriority;
+use App\Domain\Ticket\Enums\TicketType;
 
-readonly class CreateTicketDTO
+final readonly class CreateTicketDTO
 {
     public function __construct(
-        public string         $projectId,
-        public string         $reporterId,
-        public string         $title,
-        public ?string        $description,
-        public TicketType     $type,
+        public string $projectId,
+        public string $reporterId,
+        public string $title,
+        public ?string $description,
+        public TicketType $type,
         public TicketPriority $priority,
-        public ?string        $assigneeId,
-        public ?string        $dueDate,
-        public array          $labelIds = [],
+        public ?string $assigneeId,
+        public ?string $dueDate,
+        public array $labelIds = [],
     ) {}
 }

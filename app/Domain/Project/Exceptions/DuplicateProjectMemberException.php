@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain\Project\Exceptions;
 
-class DuplicateProjectMemberException extends \DomainException
+use DomainException;
+
+final class DuplicateProjectMemberException extends DomainException
 {
     public static function forUser(string $userId): self
     {

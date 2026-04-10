@@ -7,6 +7,6 @@ namespace App\Application\Features\Authentication\Queries\GetUserById;
 final readonly class GetUserByIdQuery
 {
     public function __construct(
-        public int $id
+        public ?string $id
     ) {}
 }

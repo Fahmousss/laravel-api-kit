@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\Features\Ticket\Commands\UpdateTicket;
 
-use App\Domain\Ticket\Repositories\TicketRepositoryInterface;
-use App\Domain\Ticket\Exceptions\TicketNotFoundException;
 use App\Application\Features\Ticket\Common\Interfaces\TicketActivityServiceInterface;
+use App\Domain\Ticket\Exceptions\TicketNotFoundException;
+use App\Domain\Ticket\Repositories\TicketRepositoryInterface;
 
-class UpdateTicketCommandHandler
+final class UpdateTicketCommandHandler
 {
     public function __construct(
-        private TicketRepositoryInterface      $ticketRepository,
+        private TicketRepositoryInterface $ticketRepository,
         private TicketActivityServiceInterface $activityService,
     ) {}
 
@@ -22,11 +24,21 @@ class UpdateTicketCommandHandler
             throw TicketNotFoundException::withId($dto->ticketId);
         }
 
-        if ($dto->title !== null)      $ticket->title       = $dto->title;
-        if ($dto->description !== null) $ticket->description = $dto->description;
-        if ($dto->priority !== null)   $ticket->priority    = $dto->priority;
-        if ($dto->assigneeId !== null) $ticket->assign($dto->assigneeId);
-        if ($dto->dueDate !== null)    $ticket->dueDate     = $dto->dueDate;
+        if ($dto->title !== null) {
+            $ticket->title = $dto->title;
+        }
+        if ($dto->description !== null) {
+            $ticket->description = $dto->description;
+        }
+        if ($dto->priority !== null) {
+            $ticket->priority = $dto->priority;
+        }
+        if ($dto->assigneeId !== null) {
+            $ticket->assign($dto->assigneeId);
+        }
+        if ($dto->dueDate !== null) {
+            $ticket->dueDate = $dto->dueDate;
+        }
 
         $this->ticketRepository->save($ticket);
 

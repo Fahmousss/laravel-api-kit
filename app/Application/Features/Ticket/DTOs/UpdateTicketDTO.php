@@ -1,18 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\Features\Ticket\DTOs;
 
 use App\Domain\Ticket\Enums\TicketPriority;
 
-readonly class UpdateTicketDTO
+final readonly class UpdateTicketDTO
 {
     public function __construct(
-        public string         $ticketId,
-        public string         $actorId,
-        public ?string        $title,
-        public ?string        $description,
+        public string $ticketId,
+        public string $actorId,
+        public ?string $title,
+        public ?string $description,
         public ?TicketPriority $priority,
-        public ?string        $assigneeId,
-        public ?string        $dueDate,
+        public ?string $assigneeId,
+        public ?string $dueDate,
     ) {}
 }

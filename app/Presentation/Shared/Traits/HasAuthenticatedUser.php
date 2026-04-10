@@ -14,7 +14,7 @@ trait HasAuthenticatedUser
     /**
      * Retrieve the currently authenticated user's ID via the Query Bus.
      */
-    private function getAuthUserId(): ?int
+    private function getAuthUserId(): ?string
     {
         return app(QueryBusInterface::class)->dispatch(new GetAuthUserIdQuery());
     }

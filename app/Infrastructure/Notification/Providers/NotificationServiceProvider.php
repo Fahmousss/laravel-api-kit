@@ -1,21 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\Notification\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use App\Domain\Notification\Repositories\NotificationRepositoryInterface;
-use App\Infrastructure\Notification\Persistence\EloquentNotificationRepository;
-use App\Application\Features\Notification\Common\Interfaces\NotificationServiceInterface;
-use App\Infrastructure\Notification\Services\NotificationService;
-
-use App\Application\Features\Notification\Commands\MarkAllRead\MarkAllReadCommand;
-use App\Application\Features\Notification\Commands\MarkAllRead\MarkAllReadCommandHandler;
-use App\Application\Features\Notification\Queries\ListNotifications\ListNotificationsQuery;
-use App\Application\Features\Notification\Queries\ListNotifications\ListNotificationsQueryHandler;
 use App\Application\Contracts\CommandBusInterface;
 use App\Application\Contracts\QueryBusInterface;
+use App\Application\Features\Notification\Commands\MarkAllRead\MarkAllReadCommand;
+use App\Application\Features\Notification\Commands\MarkAllRead\MarkAllReadCommandHandler;
+use App\Application\Features\Notification\Common\Interfaces\NotificationServiceInterface;
+use App\Application\Features\Notification\Queries\ListNotifications\ListNotificationsQuery;
+use App\Application\Features\Notification\Queries\ListNotifications\ListNotificationsQueryHandler;
+use App\Domain\Notification\Repositories\NotificationRepositoryInterface;
+use App\Infrastructure\Notification\Persistence\EloquentNotificationRepository;
+use App\Infrastructure\Notification\Services\NotificationService;
+use Illuminate\Support\ServiceProvider;
 
-class NotificationServiceProvider extends ServiceProvider
+final class NotificationServiceProvider extends ServiceProvider
 {
     public function register(): void
     {

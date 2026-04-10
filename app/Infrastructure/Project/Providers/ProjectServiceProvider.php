@@ -2,6 +2,8 @@
 
 namespace App\Infrastructure\Project\Providers;
 
+use App\Application\Features\Project\Queries\GetProjectMembers\GetProjectMemberRoleQuery;
+use App\Application\Features\Project\Queries\GetProjectMembers\GetProjectMemberRoleQueryHandler;
 use Illuminate\Support\ServiceProvider;
 use App\Domain\Project\Repositories\ProjectRepositoryInterface;
 use App\Domain\Project\Repositories\ProjectMemberRepositoryInterface;
@@ -31,5 +33,6 @@ class ProjectServiceProvider extends ServiceProvider
         $commandBus->register(AddMemberCommand::class,     AddMemberCommandHandler::class);
 
         $queryBus->register(ListProjectsQuery::class, ListProjectsQueryHandler::class);
+        $queryBus->register(GetProjectMemberRoleQuery::class, GetProjectMemberRoleQueryHandler::class);
     }
 }

@@ -9,7 +9,7 @@ interface AuthenticatedUserContextInterface
     /**
      * Get the ID of the currently authenticated user.
      */
-    public function currentUserId(): ?int;
+    public function currentUserId(): ?string;
 
     /**
      * Get the bearer token from the current request.

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain\Ticket\Enums;
 
 enum TicketType: string
@@ -13,7 +15,7 @@ enum TicketType: string
 
     public function label(): string
     {
-        return match($this) {
+        return match ($this) {
             self::PROGRESS  => 'Progress',
             self::ISSUE     => 'Issue',
             self::COMPLAINT => 'Complaint',
@@ -28,7 +30,9 @@ enum TicketType: string
         return TicketStatus::OPEN;
     }
 
-    /** Does this type require review before resolution? */
+    /**
+     * Does this type require review before resolution?
+     */
     public function requiresReview(): bool
     {
         return in_array($this, [

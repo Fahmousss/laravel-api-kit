@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Presentation\Requests\Api\V1;
+namespace App\Presentation\Requests\Api\V1\Authentication;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-final class VerifyEmailRequest extends FormRequest
+final class ForgotPasswordRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user() && (int) $this->route('id') === $this->user()->id;
+        return true;
     }
 
     /**
@@ -18,6 +18,8 @@ final class VerifyEmailRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [];
+        return [
+            'email' => ['required', 'email', 'exists:users,email'],
+        ];
     }
 }

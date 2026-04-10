@@ -1,31 +1,32 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\Ticket\Persistence;
 
+use App\Domain\Shared\Pagination\PaginatedResult;
 use App\Domain\Ticket\Entities\Ticket as TicketEntity;
 use App\Domain\Ticket\Repositories\TicketRepositoryInterface;
-use App\Domain\Shared\Enums\TicketStatus;
-use App\Domain\Shared\Enums\TicketType;
-use App\Domain\Shared\Enums\TicketPriority;
-use App\Domain\Shared\Pagination\PaginatedResult;
-use App\Infrastructure\Ticket\Models\Ticket as TicketModel;
 use App\Infrastructure\Shared\Traits\EntityMapper;
+use App\Infrastructure\Ticket\Models\Ticket as TicketModel;
 
-class EloquentTicketRepository implements TicketRepositoryInterface
+final class EloquentTicketRepository implements TicketRepositoryInterface
 {
     use EntityMapper;
 
     public function findById(string $id): ?TicketEntity
     {
         $model = TicketModel::find($id);
+
         return $model ? $this->mapToEntity($model, TicketEntity::class) : null;
     }
 
     public function findByProjectAndNumber(string $projectId, int $number): ?TicketEntity
     {
         $model = TicketModel::where('project_id', $projectId)
-                             ->where('ticket_number', $number)
-                             ->first();
+            ->where('ticket_number', $number)
+            ->first();
+
         return $model ? $this->mapToEntity($model, TicketEntity::class) : null;
     }
 
@@ -66,19 +67,27 @@ class EloquentTicketRepository implements TicketRepositoryInterface
     {
         $query = TicketModel::where('project_id', $projectId);
 
-        if (isset($filters['status']))   $query->where('status', $filters['status']);
-        if (isset($filters['type']))     $query->where('type', $filters['type']);
-        if (isset($filters['priority'])) $query->where('priority', $filters['priority']);
-        if (isset($filters['assignee'])) $query->where('assignee_id', $filters['assignee']);
+        if (isset($filters['status'])) {
+            $query->where('status', $filters['status']);
+        }
+        if (isset($filters['type'])) {
+            $query->where('type', $filters['type']);
+        }
+        if (isset($filters['priority'])) {
+            $query->where('priority', $filters['priority']);
+        }
+        if (isset($filters['assignee'])) {
+            $query->where('assignee_id', $filters['assignee']);
+        }
 
         $paginator = $query->orderByDesc('created_at')->paginate($perPage, ['*'], 'page', $page);
 
         return new PaginatedResult(
-            items:       array_map(fn(TicketModel $m) => $this->mapToEntity($m, TicketEntity::class), $paginator->items()),
-            total:       $paginator->total(),
-            perPage:     $paginator->perPage(),
+            items: array_map(fn (TicketModel $m) => $this->mapToEntity($m, TicketEntity::class), $paginator->items()),
+            total: $paginator->total(),
+            perPage: $paginator->perPage(),
             currentPage: $paginator->currentPage(),
-            lastPage:    $paginator->lastPage(),
+            lastPage: $paginator->lastPage(),
         );
     }
 }

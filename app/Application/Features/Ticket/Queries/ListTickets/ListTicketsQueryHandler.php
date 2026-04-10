@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\Features\Ticket\Queries\ListTickets;
 
-use App\Domain\Ticket\Repositories\TicketRepositoryInterface;
 use App\Domain\Shared\Pagination\PaginatedResult;
+use App\Domain\Ticket\Repositories\TicketRepositoryInterface;
 
-class ListTicketsQueryHandler
+final class ListTicketsQueryHandler
 {
     public function __construct(
         private TicketRepositoryInterface $ticketRepository,

@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain\Ticket\Exceptions;
 
 use App\Domain\Ticket\Enums\TicketStatus;
+use DomainException;
 
-class InvalidStatusTransitionException extends \DomainException
+final class InvalidStatusTransitionException extends DomainException
 {
     public static function fromTo(TicketStatus $from, TicketStatus $to): self
     {

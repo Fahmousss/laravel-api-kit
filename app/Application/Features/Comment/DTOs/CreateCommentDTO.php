@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\Features\Comment\DTOs;
 
-readonly class CreateCommentDTO
+final readonly class CreateCommentDTO
 {
     public function __construct(
         public string $ticketId,
         public string $authorId,
         public string $body,
-        public bool   $isInternal = false,
+        public bool $isInternal = false,
     ) {}
 }

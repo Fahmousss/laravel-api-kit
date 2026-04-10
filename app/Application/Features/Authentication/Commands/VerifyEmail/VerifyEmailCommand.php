@@ -7,6 +7,6 @@ namespace App\Application\Features\Authentication\Commands\VerifyEmail;
 final readonly class VerifyEmailCommand
 {
     public function __construct(
-        public int $userId
+        public string $userId
     ) {}
 }

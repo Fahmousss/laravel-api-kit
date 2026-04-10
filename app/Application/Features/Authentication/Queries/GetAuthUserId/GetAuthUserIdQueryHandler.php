@@ -12,7 +12,7 @@ final class GetAuthUserIdQueryHandler
         private readonly AuthenticatedUserContextInterface $authenticatedUser
     ) {}
 
-    public function handle(GetAuthUserIdQuery $query): ?int
+    public function handle(GetAuthUserIdQuery $query): ?string
     {
         return $this->authenticatedUser->currentUserId();
     }

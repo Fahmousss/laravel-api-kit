@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\Features\Notification\Queries\ListNotifications;
 
 use App\Domain\Notification\Repositories\NotificationRepositoryInterface;
 use App\Domain\Shared\Pagination\PaginatedResult;
 
-class ListNotificationsQueryHandler
+final class ListNotificationsQueryHandler
 {
     public function __construct(
         private NotificationRepositoryInterface $notificationRepository,

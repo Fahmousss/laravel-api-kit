@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\Features\Notification\Commands\MarkAllRead;
 
 use App\Domain\Notification\Repositories\NotificationRepositoryInterface;
 
-class MarkAllReadCommandHandler
+final class MarkAllReadCommandHandler
 {
     public function __construct(
         private NotificationRepositoryInterface $notificationRepository,

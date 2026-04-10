@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain\Ticket\Exceptions;
 
-class TicketNotFoundException extends \DomainException
+use DomainException;
+
+final class TicketNotFoundException extends DomainException
 {
     public static function withId(string $id): self
     {

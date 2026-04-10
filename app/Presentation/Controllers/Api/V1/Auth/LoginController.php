@@ -8,8 +8,8 @@ use App\Application\Contracts\QueryBusInterface;
 use App\Application\Features\Authentication\DTOs\UserDTO;
 use App\Application\Features\Authentication\Queries\LoginUser\LoginUserQuery;
 use App\Presentation\Controllers\Api\ApiController;
-use App\Presentation\Requests\Api\V1\LoginRequest;
-use App\Presentation\Resources\UserResource;
+use App\Presentation\Requests\Api\V1\Authentication\LoginRequest;
+use App\Presentation\Resources\Authentication\UserResource;
 use Illuminate\Http\JsonResponse;
 
 final class LoginController extends ApiController

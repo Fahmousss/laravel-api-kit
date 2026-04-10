@@ -1,15 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\Notification\Persistence;
 
 use App\Domain\Notification\Entities\Notification as NotificationEntity;
 use App\Domain\Notification\Repositories\NotificationRepositoryInterface;
-use App\Domain\Notification\Enums\NotificationType;
 use App\Domain\Shared\Pagination\PaginatedResult;
 use App\Infrastructure\Notification\Models\Notification as NotificationModel;
 use App\Infrastructure\Shared\Traits\EntityMapper;
 
-class EloquentNotificationRepository implements NotificationRepositoryInterface
+final class EloquentNotificationRepository implements NotificationRepositoryInterface
 {
     use EntityMapper;
 
@@ -31,8 +32,8 @@ class EloquentNotificationRepository implements NotificationRepositoryInterface
     public function markAllReadForUser(string $userId): void
     {
         NotificationModel::where('user_id', $userId)
-                          ->where('read', false)
-                          ->update(['read' => true]);
+            ->where('read', false)
+            ->update(['read' => true]);
     }
 
     public function markAsRead(string $notificationId): void
@@ -51,11 +52,11 @@ class EloquentNotificationRepository implements NotificationRepositoryInterface
         $paginator = $query->orderByDesc('created_at')->paginate($perPage, ['*'], 'page', $page);
 
         return new PaginatedResult(
-            items:       array_map(fn(NotificationModel $m) => $this->mapToEntity($m, NotificationEntity::class), $paginator->items()),
-            total:       $paginator->total(),
-            perPage:     $paginator->perPage(),
+            items: array_map(fn (NotificationModel $m) => $this->mapToEntity($m, NotificationEntity::class), $paginator->items()),
+            total: $paginator->total(),
+            perPage: $paginator->perPage(),
             currentPage: $paginator->currentPage(),
-            lastPage:    $paginator->lastPage(),
+            lastPage: $paginator->lastPage(),
         );
     }
 }

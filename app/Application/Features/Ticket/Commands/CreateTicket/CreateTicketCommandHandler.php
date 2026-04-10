@@ -1,21 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\Features\Ticket\Commands\CreateTicket;
 
+use App\Application\Features\Notification\Common\Interfaces\NotificationServiceInterface;
+use App\Application\Features\Ticket\Common\Interfaces\TicketActivityServiceInterface;
+use App\Domain\Project\Exceptions\ProjectNotFoundException;
+use App\Domain\Project\Repositories\ProjectRepositoryInterface;
 use App\Domain\Ticket\Entities\Ticket;
 use App\Domain\Ticket\Repositories\TicketRepositoryInterface;
-use App\Domain\Project\Repositories\ProjectRepositoryInterface;
-use App\Domain\Project\Exceptions\ProjectNotFoundException;
-use App\Application\Features\Ticket\Common\Interfaces\TicketActivityServiceInterface;
-use App\Application\Features\Notification\Common\Interfaces\NotificationServiceInterface;
 
-class CreateTicketCommandHandler
+final class CreateTicketCommandHandler
 {
     public function __construct(
-        private TicketRepositoryInterface      $ticketRepository,
-        private ProjectRepositoryInterface     $projectRepository,
+        private TicketRepositoryInterface $ticketRepository,
+        private ProjectRepositoryInterface $projectRepository,
         private TicketActivityServiceInterface $activityService,
-        private NotificationServiceInterface   $notificationService,
+        private NotificationServiceInterface $notificationService,
     ) {}
 
     public function handle(CreateTicketCommand $command): Ticket
@@ -30,20 +32,20 @@ class CreateTicketCommandHandler
         $ticketNumber = $this->ticketRepository->nextTicketNumber($dto->projectId);
 
         $ticket = new Ticket(
-            id:           null,
-            projectId:    $dto->projectId,
-            reporterId:   $dto->reporterId,
-            assigneeId:   $dto->assigneeId,
+            id: null,
+            projectId: $dto->projectId,
+            reporterId: $dto->reporterId,
+            assigneeId: $dto->assigneeId,
             ticketNumber: $ticketNumber,
-            title:        $dto->title,
-            description:  $dto->description,
-            type:         $dto->type,
-            status:       $dto->type->defaultStatus(),
-            priority:     $dto->priority,
-            dueDate:      $dto->dueDate,
-            resolvedAt:   null,
-            createdAt:    null,
-            updatedAt:    null,
+            title: $dto->title,
+            description: $dto->description,
+            type: $dto->type,
+            status: $dto->type->defaultStatus(),
+            priority: $dto->priority,
+            dueDate: $dto->dueDate,
+            resolvedAt: null,
+            createdAt: null,
+            updatedAt: null,
         );
 
         $saved = $this->ticketRepository->save($ticket);

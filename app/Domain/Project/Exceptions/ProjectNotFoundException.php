@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain\Project\Exceptions;
 
-class ProjectNotFoundException extends \DomainException
+use DomainException;
+
+final class ProjectNotFoundException extends DomainException
 {
     public static function withId(string $id): self
     {

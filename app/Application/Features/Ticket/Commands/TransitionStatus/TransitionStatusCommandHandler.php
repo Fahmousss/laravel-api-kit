@@ -1,20 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\Features\Ticket\Commands\TransitionStatus;
 
-use App\Domain\Ticket\Repositories\TicketRepositoryInterface;
-use App\Domain\Ticket\Exceptions\TicketNotFoundException;
+use App\Application\Features\Notification\Common\Interfaces\NotificationServiceInterface;
+use App\Application\Features\Ticket\Common\Interfaces\TicketActivityServiceInterface;
 use App\Domain\Authorization\Enums\UserRole;
 use App\Domain\Authorization\Exceptions\UnauthorizedActionException;
-use App\Application\Features\Ticket\Common\Interfaces\TicketActivityServiceInterface;
-use App\Application\Features\Notification\Common\Interfaces\NotificationServiceInterface;
+use App\Domain\Ticket\Exceptions\TicketNotFoundException;
+use App\Domain\Ticket\Repositories\TicketRepositoryInterface;
 
-class TransitionStatusCommandHandler
+final class TransitionStatusCommandHandler
 {
     public function __construct(
-        private TicketRepositoryInterface      $ticketRepository,
+        private TicketRepositoryInterface $ticketRepository,
         private TicketActivityServiceInterface $activityService,
-        private NotificationServiceInterface   $notificationService,
+        private NotificationServiceInterface $notificationService,
     ) {}
 
     public function handle(TransitionStatusCommand $command): void
@@ -33,15 +35,15 @@ class TransitionStatusCommandHandler
             in_array($dto->newStatus->value, ['closed', 'wontfix', 'duplicate'])
             && ! $role->canClose()
         ) {
-            throw UnauthorizedActionException::forAction("close ticket");
+            throw UnauthorizedActionException::forAction('close ticket');
         }
 
         if ($dto->newStatus->value === 'resolved' && ! $role->canReview()) {
-            throw UnauthorizedActionException::forAction("resolve ticket");
+            throw UnauthorizedActionException::forAction('resolve ticket');
         }
 
         if (! $role->canTransitionStatus()) {
-            throw UnauthorizedActionException::forAction("transition ticket status");
+            throw UnauthorizedActionException::forAction('transition ticket status');
         }
 
         $previousStatus = $ticket->status;

@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\Features\Ticket\Commands\UpdateTicket;
 
 use App\Application\Features\Ticket\DTOs\UpdateTicketDTO;
 
-readonly class UpdateTicketCommand
+final readonly class UpdateTicketCommand
 {
     public function __construct(
         public UpdateTicketDTO $dto,

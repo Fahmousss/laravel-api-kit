@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\Features\Ticket\Queries\GetTicket;
 
 use App\Domain\Ticket\Entities\Ticket;
-use App\Domain\Ticket\Repositories\TicketRepositoryInterface;
 use App\Domain\Ticket\Exceptions\TicketNotFoundException;
+use App\Domain\Ticket\Repositories\TicketRepositoryInterface;
 
-class GetTicketQueryHandler
+final class GetTicketQueryHandler
 {
     public function __construct(
         private TicketRepositoryInterface $ticketRepository,
