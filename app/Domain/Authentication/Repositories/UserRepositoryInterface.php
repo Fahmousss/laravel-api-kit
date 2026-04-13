@@ -11,11 +11,11 @@ interface UserRepositoryInterface
 {
     public function findByEmail(string $email): ?UserEntity;
 
-    public function findById(int $id): ?UserEntity;
+    public function findById(string $id): ?UserEntity;
 
     public function save(UserEntity $user): UserEntity;
 
-    public function markEmailAsVerified(int $userId): void;
+    public function markEmailAsVerified(string $userId): void;
 
     public function getAllPaginated(int $page, int $perPage): PaginatedResult;
 }

@@ -7,7 +7,7 @@ namespace App\Presentation\Controllers\Api\V1\Auth;
 use App\Application\Contracts\QueryBusInterface;
 use App\Application\Features\Authentication\Queries\GetUserById\GetUserByIdQuery;
 use App\Presentation\Controllers\Api\ApiController;
-use App\Presentation\Resources\UserResource;
+use App\Presentation\Resources\Authentication\UserResource;
 use App\Presentation\Shared\Traits\HasAuthenticatedUser;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

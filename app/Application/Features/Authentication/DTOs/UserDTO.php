@@ -7,7 +7,7 @@ namespace App\Application\Features\Authentication\DTOs;
 final readonly class UserDTO
 {
     public function __construct(
-        public int $id,
+        public string $id,
         public string $name,
         public string $email,
         public ?string $emailVerifiedAt,

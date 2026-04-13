@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Application\Features\Authentication\Commands\ResendVerificationEmail;
 
 use App\Application\Features\Authentication\Common\Interfaces\VerifyEmailNotificationServiceInterface;
-use App\Domain\Auth\Entities\UserEntity;
-use App\Domain\Auth\Exceptions\UserNotFoundException;
-use App\Domain\Auth\Repositories\UserRepositoryInterface;
+use App\Domain\Authentication\Entities\UserEntity;
+use App\Domain\Authentication\Exceptions\UserNotFoundException;
+use App\Domain\Authentication\Repositories\UserRepositoryInterface;
 use InvalidArgumentException;
 
 final readonly class ResendVerificationEmailCommandHandler

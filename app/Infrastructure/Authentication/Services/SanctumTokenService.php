@@ -11,7 +11,7 @@ use Laravel\Sanctum\PersonalAccessToken;
 
 final class SanctumTokenService implements AuthTokenServiceInterface
 {
-    public function generateForUser(int $userId): string
+    public function generateForUser(string $userId): string
     {
         /** @var User $user */
         $user = User::query()->find($userId);

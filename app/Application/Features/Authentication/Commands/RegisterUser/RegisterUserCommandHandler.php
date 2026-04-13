@@ -7,8 +7,8 @@ namespace App\Application\Features\Authentication\Commands\RegisterUser;
 use App\Application\Features\Authentication\Common\Interfaces\AuthTokenServiceInterface;
 use App\Application\Features\Authentication\Common\Interfaces\VerifyEmailNotificationServiceInterface;
 use App\Application\Features\Authentication\DTOs\UserDTO;
-use App\Domain\Auth\Entities\UserEntity;
-use App\Domain\Auth\Repositories\UserRepositoryInterface;
+use App\Domain\Authentication\Entities\UserEntity;
+use App\Domain\Authentication\Repositories\UserRepositoryInterface;
 use Illuminate\Support\Facades\Hash;
 
 final readonly class RegisterUserCommandHandler

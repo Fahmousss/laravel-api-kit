@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Application\Features\Ticket\Commands\DeleteTicket;
 
-use App\Domain\Authorization\Enums\UserRole;
 use App\Domain\Authorization\Exceptions\UnauthorizedActionException;
 use App\Domain\Ticket\Exceptions\TicketNotFoundException;
 use App\Domain\Ticket\Repositories\TicketRepositoryInterface;

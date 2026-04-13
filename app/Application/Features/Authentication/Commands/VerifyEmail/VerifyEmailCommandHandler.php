@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Application\Features\Authentication\Commands\VerifyEmail;
 
 use App\Application\Features\Authentication\Common\Interfaces\UserVerifiedEventDispatcherInterface;
-use App\Domain\Auth\Repositories\UserRepositoryInterface;
+use App\Domain\Authentication\Repositories\UserRepositoryInterface;
 
 final readonly class VerifyEmailCommandHandler
 {

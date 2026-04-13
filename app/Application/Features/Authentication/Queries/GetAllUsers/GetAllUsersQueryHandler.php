@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Application\Features\Authentication\Queries\GetAllUsers;
 
 use App\Application\Features\Authentication\DTOs\UserDTO;
-use App\Domain\Auth\Repositories\UserRepositoryInterface;
+use App\Domain\Authentication\Repositories\UserRepositoryInterface;
 use App\Domain\Shared\Pagination\PaginatedResult;
 
 final readonly class GetAllUsersQueryHandler

@@ -8,8 +8,8 @@ use App\Application\Contracts\CommandBusInterface;
 use App\Application\Features\Authentication\Commands\ResetPassword\ResetPasswordCommand;
 use App\Application\Features\Authentication\Commands\SendPasswordResetLink\SendPasswordResetLinkCommand;
 use App\Presentation\Controllers\Api\ApiController;
-use App\Presentation\Requests\Api\V1\ForgotPasswordRequest;
-use App\Presentation\Requests\Api\V1\ResetPasswordRequest;
+use App\Presentation\Requests\Api\V1\Authentication\ForgotPasswordRequest;
+use App\Presentation\Requests\Api\V1\Authentication\ResetPasswordRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Password;
 

@@ -8,8 +8,8 @@ use App\Application\Contracts\CommandBusInterface;
 use App\Application\Features\Authentication\Commands\RegisterUser\RegisterUserCommand;
 use App\Application\Features\Authentication\DTOs\UserDTO;
 use App\Presentation\Controllers\Api\ApiController;
-use App\Presentation\Requests\Api\V1\RegisterRequest;
-use App\Presentation\Resources\UserResource;
+use App\Presentation\Requests\Api\V1\Authentication\RegisterRequest;
+use App\Presentation\Resources\Authentication\UserResource;
 use Illuminate\Http\JsonResponse;
 
 final class RegisterController extends ApiController

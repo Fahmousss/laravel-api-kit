@@ -10,7 +10,7 @@ use App\Infrastructure\Authentication\Models\User;
 
 final class VerifyEmailNotificationService implements VerifyEmailNotificationServiceInterface
 {
-    public function sendVerificationEmail(int $userId): void
+    public function sendVerificationEmail(string $userId): void
     {
         /** @var User $user */
         $user = User::query()->find($userId);

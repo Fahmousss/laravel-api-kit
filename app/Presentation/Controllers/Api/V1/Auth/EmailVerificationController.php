@@ -9,7 +9,7 @@ use App\Application\Contracts\QueryBusInterface;
 use App\Application\Features\Authentication\Commands\ResendVerificationEmail\ResendVerificationEmailCommand;
 use App\Application\Features\Authentication\Commands\VerifyEmail\VerifyEmailCommand;
 use App\Application\Features\Authentication\Queries\GetUserById\GetUserByIdQuery;
-use App\Domain\Auth\Exceptions\UserNotFoundException;
+use App\Domain\Authentication\Exceptions\UserNotFoundException;
 use App\Presentation\Controllers\Api\ApiController;
 use App\Presentation\Requests\Api\V1\Authentication\ResendVerificationRequest;
 use App\Presentation\Requests\Api\V1\Authentication\VerifyEmailRequest;

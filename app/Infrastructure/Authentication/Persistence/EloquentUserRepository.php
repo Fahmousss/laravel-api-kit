@@ -26,7 +26,7 @@ final class EloquentUserRepository implements UserRepositoryInterface
         return $this->mapToEntity($model, UserEntity::class);
     }
 
-    public function findById(int $id): ?UserEntity
+    public function findById(string $id): ?UserEntity
     {
         $model = User::query()->find($id);
 
@@ -60,7 +60,7 @@ final class EloquentUserRepository implements UserRepositoryInterface
         return $this->mapToEntity($model, UserEntity::class);
     }
 
-    public function markEmailAsVerified(int $userId): void
+    public function markEmailAsVerified(string $userId): void
     {
         $model = User::query()->find($userId);
 
