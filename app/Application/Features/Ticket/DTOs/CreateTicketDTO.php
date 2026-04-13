@@ -9,15 +9,21 @@ use App\Domain\Ticket\Enums\TicketType;
 
 final readonly class CreateTicketDTO
 {
+    public TicketType $type;
+    public TicketPriority $priority;
+
     public function __construct(
         public string $projectId,
-        public string $reporterId,
         public string $title,
         public ?string $description,
-        public TicketType $type,
-        public TicketPriority $priority,
+        string $type,
+        string $priority,
         public ?string $assigneeId,
         public ?string $dueDate,
-        public array $labelIds = [],
-    ) {}
+        public ?array $labelIds,
+    ) {
+        $this->type     = TicketType::from($type);
+        $this->priority = TicketPriority::from($priority);
+    }
 }
+

@@ -11,6 +11,7 @@ use App\Presentation\Controllers\Api\V1\Auth\RegisterController;
 use App\Presentation\Controllers\Api\V1\Comment\CommentController;
 use App\Presentation\Controllers\Api\V1\Notification\GetNotificationController;
 use App\Presentation\Controllers\Api\V1\Notification\MarkAllReadController;
+use App\Presentation\Controllers\Api\V1\Project\AddMemberController;
 use App\Presentation\Controllers\Api\V1\Project\ProjectController;
 use App\Presentation\Controllers\Api\V1\Ticket\TicketController;
 use App\Presentation\Controllers\Api\V1\Ticket\TicketTransitionController;
@@ -46,13 +47,13 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
         ->name('verification.send');
 
     // Projects (no project membership check needed to list/create)
-    Route::get('/projects', [ProjectController::class, 'index']);
-    Route::post('/projects', [ProjectController::class, 'store']);
+    Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
+    Route::post('/projects', [ProjectController::class, 'store'])->name('projects.store');
 
     Route::prefix('/projects/{project_id}')
         ->middleware(EnsureProjectMember::class)
         ->group(function () {
-            Route::post('/members', [ProjectController::class, 'addMember']);
+            Route::post('/members', AddMemberController::class);
 
             // Tickets
             Route::get('/tickets', [TicketController::class, 'index']);
@@ -63,7 +64,10 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
             Route::patch('/tickets/{ticket_id}/status', TicketTransitionController::class);
 
             // Comments
-            Route::post('/tickets/{ticket_id}/comments', CommentController::class);
+            Route::get('/tickets/{ticket_id}/comments', [CommentController::class, 'index']);
+            Route::post('/tickets/{ticket_id}/comments', [CommentController::class, 'store']);
+            Route::patch('/tickets/{ticket_id}/comments/{comment_id}', [CommentController::class, 'update']);
+            Route::delete('/tickets/{ticket_id}/comments/{comment_id}', [CommentController::class, 'destroy']);
         });
 
     // Notifications (user-scoped, no project check)

@@ -6,8 +6,11 @@ namespace App\Application\Features\Ticket\Commands\TransitionStatus;
 
 use App\Application\Features\Notification\Common\Interfaces\NotificationServiceInterface;
 use App\Application\Features\Ticket\Common\Interfaces\TicketActivityServiceInterface;
+use App\Domain\ActivityLog\Enums\ActivityType;
+use App\Domain\Authorization\Enums\SystemAction;
 use App\Domain\Authorization\Enums\UserRole;
 use App\Domain\Authorization\Exceptions\UnauthorizedActionException;
+use App\Domain\Ticket\Enums\TicketStatus;
 use App\Domain\Ticket\Exceptions\TicketNotFoundException;
 use App\Domain\Ticket\Repositories\TicketRepositoryInterface;
 
@@ -22,39 +25,38 @@ final class TransitionStatusCommandHandler
     public function handle(TransitionStatusCommand $command): void
     {
         $dto = $command->dto;
+        $actor = $command->actor;
 
         $ticket = $this->ticketRepository->findById($dto->ticketId);
         if (! $ticket) {
             throw TicketNotFoundException::withId($dto->ticketId);
         }
 
-        $role = UserRole::from($dto->actorProjectRole);
-
+        $newStatus = $dto->newStatus;
         // Guard: closing requires canClose, reviewing requires canReview
-        if (
-            in_array($dto->newStatus->value, ['closed', 'wontfix', 'duplicate'])
-            && ! $role->canClose()
+        if (in_array($newStatus,
+        [TicketStatus::CLOSED, TicketStatus::WONTFIX, TicketStatus::DUPLICATE])
         ) {
-            throw UnauthorizedActionException::forAction('close ticket');
+            $actor->assertCan(SystemAction::CLOSE);
         }
 
-        if ($dto->newStatus->value === 'resolved' && ! $role->canReview()) {
-            throw UnauthorizedActionException::forAction('resolve ticket');
+        if ($newStatus === TicketStatus::RESOLVED) {
+            $actor->assertCan(SystemAction::REVIEW);
         }
 
-        if (! $role->canTransitionStatus()) {
-            throw UnauthorizedActionException::forAction('transition ticket status');
+        if (! $actor->canTransitionStatus()) {
+            $actor->assertCan(SystemAction::TRANSITION_STATUS);
         }
 
         $previousStatus = $ticket->status;
 
-        $ticket->transitionTo($dto->newStatus);
+        $ticket->transitionTo($newStatus);
 
         $this->ticketRepository->save($ticket);
 
-        $this->activityService->log($ticket->id, $dto->actorId, 'status_changed', [
+        $this->activityService->log($ticket->id, $actor->userId, ActivityType::UPDATED, [
             'from' => $previousStatus->value,
-            'to'   => $dto->newStatus->value,
+            'to'   => $newStatus->value,
         ]);
 
         $this->notificationService->notifyStatusChanged($ticket, $previousStatus);

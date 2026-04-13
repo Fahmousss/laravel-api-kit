@@ -31,6 +31,8 @@ use App\Application\Features\Authentication\Queries\GetAuthToken\GetAuthTokenQue
 use App\Application\Features\Authentication\Queries\GetAuthToken\GetAuthTokenQueryHandler;
 use App\Application\Features\Authentication\Queries\GetAuthUserId\GetAuthUserIdQuery;
 use App\Application\Features\Authentication\Queries\GetAuthUserId\GetAuthUserIdQueryHandler;
+use App\Application\Features\Authentication\Queries\GetCurrentUser\GetCurrentUserQuery;
+use App\Application\Features\Authentication\Queries\GetCurrentUser\GetCurrentUserQueryHandler;
 use App\Application\Features\Authentication\Queries\GetUserById\GetUserByIdQuery;
 use App\Application\Features\Authentication\Queries\GetUserById\GetUserByIdQueryHandler;
 use App\Application\Features\Authentication\Queries\LoginUser\LoginUserQuery;
@@ -77,5 +79,6 @@ final class AuthenticationServiceProvider extends ServiceProvider
         $queryBus->register(GetAuthUserIdQuery::class, GetAuthUserIdQueryHandler::class);
         $queryBus->register(GetAuthTokenQuery::class, GetAuthTokenQueryHandler::class);
         $queryBus->register(CheckEmailVerifiedQuery::class, CheckEmailVerifiedQueryHandler::class);
+        $queryBus->register(GetCurrentUserQuery::class, GetCurrentUserQueryHandler::class);
     }
 }

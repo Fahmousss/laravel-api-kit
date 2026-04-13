@@ -17,5 +17,5 @@ interface UserRepositoryInterface
 
     public function markEmailAsVerified(string $userId): void;
 
-    public function getAllPaginated(int $page, int $perPage): PaginatedResult;
+    public function paginate(array $filters, int $page, int $perPage): PaginatedResult;
 }

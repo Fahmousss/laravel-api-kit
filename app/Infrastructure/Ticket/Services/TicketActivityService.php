@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace App\Infrastructure\Ticket\Services;
 
 use App\Application\Features\Ticket\Common\Interfaces\TicketActivityServiceInterface;
+use App\Domain\ActivityLog\Enums\ActivityType;
 use App\Infrastructure\ActivityLog\Models\ActivityLog as ActivityLogModel;
 
 final class TicketActivityService implements TicketActivityServiceInterface
 {
-    public function log(string $ticketId, string $actorId, string $action, array $payload): void
+    public function log(string $ticketId, string $actorId, ActivityType $action, array $payload): void
     {
         ActivityLogModel::create([
             'ticket_id'  => $ticketId,

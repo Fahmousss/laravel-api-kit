@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace App\Presentation\Middleware;
 
 use App\Application\Contracts\QueryBusInterface;
+use App\Application\Features\Authentication\Queries\GetCurrentUser\GetCurrentUserQuery;
 use App\Application\Features\Project\Queries\GetProjectMembers\GetProjectMemberRoleQuery;
+use App\Infrastructure\Shared\Services\ActorContextResolverService;
+use App\Presentation\Shared\Traits\ApiResponse;
 use App\Presentation\Shared\Traits\HasAuthenticatedUser;
 use Closure;
 use Illuminate\Http\Request;
@@ -19,24 +22,28 @@ use Symfony\Component\HttpFoundation\Response;
 final class EnsureProjectMember
 {
     use HasAuthenticatedUser;
+    use ApiResponse;
 
     public function __construct(
-        private QueryBusInterface $queryBus,
+        private ActorContextResolverService $resolver
     ) {}
 
     public function handle(Request $request, Closure $next): Response
     {
         $projectId = $request->route('project_id');
-        $userId    = $this->getAuthUserId();
+        $user = $this->getCurrentUser();
 
-        $role = $this->queryBus->dispatch(new GetProjectMemberRoleQuery($projectId, $userId));
-
-        if (! $role) {
-            abort(403, 'You are not a member of this project.');
+        if ($user === null) {
+            return $this->unauthorized("Unauthorized");
         }
 
-        // Inject role into request for use by controllers/handlers
-        $request->merge(['_actor_project_role' => $role->value]);
+        $actor = $this->resolver->fromUserAndProject($user, $projectId);
+
+        if($actor === null){
+            return $this->forbidden("You are not member of this project");
+        }
+
+        $request->attributes->set('actor', $actor);
 
         return $next($request);
     }

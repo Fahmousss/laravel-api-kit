@@ -4,23 +4,33 @@ declare(strict_types=1);
 
 namespace App\Presentation\Resources\Project;
 
-use App\Domain\Project\Entities\Project;
+use App\Application\Features\Project\DTOs\ProjectDTO;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** @mixin Project */
+/** @mixin ProjectDTO */
 final class ProjectResource extends JsonResource
 {
     public function toArray($request): array
     {
+        /** @var ProjectDTO $dto */
+        $dto  = $this->resource;
+        $role = $dto->myRole;
+
         return [
-            'id'          => $this->id,
-            'owner_id'    => $this->ownerId,
-            'name'        => $this->name,
-            'slug'        => $this->slug,
-            'description' => $this->description,
-            'status'      => $this->status->value,
-            'created_at'  => $this->createdAt,
-            'updated_at'  => $this->updatedAt,
+            'id'          => $dto->id,
+            'owner_id'    => $dto->ownerId,
+            'name'        => $dto->name,
+            'slug'        => $dto->slug,
+            'description' => $dto->description,
+            'status'      => $dto->status->value,
+            'created_at'  => $dto->createdAt,
+            'updated_at'  => $dto->updatedAt,
+
+            // RBAC — project-scoped role + all permission flags
+            'my_role'        => $role?->value,
+            'my_role_label'  => $role?->label(),
+            'permissions'    => $role?->permissions(),
         ];
     }
 }
+

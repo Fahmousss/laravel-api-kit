@@ -6,7 +6,6 @@ namespace App\Presentation\Controllers\Api\V1\Project;
 
 use App\Application\Contracts\CommandBusInterface;
 use App\Application\Features\Project\Commands\AddMember\AddMemberCommand;
-use App\Domain\Authorization\Enums\UserRole;
 use App\Presentation\Controllers\Api\ApiController;
 use App\Presentation\Requests\Api\V1\Project\AddMemberRequest;
 use App\Presentation\Shared\Traits\ApiResponse;
@@ -25,12 +24,12 @@ final class AddMemberController extends ApiController
     {
         $this->commandBus->dispatch(new AddMemberCommand(
             projectId: $project_id,
-            actorId: $this->getAuthUserId(),
-            actorProjectRole: $request->input('_actor_project_role'),
-            userId: $request->string('user_id'),
-            role: UserRole::from($request->string('role')),
+            actor:     $this->actor($request),
+            userId:    $request->string('user_id'),
+            role:      $request->string('role'),
         ));
 
-        return $this->success(message: 'Member added.');
+        return $this->noContent();
     }
 }
+

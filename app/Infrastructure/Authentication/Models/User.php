@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Authentication\Models;
 
+use App\Domain\Authorization\Enums\SystemRole;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
@@ -18,6 +19,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string      $id
  * @property string      $name
  * @property string      $email
+ * @property SystemRole  $system_role
  * @property null|Carbon $email_verified_at
  * @property string      $password
  * @property null|Carbon $created_at
@@ -43,7 +45,7 @@ final class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
-        'posyandu_id',
+        'system_role'
     ];
 
     /**
@@ -66,6 +68,7 @@ final class User extends Authenticatable implements MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'password'          => 'hashed',
+            'system_role'       => SystemRole::class
         ];
     }
 }

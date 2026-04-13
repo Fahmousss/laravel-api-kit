@@ -18,5 +18,11 @@ interface CommentRepositoryInterface
     /**
      * @return PaginatedResult<Comment>
      */
-    public function paginate(string $ticketId, int $perPage, int $page): PaginatedResult;
+    public function paginate(
+        string $ticketId,
+        int    $perPage,
+        int    $page,
+        bool   $includeInternal = false,
+    ): PaginatedResult;
 }
+

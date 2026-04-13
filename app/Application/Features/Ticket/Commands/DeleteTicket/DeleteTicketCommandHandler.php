@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\Features\Ticket\Commands\DeleteTicket;
 
+use App\Domain\Authorization\Enums\SystemAction;
 use App\Domain\Authorization\Exceptions\UnauthorizedActionException;
 use App\Domain\Ticket\Exceptions\TicketNotFoundException;
 use App\Domain\Ticket\Repositories\TicketRepositoryInterface;
@@ -16,11 +17,9 @@ final class DeleteTicketCommandHandler
 
     public function handle(DeleteTicketCommand $command): void
     {
-        $role = $command->actorProjectRole;
+        $actor = $command->actor;
 
-        if (! $role->canDeleteTicket()) {
-            throw UnauthorizedActionException::forAction('delete ticket');
-        }
+        $actor->assertCan(SystemAction::DELETE_TICKET);
 
         $ticket = $this->ticketRepository->findById($command->ticketId);
         if (! $ticket) {

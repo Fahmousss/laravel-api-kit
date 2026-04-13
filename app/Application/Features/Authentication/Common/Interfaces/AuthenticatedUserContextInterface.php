@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Application\Features\Authentication\Common\Interfaces;
 
+use App\Domain\Authentication\Entities\UserEntity;
+
 interface AuthenticatedUserContextInterface
 {
     /**
@@ -20,4 +22,10 @@ interface AuthenticatedUserContextInterface
      * Check if the currently authenticated user has verified their email.
      */
     public function isEmailVerified(): bool;
+
+    /**
+     * Get the currently authenticated user as a Domain entity.
+     */
+    public function currentUser(): ?UserEntity;
 }
+

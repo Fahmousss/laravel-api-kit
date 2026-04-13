@@ -4,19 +4,17 @@ declare(strict_types=1);
 
 namespace App\Application\Features\Authentication\Common\Interfaces;
 
+use App\Application\Features\Authentication\DTOs\PasswordResetStatusDTO;
+
 interface PasswordResetServiceInterface
 {
     /**
      * Send a password reset link to the given user.
-     *
-     * @return string The status indicating success or failure.
      */
-    public function sendResetLink(string $email): string;
+    public function sendResetLink(string $email): PasswordResetStatusDTO;
 
     /**
      * Reset the user's password using the given token.
-     *
-     * @return string The status indicating success or failure.
      */
-    public function resetPassword(string $email, string $password, string $passwordConfirmation, string $token): string;
+    public function resetPassword(string $email, string $password, string $passwordConfirmation, string $token): PasswordResetStatusDTO;
 }

@@ -21,4 +21,12 @@ interface ProjectMemberRepositoryInterface
      * @return ProjectMember[]
      */
     public function listMembers(string $projectId): array;
+
+    /**
+     * Returns a map of [project_id => UserRole] for a given user.
+     * Used to attach my_role to each project in a list without N+1 queries.
+     *
+     * @return array<string, UserRole>
+     */
+    public function getRolesByUser(string $userId): array;
 }

@@ -33,6 +33,11 @@ enum UserRole: string
         return in_array($this, [self::ADMIN, self::PROJECT_MANAGER]);
     }
 
+    public function canUpdateTicket(): bool
+    {
+        return in_array($this, [self::ADMIN, self::PROJECT_MANAGER, self::DEVELOPER]);
+    }
+
     /**
      * Roles that can create tickets
      */
@@ -85,5 +90,32 @@ enum UserRole: string
     public function canDeleteTicket(): bool
     {
         return in_array($this, [self::ADMIN, self::PROJECT_MANAGER]);
+    }
+
+    public function canPostInternalComment(): bool
+    {
+        return in_array($this, [
+            self::ADMIN, self::PROJECT_MANAGER,
+            self::DEVELOPER, self::REVIEWER,
+        ]);
+    }
+
+    /**
+     * Single source of truth for all project-scoped permissions.
+     * Called by ProjectResource — frontend reads this, never recomputes.
+     */
+    public function permissions(): array
+    {
+        return [
+            'can_manage_members'        => $this->canManageMembers(),
+            'can_create_ticket'         => $this->canCreateTicket(),
+            'can_update_ticket'         => $this->canUpdateTicket(),
+            'can_delete_ticket'         => $this->canDeleteTicket(),
+            'can_transition_status'     => $this->canTransitionStatus(),
+            'can_review'                => $this->canReview(),
+            'can_close'                 => $this->canClose(),
+            'can_force_reopen'          => $this->canForceReopen(),
+            'can_post_internal_comment' => $this->canPostInternalComment(),
+        ];
     }
 }

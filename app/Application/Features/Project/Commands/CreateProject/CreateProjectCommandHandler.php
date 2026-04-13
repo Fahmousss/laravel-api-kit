@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Application\Features\Project\Commands\CreateProject;
 
+use App\Application\Features\Project\DTOs\ProjectDTO;
+use App\Domain\Authorization\Enums\SystemAction;
 use App\Domain\Authorization\Enums\UserRole;
 use App\Domain\Project\Entities\Project;
 use App\Domain\Project\Entities\ProjectMember;
@@ -18,9 +20,12 @@ final class CreateProjectCommandHandler
         private ProjectMemberRepositoryInterface $memberRepository,
     ) {}
 
-    public function handle(CreateProjectCommand $command): Project
+    public function handle(CreateProjectCommand $command): ProjectDTO
     {
-        $dto = $command->dto;
+        $dto   = $command->dto;
+        $actor = $command->actor;
+
+        $actor->assertCan(SystemAction::CREATE_PROJECT);
 
         $project = new Project(
             id: null,
@@ -45,6 +50,7 @@ final class CreateProjectCommandHandler
         );
         $this->memberRepository->save($member);
 
-        return $saved;
+        return ProjectDTO::fromEntity($saved, UserRole::ADMIN);
     }
 }
+

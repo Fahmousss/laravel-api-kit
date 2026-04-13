@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\Features\Project\Commands\AddMember;
 
-use App\Domain\Authorization\Enums\UserRole;
+use App\Domain\Authorization\Enums\SystemAction;
 use App\Domain\Authorization\Exceptions\UnauthorizedActionException;
 use App\Domain\Project\Entities\ProjectMember;
 use App\Domain\Project\Exceptions\DuplicateProjectMemberException;
@@ -16,13 +16,11 @@ final class AddMemberCommandHandler
         private ProjectMemberRepositoryInterface $memberRepository,
     ) {}
 
-    public function handle(AddMemberCommand $command): ProjectMember
+    public function handle(AddMemberCommand $command): void
     {
-        $actorRole = UserRole::from($command->actorProjectRole);
+        $actor = $command->actor;
 
-        if (! $actorRole->canManageMembers()) {
-            throw UnauthorizedActionException::forAction('add project member');
-        }
+        $actor->assertCan(SystemAction::MANAGE_MEMBERS);
 
         $existing = $this->memberRepository->findMember($command->projectId, $command->userId);
         if ($existing) {
@@ -37,6 +35,7 @@ final class AddMemberCommandHandler
             joinedAt: null,
         );
 
-        return $this->memberRepository->save($member);
+        $this->memberRepository->save($member);
     }
 }
+

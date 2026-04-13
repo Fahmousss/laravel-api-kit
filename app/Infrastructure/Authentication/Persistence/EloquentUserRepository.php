@@ -71,9 +71,13 @@ final class EloquentUserRepository implements UserRepositoryInterface
         $model->markEmailAsVerified();
     }
 
-    public function getAllPaginated(int $page, int $perPage): PaginatedResult
+    public function paginate(array $filters, int $page, int $perPage): PaginatedResult
     {
-        $paginator = User::query()->paginate(perPage: $perPage, page: $page);
+        $paginator = User::query()->orderByDesc('created_at')->paginate(
+            perPage: $perPage,
+            columns: ['*'],
+            pageName: 'page',
+            page: $page);
 
         $entities = array_map(
             fn (User $model): array|object => $this->mapToEntity($model, UserEntity::class),

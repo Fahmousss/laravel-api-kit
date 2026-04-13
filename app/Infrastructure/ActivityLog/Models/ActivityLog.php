@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\ActivityLog\Models;
 
+use App\Domain\ActivityLog\Enums\ActivityType;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
@@ -22,5 +23,6 @@ final class ActivityLog extends Model
     protected $casts = [
         'payload'    => 'array',
         'created_at' => 'datetime',
+        'action'     => ActivityType::class,
     ];
 }

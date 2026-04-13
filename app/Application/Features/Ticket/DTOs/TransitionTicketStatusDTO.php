@@ -8,11 +8,14 @@ use App\Domain\Ticket\Enums\TicketStatus;
 
 final readonly class TransitionTicketStatusDTO
 {
+    public TicketStatus $newStatus;
+
     public function __construct(
         public string $ticketId,
-        public string $actorId,
-        public string $actorProjectRole,
-        public TicketStatus $newStatus,
+        string $newStatus,
         public ?string $comment = null,
-    ) {}
+    ) {
+        $this->newStatus = TicketStatus::from($newStatus);
+    }
 }
+

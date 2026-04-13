@@ -16,7 +16,8 @@ final readonly class GetAllUsersQueryHandler
 
     public function handle(GetAllUsersQuery $query): PaginatedResult
     {
-        $paginatedResult = $this->userRepository->getAllPaginated(
+        $paginatedResult = $this->userRepository->paginate(
+            filters: [],
             page: $query->page,
             perPage: $query->perPage
         );

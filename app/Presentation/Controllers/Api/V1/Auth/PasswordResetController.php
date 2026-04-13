@@ -11,7 +11,6 @@ use App\Presentation\Controllers\Api\ApiController;
 use App\Presentation\Requests\Api\V1\Authentication\ForgotPasswordRequest;
 use App\Presentation\Requests\Api\V1\Authentication\ResetPasswordRequest;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Password;
 
 final class PasswordResetController extends ApiController
 {
@@ -21,35 +20,27 @@ final class PasswordResetController extends ApiController
 
     public function forgot(ForgotPasswordRequest $request): JsonResponse
     {
-        $status = $this->commandBus->dispatch(new SendPasswordResetLinkCommand($request->email));
+        /** @var \App\Application\Features\Authentication\DTOs\PasswordResetStatusDTO $result */
+        $result = $this->commandBus->dispatch(new SendPasswordResetLinkCommand($request->email));
 
-        if ($status === Password::RESET_LINK_SENT) {
-            return $this->success(message: 'Password reset link sent to your email');
-        }
-
-        return $this->error('Unable to send reset link', 500);
+        return $result->success
+            ? $this->success(message: $result->message)
+            : $this->error($result->message, 500);
     }
 
     public function reset(ResetPasswordRequest $request): JsonResponse
     {
-        $status = $this->commandBus->dispatch(new ResetPasswordCommand(
+        /** @var \App\Application\Features\Authentication\DTOs\PasswordResetStatusDTO $result */
+        $result = $this->commandBus->dispatch(new ResetPasswordCommand(
             $request->email,
             $request->password,
             $request->password_confirmation,
             $request->token
         ));
 
-        if ($status === Password::PASSWORD_RESET) {
-            return $this->success(message: 'Password reset successfully');
-        }
-
-        return $this->error(
-            match ($status) {
-                Password::INVALID_TOKEN => 'Invalid or expired reset token',
-                Password::INVALID_USER  => 'User not found',
-                default                 => 'Unable to reset password',
-            },
-            400
-        );
+        return $result->success
+            ? $this->success(message: $result->message)
+            : $this->error($result->message, 400);
     }
 }
+

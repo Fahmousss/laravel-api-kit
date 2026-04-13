@@ -62,4 +62,12 @@ final class EloquentProjectMemberRepository implements ProjectMemberRepositoryIn
             ->map(fn (ProjectMemberModel $m) => $this->mapToEntity($m, ProjectMemberEntity::class))
             ->toArray();
     }
+
+    public function getRolesByUser(string $userId): array
+    {
+        return ProjectMemberModel::where('user_id', $userId)
+            ->pluck('role', 'project_id')
+            ->map(fn(string $r) => UserRole::from($r))
+            ->all();
+    }
 }
