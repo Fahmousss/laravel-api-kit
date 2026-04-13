@@ -3,6 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: laravel-api-kit-app
     container_name: laravel-api-kit-app
     working_dir: /var/www
     ports:
@@ -13,6 +14,21 @@ services:
     command: ["php", "artisan", "octane:frankenphp", "--host=0.0.0.0", "--port=8080", "--workers=4"]
     environment:
       - OCTANE_SERVER=frankenphp
+    depends_on:
+      - db
+      - reverb
+
+  reverb:
+    image: laravel-api-kit-app
+    container_name: laravel-api-kit-reverb
+    working_dir: /var/www
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./:/var/www
+    command: ["php", "artisan", "reverb:start", "--host=0.0.0.0", "--port=8001", "--no-interaction"]
+    depends_on:
+      - db
 
   db:
     image: postgres:16-alpine
