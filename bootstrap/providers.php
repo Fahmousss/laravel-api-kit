@@ -10,7 +10,9 @@ return [
     App\Infrastructure\Shared\Providers\DocumentationServiceProvider::class,
     App\Infrastructure\Project\Providers\ProjectServiceProvider::class,
     App\Infrastructure\Ticket\Providers\TicketServiceProvider::class,
+    App\Infrastructure\ActivityLog\Providers\ActivityLogServiceProvider::class,
     App\Infrastructure\Comment\Providers\CommentServiceProvider::class,
     App\Infrastructure\Notification\Providers\NotificationServiceProvider::class,
 ];
+
 

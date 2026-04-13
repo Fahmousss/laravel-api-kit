@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace App\Application\Features\Ticket\Commands\DeleteTicket;
 
+use App\Application\Features\Ticket\Common\Interfaces\TicketActivityServiceInterface;
+use App\Domain\ActivityLog\Enums\ActivityType;
 use App\Domain\Authorization\Enums\SystemAction;
-use App\Domain\Authorization\Exceptions\UnauthorizedActionException;
 use App\Domain\Ticket\Exceptions\TicketNotFoundException;
 use App\Domain\Ticket\Repositories\TicketRepositoryInterface;
 
 final class DeleteTicketCommandHandler
 {
     public function __construct(
-        private TicketRepositoryInterface $ticketRepository,
+        private TicketRepositoryInterface     $ticketRepository,
+        private TicketActivityServiceInterface $activityService,
     ) {}
 
     public function handle(DeleteTicketCommand $command): void
@@ -26,6 +28,13 @@ final class DeleteTicketCommandHandler
             throw TicketNotFoundException::withId($command->ticketId);
         }
 
+        // Log before deletion so the ticket_id FK is still valid
+        $this->activityService->log($ticket->id, $actor->userId, ActivityType::DELETED, [
+            'title' => $ticket->title,
+            'type'  => $ticket->type->value,
+        ]);
+
         $this->ticketRepository->delete($command->ticketId);
     }
 }
+

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Notification\Models;
 
+use App\Domain\Notification\Enums\NotificationType;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
@@ -23,5 +24,6 @@ final class Notification extends Model
         'payload'    => 'array',
         'read'       => 'boolean',
         'created_at' => 'datetime',
+        'type' => NotificationType::class
     ];
 }

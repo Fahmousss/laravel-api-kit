@@ -54,7 +54,7 @@ final class TransitionStatusCommandHandler
 
         $this->ticketRepository->save($ticket);
 
-        $this->activityService->log($ticket->id, $actor->userId, ActivityType::UPDATED, [
+        $this->activityService->log($ticket->id, $actor->userId, ActivityType::STATUS_CHANGED, [
             'from' => $previousStatus->value,
             'to'   => $newStatus->value,
         ]);

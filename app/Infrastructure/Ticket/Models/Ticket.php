@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Ticket\Models;
 
-use App\Infrastructure\ActivityLog\Models\ActivityLogModel;
-use App\Infrastructure\Comment\Models\CommentModel;
+use App\Domain\Ticket\Enums\TicketPriority;
+use App\Domain\Ticket\Enums\TicketStatus;
+use App\Domain\Ticket\Enums\TicketType;
+use App\Infrastructure\ActivityLog\Models\ActivityLog as ActivityLogModel;
+use App\Infrastructure\Comment\Models\Comment as CommentModel;
 use App\Infrastructure\Project\Models\Project;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -31,6 +34,9 @@ final class Ticket extends Model
         'ticket_number' => 'integer',
         'due_date'      => 'date',
         'resolved_at'   => 'datetime',
+        'type' => TicketType::class,
+        'status' => TicketStatus::class,
+        'priority' => TicketPriority::class
     ];
 
     public function project(): BelongsTo

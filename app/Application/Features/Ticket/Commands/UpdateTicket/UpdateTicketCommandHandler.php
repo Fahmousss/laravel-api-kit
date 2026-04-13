@@ -37,7 +37,15 @@ final class UpdateTicketCommandHandler
 
         $this->ticketRepository->save($ticket);
 
-        $this->activityService->log($ticket->id, $actor->userId, ActivityType::UPDATED, []);
+        $changedFields = array_filter([
+            'title'       => $dto->title,
+            'description' => $dto->description !== null ? '(updated)' : null,
+            'priority'    => $dto->priority?->value,
+            'assignee_id' => $dto->assigneeId,
+            'due_date'    => $dto->dueDate,
+        ]);
+
+        $this->activityService->log($ticket->id, $actor->userId, ActivityType::UPDATED, $changedFields);
     }
 }
 

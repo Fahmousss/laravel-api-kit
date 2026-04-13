@@ -8,6 +8,7 @@ use App\Presentation\Controllers\Api\V1\Auth\LogoutController;
 use App\Presentation\Controllers\Api\V1\Auth\MeController;
 use App\Presentation\Controllers\Api\V1\Auth\PasswordResetController;
 use App\Presentation\Controllers\Api\V1\Auth\RegisterController;
+use App\Presentation\Controllers\Api\V1\ActivityLog\ActivityLogController;
 use App\Presentation\Controllers\Api\V1\Comment\CommentController;
 use App\Presentation\Controllers\Api\V1\Notification\GetNotificationController;
 use App\Presentation\Controllers\Api\V1\Notification\MarkAllReadController;
@@ -68,6 +69,9 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
             Route::post('/tickets/{ticket_id}/comments', [CommentController::class, 'store']);
             Route::patch('/tickets/{ticket_id}/comments/{comment_id}', [CommentController::class, 'update']);
             Route::delete('/tickets/{ticket_id}/comments/{comment_id}', [CommentController::class, 'destroy']);
+
+            // Activity Log
+            Route::get('/tickets/{ticket_id}/activity', ActivityLogController::class);
         });
 
     // Notifications (user-scoped, no project check)
