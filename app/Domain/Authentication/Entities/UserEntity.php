@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Domain\Authentication\Entities;
 
-use App\Domain\Authorization\Enums\SystemRole;
-
 /**
  * Pure domain entity — no framework dependencies.
+ *
+ * SystemRole is intentionally absent: it is an authorization concern
+ * resolved at runtime from config, not an identity property of the user.
  */
 final readonly class UserEntity
 {
@@ -16,7 +17,6 @@ final readonly class UserEntity
         public string $name,
         public string $email,
         public string $password,
-        public SystemRole $systemRole,
         public ?string $emailVerifiedAt = null,
         public ?string $createdAt = null,
         public ?string $updatedAt = null,
@@ -29,15 +29,9 @@ final readonly class UserEntity
             name: $name,
             email: $email,
             password: $password,
-            systemRole: SystemRole::MEMBER,
             emailVerifiedAt: null,
             createdAt: now()->toIso8601String(),
             updatedAt: now()->toIso8601String(),
         );
-    }
-
-    public function isSystemAdmin(): bool
-    {
-        return $this->systemRole->isSystemAdmin();
     }
 }

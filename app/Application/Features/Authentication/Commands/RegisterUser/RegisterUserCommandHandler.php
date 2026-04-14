@@ -7,6 +7,7 @@ namespace App\Application\Features\Authentication\Commands\RegisterUser;
 use App\Application\Features\Authentication\Common\Interfaces\AuthTokenServiceInterface;
 use App\Application\Features\Authentication\Common\Interfaces\VerifyEmailNotificationServiceInterface;
 use App\Application\Features\Authentication\DTOs\UserDTO;
+use App\Application\Features\Authorization\Common\Interfaces\SystemRoleResolverInterface;
 use App\Domain\Authentication\Entities\UserEntity;
 use App\Domain\Authentication\Repositories\UserRepositoryInterface;
 use Illuminate\Support\Facades\Hash;
@@ -14,9 +15,10 @@ use Illuminate\Support\Facades\Hash;
 final readonly class RegisterUserCommandHandler
 {
     public function __construct(
-        private UserRepositoryInterface $userRepository,
-        private VerifyEmailNotificationServiceInterface $notificationService,
-        private AuthTokenServiceInterface $tokenService,
+        private UserRepositoryInterface                  $userRepository,
+        private VerifyEmailNotificationServiceInterface  $notificationService,
+        private AuthTokenServiceInterface                $tokenService,
+        private SystemRoleResolverInterface              $roleResolver,
     ) {}
 
     public function handle(RegisterUserCommand $command): UserDTO
@@ -34,13 +36,14 @@ final readonly class RegisterUserCommandHandler
         $token = $this->tokenService->generateForUser($savedEntity->id);
 
         return new UserDTO(
-            id: $savedEntity->id,
-            name: $savedEntity->name,
-            email: $savedEntity->email,
+            id:              $savedEntity->id,
+            name:            $savedEntity->name,
+            email:           $savedEntity->email,
+            systemRole:      $this->roleResolver->resolveForEmail($savedEntity->email),
             emailVerifiedAt: $savedEntity->emailVerifiedAt,
-            createdAt: $savedEntity->createdAt ?? now()->toIso8601String(),
-            updatedAt: $savedEntity->updatedAt ?? now()->toIso8601String(),
-            token: $token,
+            createdAt:       $savedEntity->createdAt ?? now()->toIso8601String(),
+            updatedAt:       $savedEntity->updatedAt ?? now()->toIso8601String(),
+            token:           $token,
         );
     }
 }

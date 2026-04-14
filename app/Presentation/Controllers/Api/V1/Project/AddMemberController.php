@@ -25,8 +25,8 @@ final class AddMemberController extends ApiController
         $this->commandBus->dispatch(new AddMemberCommand(
             projectId: $project_id,
             actor:     $this->actor($request),
-            userId:    $request->string('user_id'),
-            role:      $request->string('role'),
+            userId:    $request->user_id,
+            role:      $request->role,
         ));
 
         return $this->noContent();
