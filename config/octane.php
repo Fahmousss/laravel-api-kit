@@ -223,4 +223,23 @@ return [
 
     'max_execution_time' => 30,
 
+    'frankenphp' => [
+        'options' => [
+            'http_compression' => true,
+            'http_compression_level' => 6, // 1 - 9
+            'compression_min_length' => 20,
+            'package_max_length' => 2 * 1024 * 1024, // 2MB
+            'upload_max_filesize' => 20 * 1024 * 1024, // 20MB
+            'open_http2_protocol' => true,
+            'document_root' => public_path(),
+            'enable_static_handler' => true,
+        ]
+    ],
+
+    // https://github.com/laravel/octane/pull/853#issuecomment-1999530137
+    'state_file' => base_path('bootstrap/octane-server-state.json'),
+
+    // https://github.com/laravel/octane/pull/902/files
+    'usleep_between_writing_server_output' => 1,
+
 ];

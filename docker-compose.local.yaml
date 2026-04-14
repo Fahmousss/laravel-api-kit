@@ -1,0 +1,138 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.local
+    image: laravel-api-kit-local
+    container_name: laravel-api-kit-app
+    working_dir: /var/www
+    ports:
+      - "80:8000"
+    volumes:
+      - ./:/var/www
+    env_file:
+      - .env
+    environment:
+      - APP_ENV=local
+    entrypoint: >
+      /bin/sh -c "
+        php artisan optimize:clear &&
+        php artisan octane:frankenphp --host=0.0.0.0 --port=8000 --workers=4
+      "
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  reverb:
+    build:
+      context: .
+      dockerfile: Dockerfile.local
+    image: laravel-api-kit-local
+    container_name: laravel-api-kit-reverb
+    working_dir: /var/www
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./:/var/www
+    env_file:
+      - .env
+    environment:
+      - APP_ENV=local
+    entrypoint: ["php", "artisan", "reverb:start", "--host=0.0.0.0", "--port=8080", "--no-interaction"]
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  horizon:
+    build:
+      context: .
+      dockerfile: Dockerfile.local
+    image: laravel-api-kit-local
+    container_name: laravel-api-kit-horizon
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    env_file:
+      - .env
+    environment:
+      - APP_ENV=local
+    entrypoint: ["php", "artisan", "horizon"]
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile.local
+    image: laravel-api-kit-local
+    container_name: laravel-api-kit-scheduler
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    env_file:
+      - .env
+    environment:
+      - APP_ENV=local
+    entrypoint: ["php", "artisan", "schedule:work"]
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  db:
+    image: postgres:16-alpine
+    container_name: laravel-api-kit-db
+    environment:
+      POSTGRES_DB: "${DB_DATABASE:-ticketing}"
+      POSTGRES_USER: "${DB_USERNAME:-laravel}"
+      POSTGRES_PASSWORD: "${DB_PASSWORD:-secret}"
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-d", "${DB_DATABASE:-ticketing}", "-U", "${DB_USERNAME:-laravel}"]
+      retries: 3
+      timeout: 5s
+
+  redis:
+    image: redis:7-alpine
+    container_name: laravel-api-kit-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: ["redis-server", "--requirepass", "${REDIS_PASSWORD:-secret}"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "--pass", "${REDIS_PASSWORD:-secret}", "ping"]
+      retries: 3
+      timeout: 5s
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: laravel-api-kit-pgadmin
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "${PGADMIN_DEFAULT_EMAIL:-admin@local.test}"
+      PGADMIN_DEFAULT_PASSWORD: "${PGADMIN_DEFAULT_PASSWORD:-secret}"
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  db-data:
+  redis-data:
+  pgadmin-data:

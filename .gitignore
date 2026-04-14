@@ -53,3 +53,10 @@ MCP.md
 **/caddy
 frankenphp
 frankenphp-worker.php
+
+# Runtime state & configuration directories
+.config/
+.data/
+bootstrap/octane-server-state.json
+supervisord.pid
+.env.local
