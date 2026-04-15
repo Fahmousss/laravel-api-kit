@@ -19,8 +19,13 @@ final class ListProjectsQueryHandler
 
     public function handle(ListProjectsQuery $query): PaginatedResult
     {
+        $filters = $query->filters;
+        if (!$query->actor->isSystemAdmin()) {
+            $filters['member_id'] = $query->actor->userId;
+        }
+
         $result = $this->projectRepository->paginate(
-            array_merge($query->filters, ['member_id' => $query->actor->userId]),
+            $filters,
             $query->perPage,
             $query->page,
         );

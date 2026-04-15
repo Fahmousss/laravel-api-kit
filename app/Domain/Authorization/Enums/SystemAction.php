@@ -17,5 +17,7 @@ enum SystemAction: string
     case FORCE_REOPEN          = 'forceReopen';
     case POST_INTERNAL_COMMENT = 'postInternalComment';
     case ACCESS_ADMIN_PANEL    = 'accessAdminPanel';
+    case UPDATE_PROJECT        = 'updateProject';
+    case DELETE_PROJECT        = 'deleteProject';
 }
 

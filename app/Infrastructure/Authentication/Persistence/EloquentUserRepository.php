@@ -92,4 +92,9 @@ final class EloquentUserRepository implements UserRepositoryInterface
             lastPage: $paginator->lastPage()
         );
     }
+
+    public function delete(string $id): void
+    {
+        User::destroy($id);
+    }
 }

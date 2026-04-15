@@ -9,7 +9,7 @@ use App\Presentation\Shared\Traits\ApiResponse;
 use App\Presentation\Shared\Traits\HasAuthenticatedUser;
 use Closure;
 use Illuminate\Http\Request;
-use App\Infrastructure\Shared\Services\ActorContextResolverService;
+use App\Infrastructure\Authorization\Services\ActorContextResolverService;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

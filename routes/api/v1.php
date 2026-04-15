@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Domain\Shared\Enums\RouteName;
 use App\Presentation\Controllers\Api\V1\ActivityLog\ActivityLogController;
+use App\Presentation\Controllers\Api\V1\Admin\UserController;
 use App\Presentation\Controllers\Api\V1\Auth\EmailVerificationController;
 use App\Presentation\Controllers\Api\V1\Auth\LoginController;
 use App\Presentation\Controllers\Api\V1\Auth\LogoutController;
@@ -78,6 +79,24 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
     // Notifications (user-scoped, no project check)
     Route::get('/notifications', GetNotificationController::class)->name(RouteName::NOTIFICATIONS_INDEX);
     Route::post('/notifications/read-all', MarkAllReadController::class)->name(RouteName::NOTIFICATIONS_MARK_ALL_READ);
+
+    // Admin Routes
+    Route::prefix('/admin')
+        ->middleware(\App\Presentation\Middleware\EnsureSystemAdmin::class)
+        ->group(function () {
+            // Users
+            Route::get('users', [\App\Presentation\Controllers\Api\V1\Admin\UserController::class, 'index'])->name(RouteName::ADMIN_USERS_INDEX);
+            Route::post('users', [\App\Presentation\Controllers\Api\V1\Admin\UserController::class, 'store'])->name(RouteName::ADMIN_USERS_STORE);
+            Route::get('users/{user}', [\App\Presentation\Controllers\Api\V1\Admin\UserController::class, 'show'])->name(RouteName::ADMIN_USERS_SHOW);
+            Route::patch('users/{user}', [\App\Presentation\Controllers\Api\V1\Admin\UserController::class, 'update'])->name(RouteName::ADMIN_USERS_UPDATE);
+            Route::delete('users/{user}', [\App\Presentation\Controllers\Api\V1\Admin\UserController::class, 'destroy'])->name(RouteName::ADMIN_USERS_DESTROY);
+
+            // Projects
+            Route::get('projects', [\App\Presentation\Controllers\Api\V1\Admin\ProjectController::class, 'index'])->name(RouteName::ADMIN_PROJECTS_INDEX);
+            Route::get('projects/{project}', [\App\Presentation\Controllers\Api\V1\Admin\ProjectController::class, 'show'])->name(RouteName::ADMIN_PROJECTS_SHOW);
+            Route::patch('projects/{project}', [\App\Presentation\Controllers\Api\V1\Admin\ProjectController::class, 'update'])->name(RouteName::ADMIN_PROJECTS_UPDATE);
+            Route::delete('projects/{project}', [\App\Presentation\Controllers\Api\V1\Admin\ProjectController::class, 'destroy'])->name(RouteName::ADMIN_PROJECTS_DESTROY);
+        });
 });
 
 // Password reset routes (public with rate limiting)

@@ -7,7 +7,7 @@ namespace App\Presentation\Middleware;
 use App\Application\Contracts\QueryBusInterface;
 use App\Application\Features\Authentication\Queries\GetCurrentUser\GetCurrentUserQuery;
 use App\Application\Features\Project\Queries\GetProjectMembers\GetProjectMemberRoleQuery;
-use App\Infrastructure\Shared\Services\ActorContextResolverService;
+use App\Infrastructure\Authorization\Services\ActorContextResolverService;
 use App\Presentation\Shared\Traits\ApiResponse;
 use App\Presentation\Shared\Traits\HasAuthenticatedUser;
 use Closure;

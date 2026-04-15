@@ -39,4 +39,16 @@ enum RouteName: string
     case ACTIVITY_LOG_INDEX = 'activity-log.index';
     case NOTIFICATIONS_INDEX = 'notifications.index';
     case NOTIFICATIONS_MARK_ALL_READ = 'notifications.mark-all-read';
+    // Admin - Users
+    case ADMIN_USERS_INDEX = 'admin.users.index';
+    case ADMIN_USERS_SHOW = 'admin.users.show';
+    case ADMIN_USERS_STORE = 'admin.users.store';
+    case ADMIN_USERS_UPDATE = 'admin.users.update';
+    case ADMIN_USERS_DESTROY = 'admin.users.destroy';
+
+    // Admin - Projects
+    case ADMIN_PROJECTS_INDEX = 'admin.projects.index';
+    case ADMIN_PROJECTS_SHOW = 'admin.projects.show';
+    case ADMIN_PROJECTS_UPDATE = 'admin.projects.update';
+    case ADMIN_PROJECTS_DESTROY = 'admin.projects.destroy';
 }

@@ -79,6 +79,16 @@ final readonly class ActorContext
         return true; // Any authenticated member may create a project
     }
 
+    public function canUpdateProject(): bool
+    {
+        return $this->isSystemAdmin() || $this->projectRole === UserRole::ADMIN;
+    }
+
+    public function canDeleteProject(): bool
+    {
+        return $this->isSystemAdmin() || $this->projectRole === UserRole::ADMIN;
+    }
+
     public function canForceReopen(): bool
     {
         return $this->projectRole?->canForceReopen() ?? false;
@@ -111,6 +121,8 @@ final readonly class ActorContext
             SystemAction::FORCE_REOPEN          => $this->canForceReopen(),
             SystemAction::POST_INTERNAL_COMMENT => $this->canPostInternalComment(),
             SystemAction::ACCESS_ADMIN_PANEL    => $this->isSystemAdmin(),
+            SystemAction::UPDATE_PROJECT        => $this->canUpdateProject(),
+            SystemAction::DELETE_PROJECT        => $this->canDeleteProject(),
         };
 
         if (! $allowed) {
