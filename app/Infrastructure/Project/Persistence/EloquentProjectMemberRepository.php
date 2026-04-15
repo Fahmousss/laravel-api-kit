@@ -29,7 +29,7 @@ final class EloquentProjectMemberRepository implements ProjectMemberRepositoryIn
             ->where('user_id', $userId)
             ->first();
 
-        return $model ? UserRole::from($model->role) : null;
+        return $model ? $model->role : null;
     }
 
     public function save(ProjectMemberEntity $member): ProjectMemberEntity
@@ -67,7 +67,6 @@ final class EloquentProjectMemberRepository implements ProjectMemberRepositoryIn
     {
         return ProjectMemberModel::where('user_id', $userId)
             ->pluck('role', 'project_id')
-            ->map(fn(string $r) => UserRole::from($r))
             ->all();
     }
 }

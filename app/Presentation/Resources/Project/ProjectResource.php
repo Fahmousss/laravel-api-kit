@@ -7,7 +7,9 @@ namespace App\Presentation\Resources\Project;
 use App\Application\Features\Project\DTOs\ProjectDTO;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** @mixin ProjectDTO */
+/**
+ * @mixin ProjectDTO
+ */
 final class ProjectResource extends JsonResource
 {
     public function toArray($request): array
@@ -27,10 +29,9 @@ final class ProjectResource extends JsonResource
             'updated_at'  => $dto->updatedAt,
 
             // RBAC — project-scoped role + all permission flags
-            'my_role'        => $role?->value,
-            'my_role_label'  => $role?->label(),
-            'permissions'    => $role?->permissions(),
+            'my_role'       => $role?->value,
+            'my_role_label' => $role?->label(),
+            'permissions'   => $role?->permissions(),
         ];
     }
 }
-

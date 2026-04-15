@@ -115,7 +115,7 @@ return [
     */
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
-    'admin_email' => env('APP_ADMIN_EMAIL', 'admin@example.com'),
-    'admin_password' => env('APP_ADMIN_PASSWORD', 'password'),
+    'admin_email'      => env('APP_ADMIN_EMAIL', 'admin@example.com'),
+    'admin_password'   => env('APP_ADMIN_PASSWORD', 'password'),
 
 ];

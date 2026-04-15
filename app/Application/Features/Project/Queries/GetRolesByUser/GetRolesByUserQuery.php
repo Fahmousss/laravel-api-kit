@@ -10,4 +10,3 @@ final readonly class GetRolesByUserQuery
         public string $userId
     ) {}
 }
-

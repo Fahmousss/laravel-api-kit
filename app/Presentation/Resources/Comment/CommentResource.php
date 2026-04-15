@@ -7,7 +7,9 @@ namespace App\Presentation\Resources\Comment;
 use App\Application\Features\Comment\DTOs\CommentDTO;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** @mixin CommentDTO */
+/**
+ * @mixin CommentDTO
+ */
 final class CommentResource extends JsonResource
 {
     public function toArray($request): array
@@ -25,4 +27,3 @@ final class CommentResource extends JsonResource
         ];
     }
 }
-

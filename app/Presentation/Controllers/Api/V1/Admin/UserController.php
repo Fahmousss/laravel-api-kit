@@ -34,7 +34,7 @@ final class UserController extends ApiController
 
         return $this->paginated(
             paginatedResult: $result,
-            resourceClass: UserResource::class,
+            data: UserResource::collection($result->items),
         );
     }
 

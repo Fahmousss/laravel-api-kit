@@ -18,7 +18,7 @@ final class UpdateUserRequest extends FormRequest
         // $this->route('user_id') gets the ID from the URL if named appropriately
         return [
             'name'     => ['sometimes', 'string', 'max:255'],
-            'email'    => ['sometimes', 'string', 'email', 'max:255', 'unique:users,email,' . $this->route('user_id')],
+            'email'    => ['sometimes', 'string', 'email', 'max:255', 'unique:users,email,'.$this->route('user_id')],
             'password' => ['sometimes', 'string', 'min:8', 'confirmed'],
         ];
     }

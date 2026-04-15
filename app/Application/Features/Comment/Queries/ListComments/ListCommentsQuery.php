@@ -10,8 +10,8 @@ final readonly class ListCommentsQuery
 {
     public function __construct(
         public ActorContext $actor,
-        public string       $ticketId,
-        public int          $perPage = 20,
-        public int          $page    = 1,
+        public string $ticketId,
+        public int $perPage = 20,
+        public int $page = 1,
     ) {}
 }

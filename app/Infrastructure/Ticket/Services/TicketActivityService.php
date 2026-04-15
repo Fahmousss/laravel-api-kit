@@ -18,15 +18,14 @@ final class TicketActivityService implements TicketActivityServiceInterface
     public function log(string $ticketId, string $actorId, ActivityType $action, array $payload): void
     {
         $log = new ActivityLogEntity(
-            id:        null,
-            ticketId:  $ticketId,
-            actorId:   $actorId,
-            action:    $action,
-            payload:   $payload,
+            id: null,
+            ticketId: $ticketId,
+            actorId: $actorId,
+            action: $action,
+            payload: $payload,
             createdAt: null,
         );
 
         $this->activityLogRepository->save($log);
     }
 }
-

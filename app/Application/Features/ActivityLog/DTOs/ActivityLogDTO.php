@@ -13,18 +13,18 @@ final readonly class ActivityLogDTO
         public string $ticketId,
         public string $actorId,
         public string $action,
-        public array  $payload,
+        public array $payload,
         public string $createdAt,
     ) {}
 
     public static function fromEntity(ActivityLog $log): self
     {
         return new self(
-            id:        $log->id,
-            ticketId:  $log->ticketId,
-            actorId:   $log->actorId,
-            action:    $log->action->value,
-            payload:   $log->payload,
+            id: $log->id,
+            ticketId: $log->ticketId,
+            actorId: $log->actorId,
+            action: $log->action->value,
+            payload: $log->payload,
             createdAt: $log->createdAt ?? now()->toIso8601String(),
         );
     }

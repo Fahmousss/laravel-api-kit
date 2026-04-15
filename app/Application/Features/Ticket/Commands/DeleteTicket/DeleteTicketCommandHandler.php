@@ -13,7 +13,7 @@ use App\Domain\Ticket\Repositories\TicketRepositoryInterface;
 final class DeleteTicketCommandHandler
 {
     public function __construct(
-        private TicketRepositoryInterface     $ticketRepository,
+        private TicketRepositoryInterface $ticketRepository,
         private TicketActivityServiceInterface $activityService,
     ) {}
 
@@ -37,4 +37,3 @@ final class DeleteTicketCommandHandler
         $this->ticketRepository->delete($command->ticketId);
     }
 }
-

@@ -29,8 +29,8 @@ final class ActorContextResolverService implements ActorContextResolverServiceIn
     public function fromUser(UserDTO $user): ActorContext
     {
         return new ActorContext(
-            userId:      $user->id,
-            systemRole:  $user->systemRole,
+            userId: $user->id,
+            systemRole: $user->systemRole,
             projectRole: null,
         );
     }
@@ -48,10 +48,9 @@ final class ActorContextResolverService implements ActorContextResolverServiceIn
         }
 
         return new ActorContext(
-            userId:      $user->id,
-            systemRole:  $user->systemRole,
+            userId: $user->id,
+            systemRole: $user->systemRole,
             projectRole: $role,
         );
     }
 }
-

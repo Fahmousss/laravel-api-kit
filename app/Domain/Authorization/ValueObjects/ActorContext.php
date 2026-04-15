@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Domain\Authorization\ValueObjects;
 
 use App\Domain\Authorization\Enums\SystemAction;
-use App\Domain\Authorization\Enums\UserRole;
 use App\Domain\Authorization\Enums\SystemRole;
+use App\Domain\Authorization\Enums\UserRole;
 use App\Domain\Authorization\Exceptions\UnauthorizedActionException;
 
 /**
@@ -20,9 +20,9 @@ use App\Domain\Authorization\Exceptions\UnauthorizedActionException;
 final readonly class ActorContext
 {
     public function __construct(
-        public string      $userId,
-        public SystemRole  $systemRole,
-        public ?UserRole   $projectRole = null,
+        public string $userId,
+        public SystemRole $systemRole,
+        public ?UserRole $projectRole = null,
     ) {}
 
     // ── System-level checks ────────────────────────────────────────────
@@ -76,7 +76,7 @@ final readonly class ActorContext
 
     public function canCreateProject(): bool
     {
-        return true; // Any authenticated member may create a project
+        return $this->isSystemAdmin() || $this->projectRole === UserRole::ADMIN;
     }
 
     public function canUpdateProject(): bool
@@ -109,7 +109,7 @@ final readonly class ActorContext
      */
     public function assertCan(SystemAction $action): void
     {
-        $allowed = match($action) {
+        $allowed = match ($action) {
             SystemAction::MANAGE_MEMBERS        => $this->canManageMembers(),
             SystemAction::CREATE_PROJECT        => $this->canCreateProject(),
             SystemAction::CREATE_TICKET         => $this->canCreateTicket(),

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     App\Infrastructure\ActivityLog\Providers\ActivityLogServiceProvider::class,
     App\Infrastructure\Authentication\Providers\AuthenticationServiceProvider::class,

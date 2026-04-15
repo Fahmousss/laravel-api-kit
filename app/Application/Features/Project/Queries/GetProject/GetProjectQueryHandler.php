@@ -24,4 +24,3 @@ final class GetProjectQueryHandler
         return ProjectDTO::fromEntity($project, $query->actor->projectRole);
     }
 }
-

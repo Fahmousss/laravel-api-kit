@@ -20,9 +20,8 @@ interface CommentRepositoryInterface
      */
     public function paginate(
         string $ticketId,
-        int    $perPage,
-        int    $page,
-        bool   $includeInternal = false,
+        int $perPage,
+        int $page,
+        bool $includeInternal = false,
     ): PaginatedResult;
 }
-

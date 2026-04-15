@@ -34,9 +34,9 @@ final class Ticket extends Model
         'ticket_number' => 'integer',
         'due_date'      => 'date',
         'resolved_at'   => 'datetime',
-        'type' => TicketType::class,
-        'status' => TicketStatus::class,
-        'priority' => TicketPriority::class
+        'type'          => TicketType::class,
+        'status'        => TicketStatus::class,
+        'priority'      => TicketPriority::class,
     ];
 
     public function project(): BelongsTo

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Application\Features\Project\Commands\AddMember;
 
 use App\Domain\Authorization\Enums\SystemAction;
-use App\Domain\Authorization\Exceptions\UnauthorizedActionException;
 use App\Domain\Project\Entities\ProjectMember;
 use App\Domain\Project\Exceptions\DuplicateProjectMemberException;
 use App\Domain\Project\Repositories\ProjectMemberRepositoryInterface;
@@ -38,4 +37,3 @@ final class AddMemberCommandHandler
         $this->memberRepository->save($member);
     }
 }
-

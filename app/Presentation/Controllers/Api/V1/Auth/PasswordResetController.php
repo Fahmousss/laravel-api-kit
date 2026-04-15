@@ -43,4 +43,3 @@ final class PasswordResetController extends ApiController
             : $this->error($result->message, 400);
     }
 }
-

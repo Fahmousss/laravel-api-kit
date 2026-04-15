@@ -15,7 +15,6 @@ use App\Domain\Authorization\Enums\SystemRole;
  */
 final class ConfigSystemRoleResolver implements SystemRoleResolverInterface
 {
-    /** @var string */
     private string $adminEmail;
 
     public function __construct()

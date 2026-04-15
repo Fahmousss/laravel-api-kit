@@ -7,7 +7,6 @@ namespace App\Application\Features\Authorization\Common\Interfaces;
 use App\Application\Features\Authentication\DTOs\UserDTO;
 use App\Domain\Authorization\ValueObjects\ActorContext;
 
-
 interface ActorContextResolverServiceInterface
 {
     /**

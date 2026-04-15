@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain\Authorization\Enums;
 
 enum SystemRole: string
@@ -9,7 +11,7 @@ enum SystemRole: string
 
     public function label(): string
     {
-        return match($this) {
+        return match ($this) {
             self::SYSTEM_ADMIN => 'System Administrator',
             self::MEMBER       => 'Member',
         };

@@ -8,4 +8,3 @@ final readonly class GetCurrentUserQuery
 {
     public function __construct() {}
 }
-

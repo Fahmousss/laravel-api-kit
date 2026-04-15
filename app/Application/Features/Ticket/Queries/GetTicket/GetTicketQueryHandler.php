@@ -25,4 +25,3 @@ final class GetTicketQueryHandler
         return TicketDTO::fromEntity($ticket);
     }
 }
-

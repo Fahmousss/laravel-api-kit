@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace App\Application\Features\Project\Commands\UpdateProject;
 
 use App\Application\Features\Project\DTOs\ProjectDTO;
-use App\Domain\Authorization\Enums\SystemRole;
-use App\Domain\Authorization\Enums\UserRole;
 use App\Domain\Project\Enums\ProjectStatus;
+use App\Domain\Project\Exceptions\ProjectNotFoundException;
 use App\Domain\Project\Repositories\ProjectMemberRepositoryInterface;
 use App\Domain\Project\Repositories\ProjectRepositoryInterface;
-use App\Domain\Project\Exceptions\ProjectNotFoundException;
 
 final readonly class UpdateProjectCommandHandler
 {
@@ -45,9 +43,9 @@ final readonly class UpdateProjectCommandHandler
         }
 
         $savedProject = $this->projectRepository->save($project);
-        
+
         $roleValues = $this->memberRepository->getRolesByUser($command->actor->userId);
-        $role = $roleValues[$project->id] ?? null;
+        $role       = $roleValues[$project->id] ?? null;
 
         return ProjectDTO::fromEntity($savedProject, $role);
     }

@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace App\Presentation\Requests\Api\V1\Admin;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Domain\Project\Enums\ProjectStatus;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\Enum;
 
 final class UpdateProjectRequest extends FormRequest
 {

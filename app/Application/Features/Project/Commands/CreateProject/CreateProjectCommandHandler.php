@@ -53,4 +53,3 @@ final class CreateProjectCommandHandler
         return ProjectDTO::fromEntity($saved, UserRole::ADMIN);
     }
 }
-

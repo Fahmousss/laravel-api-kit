@@ -25,20 +25,20 @@ final class CommentController extends ApiController
 
     public function __construct(
         private CommandBusInterface $commandBus,
-        private QueryBusInterface   $queryBus,
+        private QueryBusInterface $queryBus,
     ) {}
 
     public function index(Request $request, string $project_id, string $ticket_id): JsonResponse
     {
         $result = $this->queryBus->dispatch(new ListCommentsQuery(
-            actor:    $this->actor($request),
+            actor: $this->actor($request),
             ticketId: $ticket_id,
-            perPage:  (int) $request->input('per_page', 20),
-            page:     (int) $request->input('page', 1),
+            perPage: (int) $request->input('per_page', 20),
+            page: (int) $request->input('page', 1),
         ));
 
         return $this->paginated(
-            resourceClass: CommentResource::class,
+            data: CommentResource::collection($result->items),
             paginatedResult: $result,
         );
     }
@@ -48,9 +48,9 @@ final class CommentController extends ApiController
         $commentDto = $this->commandBus->dispatch(new CreateCommentCommand(
             actor: $this->actor($request),
             dto: new CreateCommentDTO(
-                ticketId:   $ticket_id,
-                authorId:   $this->actor($request)->userId,
-                body:       $request->string('body'),
+                ticketId: $ticket_id,
+                authorId: $this->actor($request)->userId,
+                body: $request->body,
                 isInternal: $request->boolean('is_internal', false),
             ),
         ));
@@ -61,9 +61,9 @@ final class CommentController extends ApiController
     public function update(EditCommentRequest $request, string $project_id, string $ticket_id, string $comment_id): JsonResponse
     {
         $commentDto = $this->commandBus->dispatch(new EditCommentCommand(
-            actor:     $this->actor($request),
+            actor: $this->actor($request),
             commentId: $comment_id,
-            body:      $request->string('body'),
+            body: $request->body,
         ));
 
         return $this->success(data: new CommentResource($commentDto));
@@ -72,11 +72,10 @@ final class CommentController extends ApiController
     public function destroy(Request $request, string $project_id, string $ticket_id, string $comment_id): JsonResponse
     {
         $this->commandBus->dispatch(new DeleteCommentCommand(
-            actor:     $this->actor($request),
+            actor: $this->actor($request),
             commentId: $comment_id,
         ));
 
         return $this->noContent();
     }
 }
-

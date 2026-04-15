@@ -23,10 +23,10 @@ final class GetNotificationController extends ApiController
     public function __invoke(Request $request): JsonResponse
     {
         $result = $this->queryBus->dispatch(new ListNotificationsQuery(
-            userId:     $this->getAuthUserId(),
+            userId: $this->getAuthUserId(),
             unreadOnly: $request->boolean('unread_only'),
-            perPage:    (int) $request->input('per_page', 20),
-            page:       (int) $request->input('page', 1),
+            perPage: (int) $request->input('per_page', 20),
+            page: (int) $request->input('page', 1),
         ));
 
         return $this->paginated(
@@ -35,4 +35,3 @@ final class GetNotificationController extends ApiController
         );
     }
 }
-

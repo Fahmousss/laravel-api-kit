@@ -19,8 +19,8 @@ final class ListActivityLogsQueryHandler
     {
         $result = $this->activityLogRepository->paginate(
             ticketId: $query->ticketId,
-            perPage:  $query->perPage,
-            page:     $query->page,
+            perPage: $query->perPage,
+            page: $query->page,
         );
 
         return new PaginatedResult(

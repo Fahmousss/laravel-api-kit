@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\Hash;
 final readonly class CreateUserCommandHandler
 {
     public function __construct(
-        private UserRepositoryInterface       $userRepository,
-        private SystemRoleResolverInterface   $roleResolver,
+        private UserRepositoryInterface $userRepository,
+        private SystemRoleResolverInterface $roleResolver,
     ) {}
 
     public function handle(CreateUserCommand $command): UserDTO
@@ -28,13 +28,13 @@ final readonly class CreateUserCommandHandler
         $savedEntity = $this->userRepository->save($entity);
 
         return new UserDTO(
-            id:              $savedEntity->id,
-            name:            $savedEntity->name,
-            email:           $savedEntity->email,
-            systemRole:      $this->roleResolver->resolveForEmail($savedEntity->email),
+            id: $savedEntity->id,
+            name: $savedEntity->name,
+            email: $savedEntity->email,
+            systemRole: $this->roleResolver->resolveForEmail($savedEntity->email),
             emailVerifiedAt: $savedEntity->emailVerifiedAt,
-            createdAt:       $savedEntity->createdAt ?? now()->toIso8601String(),
-            updatedAt:       $savedEntity->updatedAt ?? now()->toIso8601String(),
+            createdAt: $savedEntity->createdAt ?? now()->toIso8601String(),
+            updatedAt: $savedEntity->updatedAt ?? now()->toIso8601String(),
         );
     }
 }

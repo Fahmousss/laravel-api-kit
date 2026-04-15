@@ -10,6 +10,7 @@ use App\Domain\Ticket\Enums\TicketType;
 final readonly class CreateTicketDTO
 {
     public TicketType $type;
+
     public TicketPriority $priority;
 
     public function __construct(
@@ -26,4 +27,3 @@ final readonly class CreateTicketDTO
         $this->priority = TicketPriority::from($priority);
     }
 }
-

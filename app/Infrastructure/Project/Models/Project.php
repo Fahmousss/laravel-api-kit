@@ -19,8 +19,8 @@ final class Project extends Model
         'owner_id', 'name', 'slug', 'description', 'status',
     ];
 
-    protected $casts=[
-        'status' => ProjectStatus::class
+    protected $casts = [
+        'status' => ProjectStatus::class,
     ];
 
     public function members(): HasMany

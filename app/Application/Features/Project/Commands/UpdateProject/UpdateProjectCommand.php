@@ -10,7 +10,7 @@ final readonly class UpdateProjectCommand
 {
     public function __construct(
         public ActorContext $actor,
-        public string  $id,
+        public string $id,
         public ?string $name = null,
         public ?string $description = null,
         public ?string $status = null,

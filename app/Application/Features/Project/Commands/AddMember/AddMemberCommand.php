@@ -20,4 +20,3 @@ final readonly class AddMemberCommand
         $this->role = UserRole::from($role);
     }
 }
-

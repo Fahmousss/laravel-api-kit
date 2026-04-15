@@ -8,8 +8,6 @@ use App\Application\Features\Notification\Common\Interfaces\NotificationServiceI
 use App\Application\Features\Ticket\Common\Interfaces\TicketActivityServiceInterface;
 use App\Domain\ActivityLog\Enums\ActivityType;
 use App\Domain\Authorization\Enums\SystemAction;
-use App\Domain\Authorization\Enums\UserRole;
-use App\Domain\Authorization\Exceptions\UnauthorizedActionException;
 use App\Domain\Ticket\Enums\TicketStatus;
 use App\Domain\Ticket\Exceptions\TicketNotFoundException;
 use App\Domain\Ticket\Repositories\TicketRepositoryInterface;
@@ -24,7 +22,7 @@ final class TransitionStatusCommandHandler
 
     public function handle(TransitionStatusCommand $command): void
     {
-        $dto = $command->dto;
+        $dto   = $command->dto;
         $actor = $command->actor;
 
         $ticket = $this->ticketRepository->findById($dto->ticketId);
@@ -35,7 +33,7 @@ final class TransitionStatusCommandHandler
         $newStatus = $dto->newStatus;
         // Guard: closing requires canClose, reviewing requires canReview
         if (in_array($newStatus,
-        [TicketStatus::CLOSED, TicketStatus::WONTFIX, TicketStatus::DUPLICATE])
+            [TicketStatus::CLOSED, TicketStatus::WONTFIX, TicketStatus::DUPLICATE])
         ) {
             $actor->assertCan(SystemAction::CLOSE);
         }

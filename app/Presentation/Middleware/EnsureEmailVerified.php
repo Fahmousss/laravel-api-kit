@@ -11,9 +11,8 @@ use Illuminate\Http\Request;
 
 final class EnsureEmailVerified
 {
-    use HasAuthenticatedUser;
-
     use ApiResponse;
+    use HasAuthenticatedUser;
 
     /**
      * Ensure the user's email is verified before allowing access.

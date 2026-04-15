@@ -12,7 +12,7 @@ use App\Domain\Shared\Pagination\PaginatedResult;
 final readonly class GetAllUsersQueryHandler
 {
     public function __construct(
-        private UserRepositoryInterface     $userRepository,
+        private UserRepositoryInterface $userRepository,
         private SystemRoleResolverInterface $roleResolver,
     ) {}
 
@@ -25,13 +25,13 @@ final readonly class GetAllUsersQueryHandler
         );
 
         $dtos = array_map(fn ($entity): UserDTO => new UserDTO(
-            id:              $entity->id,
-            name:            $entity->name,
-            email:           $entity->email,
-            systemRole:      $this->roleResolver->resolveForEmail($entity->email),
+            id: $entity->id,
+            name: $entity->name,
+            email: $entity->email,
+            systemRole: $this->roleResolver->resolveForEmail($entity->email),
             emailVerifiedAt: $entity->emailVerifiedAt,
-            createdAt:       $entity->createdAt ?? now()->toIso8601String(),
-            updatedAt:       $entity->updatedAt ?? now()->toIso8601String(),
+            createdAt: $entity->createdAt ?? now()->toIso8601String(),
+            updatedAt: $entity->updatedAt ?? now()->toIso8601String(),
         ), $paginatedResult->items);
 
         return new PaginatedResult(

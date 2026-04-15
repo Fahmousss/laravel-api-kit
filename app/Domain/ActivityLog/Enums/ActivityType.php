@@ -12,4 +12,3 @@ enum ActivityType: string
     case STATUS_CHANGED = 'status_changed';
     case ASSIGNED       = 'assigned';
 }
-

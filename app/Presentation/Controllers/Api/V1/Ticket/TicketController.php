@@ -42,7 +42,7 @@ final class TicketController extends ApiController
         ));
 
         return $this->paginated(
-            resourceClass: TicketResource::class,
+            data: TicketResource::collection($result->items),
             paginatedResult: $result,
         );
     }
@@ -63,13 +63,13 @@ final class TicketController extends ApiController
             actor: $this->actor($request),
             dto: new CreateTicketDTO(
                 projectId: $project_id,
-                title: $request->string('title'),
-                description: $request->string('description'),
-                type: $request->string('type'),
-                priority: $request->string('priority'),
-                assigneeId: $request->input('assignee_id'),
-                dueDate: $request->input('due_date'),
-                labelIds: $request->input('label_ids', []),
+                title: $request->title,
+                description: $request->description,
+                type: $request->type,
+                priority: $request->priority,
+                assigneeId: $request->assignee_id,
+                dueDate: $request->due_date,
+                labelIds: $request->label_ids,
             ),
         ));
 
@@ -103,4 +103,3 @@ final class TicketController extends ApiController
         return $this->noContent();
     }
 }
-

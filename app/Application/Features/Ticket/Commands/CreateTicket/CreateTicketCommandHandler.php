@@ -10,8 +10,10 @@ use App\Application\Features\Ticket\DTOs\TicketDTO;
 use App\Domain\ActivityLog\Enums\ActivityType;
 use App\Domain\Authorization\Enums\SystemAction;
 use App\Domain\Project\Exceptions\ProjectNotFoundException;
+use App\Domain\Project\Repositories\ProjectMemberRepositoryInterface;
 use App\Domain\Project\Repositories\ProjectRepositoryInterface;
 use App\Domain\Ticket\Entities\Ticket;
+use App\Domain\Ticket\Exceptions\InvalidAssigneeException;
 use App\Domain\Ticket\Repositories\TicketRepositoryInterface;
 
 final class CreateTicketCommandHandler
@@ -19,13 +21,14 @@ final class CreateTicketCommandHandler
     public function __construct(
         private TicketRepositoryInterface $ticketRepository,
         private ProjectRepositoryInterface $projectRepository,
+        private ProjectMemberRepositoryInterface $memberRepository,
         private TicketActivityServiceInterface $activityService,
         private NotificationServiceInterface $notificationService,
     ) {}
 
     public function handle(CreateTicketCommand $command): TicketDTO
     {
-        $dto = $command->dto;
+        $dto   = $command->dto;
         $actor = $command->actor;
 
         $actor->assertCan(SystemAction::CREATE_TICKET);
@@ -33,6 +36,13 @@ final class CreateTicketCommandHandler
         $project = $this->projectRepository->findById($dto->projectId);
         if (! $project) {
             throw ProjectNotFoundException::withId($dto->projectId);
+        }
+
+        if ($dto->assigneeId !== null) {
+            $member = $this->memberRepository->findMember($dto->projectId, $dto->assigneeId);
+            if (! $member) {
+                throw InvalidAssigneeException::notAProjectMember($dto->assigneeId, $dto->projectId);
+            }
         }
 
         $ticketNumber = $this->ticketRepository->nextTicketNumber($dto->projectId);
@@ -66,4 +76,3 @@ final class CreateTicketCommandHandler
         return TicketDTO::fromEntity($saved);
     }
 }
-

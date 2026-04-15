@@ -35,4 +35,3 @@ final class TicketTransitionController extends ApiController
         return $this->noContent();
     }
 }
-

@@ -13,19 +13,19 @@ final readonly class CommentDTO
         public string $ticketId,
         public string $authorId,
         public string $body,
-        public bool   $isInternal,
+        public bool $isInternal,
         public string $createdAt,
     ) {}
 
     public static function fromEntity(Comment $comment): self
     {
         return new self(
-            id:         $comment->id,
-            ticketId:   $comment->ticketId,
-            authorId:   $comment->authorId,
-            body:       $comment->body,
+            id: $comment->id,
+            ticketId: $comment->ticketId,
+            authorId: $comment->authorId,
+            body: $comment->body,
             isInternal: $comment->isInternal,
-            createdAt:  $comment->createdAt ?? now()->toIso8601String(),
+            createdAt: $comment->createdAt ?? now()->toIso8601String(),
         );
     }
 }

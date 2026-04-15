@@ -10,6 +10,6 @@ final readonly class DeleteCommentCommand
 {
     public function __construct(
         public ActorContext $actor,
-        public string       $commentId,
+        public string $commentId,
     ) {}
 }

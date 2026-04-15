@@ -7,7 +7,9 @@ namespace App\Presentation\Resources\ActivityLog;
 use App\Application\Features\ActivityLog\DTOs\ActivityLogDTO;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** @mixin ActivityLogDTO */
+/**
+ * @mixin ActivityLogDTO
+ */
 final class ActivityLogResource extends JsonResource
 {
     public function toArray($request): array

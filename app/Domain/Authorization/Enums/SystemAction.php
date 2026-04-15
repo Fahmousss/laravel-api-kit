@@ -20,4 +20,3 @@ enum SystemAction: string
     case UPDATE_PROJECT        = 'updateProject';
     case DELETE_PROJECT        = 'deleteProject';
 }
-

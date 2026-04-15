@@ -10,8 +10,7 @@ use App\Domain\Authorization\ValueObjects\ActorContext;
 final readonly class CreateCommentCommand
 {
     public function __construct(
-        public ActorContext      $actor,
-        public CreateCommentDTO  $dto,
+        public ActorContext $actor,
+        public CreateCommentDTO $dto,
     ) {}
 }
-

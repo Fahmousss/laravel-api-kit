@@ -15,10 +15,10 @@ use Illuminate\Support\Facades\Hash;
 final readonly class RegisterUserCommandHandler
 {
     public function __construct(
-        private UserRepositoryInterface                  $userRepository,
-        private VerifyEmailNotificationServiceInterface  $notificationService,
-        private AuthTokenServiceInterface                $tokenService,
-        private SystemRoleResolverInterface              $roleResolver,
+        private UserRepositoryInterface $userRepository,
+        private VerifyEmailNotificationServiceInterface $notificationService,
+        private AuthTokenServiceInterface $tokenService,
+        private SystemRoleResolverInterface $roleResolver,
     ) {}
 
     public function handle(RegisterUserCommand $command): UserDTO
@@ -36,14 +36,14 @@ final readonly class RegisterUserCommandHandler
         $token = $this->tokenService->generateForUser($savedEntity->id);
 
         return new UserDTO(
-            id:              $savedEntity->id,
-            name:            $savedEntity->name,
-            email:           $savedEntity->email,
-            systemRole:      $this->roleResolver->resolveForEmail($savedEntity->email),
+            id: $savedEntity->id,
+            name: $savedEntity->name,
+            email: $savedEntity->email,
+            systemRole: $this->roleResolver->resolveForEmail($savedEntity->email),
             emailVerifiedAt: $savedEntity->emailVerifiedAt,
-            createdAt:       $savedEntity->createdAt ?? now()->toIso8601String(),
-            updatedAt:       $savedEntity->updatedAt ?? now()->toIso8601String(),
-            token:           $token,
+            createdAt: $savedEntity->createdAt ?? now()->toIso8601String(),
+            updatedAt: $savedEntity->updatedAt ?? now()->toIso8601String(),
+            token: $token,
         );
     }
 }

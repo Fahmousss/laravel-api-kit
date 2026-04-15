@@ -7,7 +7,9 @@ namespace App\Presentation\Resources\Ticket;
 use App\Application\Features\Ticket\DTOs\TicketDTO;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** @mixin TicketDTO */
+/**
+ * @mixin TicketDTO
+ */
 final class TicketResource extends JsonResource
 {
     public function toArray($request): array
@@ -43,4 +45,3 @@ final class TicketResource extends JsonResource
         ];
     }
 }
-

@@ -23,7 +23,13 @@ final class CreateTicketRequest extends FormRequest
             'description' => ['nullable', 'string'],
             'type'        => ['required', 'string', Rule::enum(TicketType::class)],
             'priority'    => ['required', 'string', Rule::enum(TicketPriority::class)],
-            'assignee_id' => ['nullable', 'uuid'],
+            'assignee_id' => [
+                'nullable', 
+                'uuid', 
+                Rule::exists('project_members', 'user_id')->where(function ($query) {
+                    $query->where('project_id', $this->route('project_id'));
+                }),
+            ],
             'due_date'    => ['nullable', 'date'],
             'label_ids'   => ['nullable', 'array'],
             'label_ids.*' => ['uuid'],

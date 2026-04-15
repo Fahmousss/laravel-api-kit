@@ -8,7 +8,7 @@ final readonly class ListActivityLogsQuery
 {
     public function __construct(
         public string $ticketId,
-        public int    $perPage = 20,
-        public int    $page    = 1,
+        public int $perPage = 20,
+        public int $page = 1,
     ) {}
 }

@@ -10,7 +10,7 @@ final readonly class EditCommentCommand
 {
     public function __construct(
         public ActorContext $actor,
-        public string       $commentId,
-        public string       $body,
+        public string $commentId,
+        public string $body,
     ) {}
 }

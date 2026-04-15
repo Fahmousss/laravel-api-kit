@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Application\Features\Comment\Commands\DeleteComment;
 
-use App\Domain\Authorization\Exceptions\UnauthorizedActionException;
 use App\Domain\Authorization\Enums\SystemAction;
+use App\Domain\Authorization\Exceptions\UnauthorizedActionException;
 use App\Domain\Comment\Exceptions\CommentNotFoundException;
 use App\Domain\Comment\Repositories\CommentRepositoryInterface;
 

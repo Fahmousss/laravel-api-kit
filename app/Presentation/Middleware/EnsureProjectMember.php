@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Middleware;
 
-use App\Application\Contracts\QueryBusInterface;
-use App\Application\Features\Authentication\Queries\GetCurrentUser\GetCurrentUserQuery;
-use App\Application\Features\Project\Queries\GetProjectMembers\GetProjectMemberRoleQuery;
+use App\Domain\Authorization\Enums\SystemRole;
 use App\Infrastructure\Authorization\Services\ActorContextResolverService;
 use App\Presentation\Shared\Traits\ApiResponse;
 use App\Presentation\Shared\Traits\HasAuthenticatedUser;
@@ -21,8 +19,8 @@ use Symfony\Component\HttpFoundation\Response;
  */
 final class EnsureProjectMember
 {
-    use HasAuthenticatedUser;
     use ApiResponse;
+    use HasAuthenticatedUser;
 
     public function __construct(
         private ActorContextResolverService $resolver
@@ -31,16 +29,16 @@ final class EnsureProjectMember
     public function handle(Request $request, Closure $next): Response
     {
         $projectId = $request->route('project_id');
-        $user = $this->getCurrentUser();
+        $user      = $this->getCurrentUser();
 
         if ($user === null) {
-            return $this->unauthorized("Unauthorized");
+            return $this->unauthorized('Unauthorized');
         }
 
         $actor = $this->resolver->fromUserAndProject($user, $projectId);
 
-        if($actor === null){
-            return $this->forbidden("You are not member of this project");
+        if ($actor === null) {
+            return $this->forbidden('You are not member of this project');
         }
 
         $request->attributes->set('actor', $actor);

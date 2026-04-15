@@ -18,4 +18,3 @@ final readonly class TransitionTicketStatusDTO
         $this->newStatus = TicketStatus::from($newStatus);
     }
 }
-

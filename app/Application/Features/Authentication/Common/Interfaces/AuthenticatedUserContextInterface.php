@@ -28,4 +28,3 @@ interface AuthenticatedUserContextInterface
      */
     public function currentUser(): ?UserEntity;
 }
-

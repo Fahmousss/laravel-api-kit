@@ -24,12 +24,11 @@ final class AddMemberController extends ApiController
     {
         $this->commandBus->dispatch(new AddMemberCommand(
             projectId: $project_id,
-            actor:     $this->actor($request),
-            userId:    $request->user_id,
-            role:      $request->role,
+            actor: $this->actor($request),
+            userId: $request->user_id,
+            role: $request->role,
         ));
 
         return $this->noContent();
     }
 }
-

@@ -51,4 +51,3 @@ final class CreateCommentCommandHandler
         return CommentDTO::fromEntity($saved);
     }
 }
-

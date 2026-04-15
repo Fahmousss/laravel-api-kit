@@ -7,7 +7,9 @@ namespace App\Presentation\Resources\Notification;
 use App\Application\Features\Notification\DTOs\NotificationDTO;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** @mixin NotificationDTO */
+/**
+ * @mixin NotificationDTO
+ */
 final class NotificationResource extends JsonResource
 {
     public function toArray($request): array
@@ -25,4 +27,3 @@ final class NotificationResource extends JsonResource
         ];
     }
 }
-

@@ -17,4 +17,3 @@ final class GetRolesByUserQueryHandler
         return $this->projectMemberRepository->getRolesByUser($query->userId);
     }
 }
-

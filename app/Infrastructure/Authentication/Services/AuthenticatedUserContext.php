@@ -49,4 +49,3 @@ final class AuthenticatedUserContext implements AuthenticatedUserContextInterfac
         return $this->mapToEntity($user, UserEntity::class);
     }
 }
-

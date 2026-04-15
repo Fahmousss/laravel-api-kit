@@ -22,6 +22,6 @@ final class ProjectMember extends Model
 
     protected $casts = [
         'joined_at' => 'datetime',
-        'role' => UserRole::class
+        'role'      => UserRole::class,
     ];
 }

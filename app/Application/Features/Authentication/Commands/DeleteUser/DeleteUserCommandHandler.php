@@ -6,7 +6,6 @@ namespace App\Application\Features\Authentication\Commands\DeleteUser;
 
 use App\Domain\Authentication\Exceptions\UserNotFoundException;
 use App\Domain\Authentication\Repositories\UserRepositoryInterface;
-use InvalidArgumentException;
 
 final readonly class DeleteUserCommandHandler
 {
@@ -23,7 +22,7 @@ final readonly class DeleteUserCommandHandler
         }
 
         // Normally we'd prevent deleting oneself, but here the logic is simple enough.
-        
+
         $this->userRepository->delete($command->id);
     }
 }

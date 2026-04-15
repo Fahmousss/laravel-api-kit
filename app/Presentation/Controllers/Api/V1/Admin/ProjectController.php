@@ -6,12 +6,15 @@ namespace App\Presentation\Controllers\Api\V1\Admin;
 
 use App\Application\Contracts\CommandBusInterface;
 use App\Application\Contracts\QueryBusInterface;
+use App\Application\Features\Project\Commands\CreateProject\CreateProjectCommand;
 use App\Application\Features\Project\Commands\DeleteProject\DeleteProjectCommand;
 use App\Application\Features\Project\Commands\UpdateProject\UpdateProjectCommand;
+use App\Application\Features\Project\DTOs\CreateProjectDTO;
 use App\Application\Features\Project\Queries\GetProject\GetProjectQuery;
 use App\Application\Features\Project\Queries\ListProjects\ListProjectsQuery;
 use App\Presentation\Controllers\Api\ApiController;
 use App\Presentation\Requests\Api\V1\Admin\UpdateProjectRequest;
+use App\Presentation\Requests\Api\V1\Project\CreateProjectRequest;
 use App\Presentation\Resources\Project\ProjectResource;
 use App\Presentation\Shared\Traits\HasAuthenticatedUser;
 use Illuminate\Http\JsonResponse;
@@ -38,7 +41,7 @@ final class ProjectController extends ApiController
 
         return $this->paginated(
             paginatedResult: $result,
-            resourceClass: ProjectResource::class,
+            data: ProjectResource::collection($result->items),
         );
     }
 
@@ -50,6 +53,22 @@ final class ProjectController extends ApiController
         ));
 
         return $this->success(data: new ProjectResource($dto));
+    }
+
+    public function store(CreateProjectRequest $request): JsonResponse
+    {
+        $actor      = $this->actorFromRequest();
+        $projectDto = $this->commandBus->dispatch(new CreateProjectCommand(
+            actor: $actor,
+            dto: new CreateProjectDTO(
+                ownerId: $actor->userId,
+                name: $request->name,
+                slug: $request->slug,
+                description: $request->input('description'),
+            ),
+        ));
+
+        return $this->created(data: new ProjectResource($projectDto));
     }
 
     public function update(UpdateProjectRequest $request, string $project_id): JsonResponse

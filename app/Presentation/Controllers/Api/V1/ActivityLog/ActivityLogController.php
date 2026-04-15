@@ -21,12 +21,12 @@ final class ActivityLogController extends ApiController
     {
         $result = $this->queryBus->dispatch(new ListActivityLogsQuery(
             ticketId: $ticket_id,
-            perPage:  (int) $request->input('per_page', 20),
-            page:     (int) $request->input('page', 1),
+            perPage: (int) $request->input('per_page', 20),
+            page: (int) $request->input('page', 1),
         ));
 
         return $this->paginated(
-            resourceClass: ActivityLogResource::class,
+            data: ActivityLogResource::collection($result->items),
             paginatedResult: $result,
         );
     }

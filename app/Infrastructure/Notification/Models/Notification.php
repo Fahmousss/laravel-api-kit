@@ -24,6 +24,6 @@ final class Notification extends Model
         'payload'    => 'array',
         'read'       => 'boolean',
         'created_at' => 'datetime',
-        'type' => NotificationType::class
+        'type'       => NotificationType::class,
     ];
 }

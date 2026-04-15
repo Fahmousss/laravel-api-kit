@@ -21,4 +21,3 @@ final readonly class UpdateTicketDTO
         $this->priority = $priority !== null ? TicketPriority::from($priority) : null;
     }
 }
-

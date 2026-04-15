@@ -49,9 +49,8 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
         ->middleware('throttle:6,1')
         ->name(RouteName::EMAIL_RESEND);
 
-    // Projects (no project membership check needed to list/create)
+    // Projects (no project membership check needed to list)
     Route::get('/projects', [ProjectController::class, 'index'])->name(RouteName::PROJECTS_INDEX);
-    Route::post('/projects', [ProjectController::class, 'store'])->name(RouteName::PROJECTS_STORE);
 
     Route::prefix('/projects/{project_id}')
         ->middleware(EnsureProjectMember::class)
@@ -82,20 +81,21 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
 
     // Admin Routes
     Route::prefix('/admin')
-        ->middleware(\App\Presentation\Middleware\EnsureSystemAdmin::class)
+        ->middleware(App\Presentation\Middleware\EnsureSystemAdmin::class)
         ->group(function () {
             // Users
-            Route::get('users', [\App\Presentation\Controllers\Api\V1\Admin\UserController::class, 'index'])->name(RouteName::ADMIN_USERS_INDEX);
-            Route::post('users', [\App\Presentation\Controllers\Api\V1\Admin\UserController::class, 'store'])->name(RouteName::ADMIN_USERS_STORE);
-            Route::get('users/{user}', [\App\Presentation\Controllers\Api\V1\Admin\UserController::class, 'show'])->name(RouteName::ADMIN_USERS_SHOW);
-            Route::patch('users/{user}', [\App\Presentation\Controllers\Api\V1\Admin\UserController::class, 'update'])->name(RouteName::ADMIN_USERS_UPDATE);
-            Route::delete('users/{user}', [\App\Presentation\Controllers\Api\V1\Admin\UserController::class, 'destroy'])->name(RouteName::ADMIN_USERS_DESTROY);
+            Route::get('users', [UserController::class, 'index'])->name(RouteName::ADMIN_USERS_INDEX);
+            Route::post('users', [UserController::class, 'store'])->name(RouteName::ADMIN_USERS_STORE);
+            Route::get('users/{user}', [UserController::class, 'show'])->name(RouteName::ADMIN_USERS_SHOW);
+            Route::patch('users/{user}', [UserController::class, 'update'])->name(RouteName::ADMIN_USERS_UPDATE);
+            Route::delete('users/{user}', [UserController::class, 'destroy'])->name(RouteName::ADMIN_USERS_DESTROY);
 
             // Projects
-            Route::get('projects', [\App\Presentation\Controllers\Api\V1\Admin\ProjectController::class, 'index'])->name(RouteName::ADMIN_PROJECTS_INDEX);
-            Route::get('projects/{project}', [\App\Presentation\Controllers\Api\V1\Admin\ProjectController::class, 'show'])->name(RouteName::ADMIN_PROJECTS_SHOW);
-            Route::patch('projects/{project}', [\App\Presentation\Controllers\Api\V1\Admin\ProjectController::class, 'update'])->name(RouteName::ADMIN_PROJECTS_UPDATE);
-            Route::delete('projects/{project}', [\App\Presentation\Controllers\Api\V1\Admin\ProjectController::class, 'destroy'])->name(RouteName::ADMIN_PROJECTS_DESTROY);
+            Route::get('projects', [App\Presentation\Controllers\Api\V1\Admin\ProjectController::class, 'index'])->name(RouteName::ADMIN_PROJECTS_INDEX);
+            Route::post('projects', [App\Presentation\Controllers\Api\V1\Admin\ProjectController::class, 'store'])->name(RouteName::ADMIN_CREATE_PROJECT);
+            Route::get('projects/{project}', [App\Presentation\Controllers\Api\V1\Admin\ProjectController::class, 'show'])->name(RouteName::ADMIN_PROJECTS_SHOW);
+            Route::patch('projects/{project}', [App\Presentation\Controllers\Api\V1\Admin\ProjectController::class, 'update'])->name(RouteName::ADMIN_PROJECTS_UPDATE);
+            Route::delete('projects/{project}', [App\Presentation\Controllers\Api\V1\Admin\ProjectController::class, 'destroy'])->name(RouteName::ADMIN_PROJECTS_DESTROY);
         });
 });
 

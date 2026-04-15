@@ -19,7 +19,7 @@ final class UpdateTicketCommandHandler
 
     public function handle(UpdateTicketCommand $command): void
     {
-        $dto = $command->dto;
+        $dto   = $command->dto;
         $actor = $command->actor;
 
         $actor->assertCan(SystemAction::UPDATE_TICKET);
@@ -29,11 +29,21 @@ final class UpdateTicketCommandHandler
             throw TicketNotFoundException::withId($dto->ticketId);
         }
 
-        if ($dto->title !== null)       $ticket->title = $dto->title;
-        if ($dto->description !== null) $ticket->description = $dto->description;
-        if ($dto->priority !== null)    $ticket->priority = $dto->priority;
-        if ($dto->assigneeId !== null)  $ticket->assign($dto->assigneeId);
-        if ($dto->dueDate !== null)     $ticket->dueDate = $dto->dueDate;
+        if ($dto->title !== null) {
+            $ticket->title = $dto->title;
+        }
+        if ($dto->description !== null) {
+            $ticket->description = $dto->description;
+        }
+        if ($dto->priority !== null) {
+            $ticket->priority = $dto->priority;
+        }
+        if ($dto->assigneeId !== null) {
+            $ticket->assign($dto->assigneeId);
+        }
+        if ($dto->dueDate !== null) {
+            $ticket->dueDate = $dto->dueDate;
+        }
 
         $this->ticketRepository->save($ticket);
 
@@ -48,4 +58,3 @@ final class UpdateTicketCommandHandler
         $this->activityService->log($ticket->id, $actor->userId, ActivityType::UPDATED, $changedFields);
     }
 }
-
