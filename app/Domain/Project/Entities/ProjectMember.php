@@ -14,6 +14,7 @@ final class ProjectMember
         public readonly string $userId,
         public UserRole $role,
         public readonly ?string $joinedAt,
+        public readonly ?array $user = null,
     ) {}
 
     public function changeRole(UserRole $newRole): void

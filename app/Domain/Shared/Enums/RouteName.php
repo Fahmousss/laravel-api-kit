@@ -17,9 +17,10 @@ enum RouteName: string
     case EMAIL_RESEND = 'verification.send';
 
     // Projects
-    case PROJECTS_INDEX      = 'projects.index';
-    case PROJECTS_STORE      = 'projects.store';
-    case PROJECTS_ADD_MEMBER = 'projects.add-member';
+    case PROJECTS_INDEX         = 'projects.index';
+    case PROJECTS_STORE         = 'projects.store';
+    case PROJECTS_MEMBERS_INDEX = 'projects.members.index';
+    case PROJECTS_ADD_MEMBER    = 'projects.add-member';
 
     // Password reset
     case PASSWORD_EMAIL = 'password.email';

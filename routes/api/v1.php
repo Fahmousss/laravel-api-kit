@@ -55,6 +55,7 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
     Route::prefix('/projects/{project_id}')
         ->middleware(EnsureProjectMember::class)
         ->group(function () {
+            Route::get('/members', \App\Presentation\Controllers\Api\V1\Project\GetMembersController::class)->name(RouteName::PROJECTS_MEMBERS_INDEX);
             Route::post('/members', AddMemberController::class)->name(RouteName::PROJECTS_ADD_MEMBER);
 
             // Tickets
@@ -91,8 +92,8 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
             Route::delete('users/{user}', [UserController::class, 'destroy'])->name(RouteName::ADMIN_USERS_DESTROY);
 
             // Projects
-            Route::get('projects', [App\Presentation\Controllers\Api\V1\Admin\ProjectController::class, 'index'])->name(RouteName::ADMIN_PROJECTS_INDEX);
             Route::post('projects', [App\Presentation\Controllers\Api\V1\Admin\ProjectController::class, 'store'])->name(RouteName::ADMIN_CREATE_PROJECT);
+            Route::get('projects', [App\Presentation\Controllers\Api\V1\Admin\ProjectController::class, 'index'])->name(RouteName::ADMIN_PROJECTS_INDEX);
             Route::get('projects/{project}', [App\Presentation\Controllers\Api\V1\Admin\ProjectController::class, 'show'])->name(RouteName::ADMIN_PROJECTS_SHOW);
             Route::patch('projects/{project}', [App\Presentation\Controllers\Api\V1\Admin\ProjectController::class, 'update'])->name(RouteName::ADMIN_PROJECTS_UPDATE);
             Route::delete('projects/{project}', [App\Presentation\Controllers\Api\V1\Admin\ProjectController::class, 'destroy'])->name(RouteName::ADMIN_PROJECTS_DESTROY);

@@ -41,5 +41,6 @@ final class ProjectServiceProvider extends ServiceProvider
         $queryBus->register(GetProjectQuery::class, GetProjectQueryHandler::class);
         $queryBus->register(GetProjectMemberRoleQuery::class, GetProjectMemberRoleQueryHandler::class);
         $queryBus->register(GetRolesByUserQuery::class, GetRolesByUserQueryHandler::class);
+        $queryBus->register(\App\Application\Features\Project\Queries\ListProjectMembers\ListProjectMembersQuery::class, \App\Application\Features\Project\Queries\ListProjectMembers\ListProjectMembersQueryHandler::class);
     }
 }

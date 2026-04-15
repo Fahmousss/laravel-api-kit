@@ -21,29 +21,40 @@ trait EntityMapper
      * @return array<T>|T
      */
     protected function mapToEntity(Model|Collection $model, string $entityClass): object|array
-    {
-        if ($model instanceof Collection) {
-            return $model->map(fn (Model $item) => $this->mapToEntity($item, $entityClass))->all();
-        }
-
-        $reflection  = new ReflectionClass($entityClass);
-        $constructor = $reflection->getConstructor();
-
-        // If the entity has no constructor, instantiate directly
-        if (! $constructor) {
-            return new $entityClass();
-        }
-
-        $args = [];
-        foreach ($constructor->getParameters() as $parameter) {
-            $name          = $parameter->getName();
-            $attributeName = Str::snake($name);
-
-            $value = $model->getAttribute($attributeName) ?? $model->getAttribute($name);
-
-            $args[$name] = $value;
-        }
-
-        return $reflection->newInstanceArgs($args);
+{
+    if ($model instanceof Collection) {
+        return $model->map(fn (Model $item) => $this->mapToEntity($item, $entityClass))->all();
     }
+
+    $reflection  = new ReflectionClass($entityClass);
+    $constructor = $reflection->getConstructor();
+
+    if (! $constructor) {
+        return new $entityClass();
+    }
+
+    $args = [];
+
+    foreach ($constructor->getParameters() as $parameter) {
+        $name          = $parameter->getName();
+        $attributeName = Str::snake($name);
+
+        $value = $model->getAttribute($attributeName)
+            ?? $model->getAttribute($name);
+
+        if ($value === null && $model->relationLoaded($name)) {
+            $relation = $model->getRelation($name);
+
+            if ($relation instanceof Model) {
+                $value = $relation->toArray();
+            } elseif ($relation instanceof Collection) {
+                $value = $relation->map->toArray()->all();
+            }
+        }
+
+        $args[$name] = $value;
+    }
+
+    return $reflection->newInstanceArgs($args);
+}
 }

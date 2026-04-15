@@ -30,7 +30,7 @@ final class GetNotificationController extends ApiController
         ));
 
         return $this->paginated(
-            resourceClass: NotificationResource::class,
+            data: NotificationResource::collection($result->items),
             paginatedResult: $result,
         );
     }

@@ -24,4 +24,9 @@ final class ProjectMember extends Model
         'joined_at' => 'datetime',
         'role'      => UserRole::class,
     ];
+
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(\App\Infrastructure\Authentication\Models\User::class, 'user_id');
+    }
 }

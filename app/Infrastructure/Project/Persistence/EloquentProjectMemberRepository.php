@@ -9,6 +9,7 @@ use App\Domain\Project\Entities\ProjectMember as ProjectMemberEntity;
 use App\Domain\Project\Repositories\ProjectMemberRepositoryInterface;
 use App\Infrastructure\Project\Models\ProjectMember as ProjectMemberModel;
 use App\Infrastructure\Shared\Traits\EntityMapper;
+use Illuminate\Support\Facades\Log;
 
 final class EloquentProjectMemberRepository implements ProjectMemberRepositoryInterface
 {
@@ -58,8 +59,12 @@ final class EloquentProjectMemberRepository implements ProjectMemberRepositoryIn
     public function listMembers(string $projectId): array
     {
         return ProjectMemberModel::where('project_id', $projectId)
+            ->with(['user:id,name,email'])
             ->get()
-            ->map(fn (ProjectMemberModel $m) => $this->mapToEntity($m, ProjectMemberEntity::class))
+            ->map(function (ProjectMemberModel $m){
+                $m->user = $m->user->toArray();
+                return $this->mapToEntity($m, ProjectMemberEntity::class);
+            })
             ->toArray();
     }
 
