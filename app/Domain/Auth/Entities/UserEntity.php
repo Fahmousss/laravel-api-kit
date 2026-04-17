@@ -4,16 +4,12 @@ declare(strict_types=1);
 
 namespace App\Domain\Auth\Entities;
 
-use App\Domain\Auth\Enums\Role;
 
 /**
  * Pure domain entity — no framework dependencies.
  */
 final readonly class UserEntity
 {
-    /**
-     * @param Role[] $roles
-     */
     public function __construct(
         public ?int $id,
         public string $name,

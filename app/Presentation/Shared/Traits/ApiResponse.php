@@ -79,37 +79,23 @@ trait ApiResponse
     {
         return $this->error($message, Response::HTTP_UNPROCESSABLE_ENTITY, $errors, $headers);
     }
-
-    /**
-     * Returns a standard success wrapper for a custom Domain PaginatedResult collection.
-     *
-     * @param PaginatedResult $paginatedResult The Custom Domain Pagination object
-     * @param string          $resourceClass   The API Resource class name to map items into (e.g. PosyanduResource::class)
-     */
-    protected function paginated(
+ protected function paginated(
         PaginatedResult $paginatedResult,
-        string $resourceClass,
+        mixed $data,
         string $message = 'Success',
         int $code = Response::HTTP_OK,
         array $headers = []
     ): JsonResponse {
-        // Map the DTOs inside the PaginatedResult into the specified Resource
-        $resourceCollection = $resourceClass::collection($paginatedResult->items);
-
-        // Resolve the underlying Resource data into an array format suitable for the response
-        $resolvedData = $resourceCollection->resolve(request());
 
         return response()->json([
             'success'    => true,
             'message'    => $message,
-            'data'       => $resolvedData,
+            'data'       => $data,
             'pagination' => [
                 'current_page' => $paginatedResult->currentPage,
                 'last_page'    => $paginatedResult->lastPage,
                 'per_page'     => $paginatedResult->perPage,
                 'total'        => $paginatedResult->total,
-                // We keep null for urls because we no longer depend on Eloquent pagination routing,
-                // Frontend traditionally constructs URL queries based on current_page manually via query strings.
                 'next_page_url' => null,
                 'prev_page_url' => null,
             ],

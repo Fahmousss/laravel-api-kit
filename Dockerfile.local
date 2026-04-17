@@ -1,0 +1,47 @@
+ARG PHP_VERSION=8.5
+ARG FRANKENPHP_VERSION=1.12
+ARG COMPOSER_VERSION=2.9
+
+FROM composer:${COMPOSER_VERSION} AS vendor
+
+FROM dunglas/frankenphp:${FRANKENPHP_VERSION}-php${PHP_VERSION}-alpine
+
+ARG USER=laravel
+ARG USER_ID=1000
+ARG GROUP_ID=1000
+
+ENV APP_ENV=local
+
+# Install system dependencies & PHP extensions
+RUN apk update && apk upgrade && apk add --no-cache \
+    unzip \
+    ca-certificates \
+    bash \
+    supervisor \
+    libsodium-dev \
+    && install-php-extensions \
+    pdo_pgsql \
+    mbstring \
+    exif \
+    pcntl \
+    bcmath \
+    gd \
+    zip \
+    redis \
+    intl \
+    && rm -rf /var/cache/apk/* /tmp/* /var/tmp/*
+
+# Install Composer
+COPY --link --from=vendor /usr/bin/composer /usr/bin/composer
+
+# Create system user
+RUN addgroup -g ${GROUP_ID} ${USER} \
+    && adduser -D -G ${USER} -u ${USER_ID} -s /bin/sh ${USER} \
+    && mkdir -p /home/${USER}/.composer \
+    && chown -R ${USER}:${USER} /home/${USER} \
+    && mkdir -p /data/caddy /config/caddy \
+    && chown -R ${USER}:${USER} /data/caddy /config/caddy
+
+WORKDIR /var/www
+
+USER ${USER}

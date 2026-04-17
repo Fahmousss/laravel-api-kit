@@ -12,7 +12,7 @@ A production-ready, API-only Laravel 12 starter kit following the 2024-2025 REST
 - **Token Authentication** - Laravel Sanctum for mobile/SPA auth
 - **Email Verification** - Built-in email verification flow with signed URLs
 - **Password Reset** - Secure password reset with token-based flow
-- **API Versioning** - URI-based versioning with deprecation support via [grazulex/laravel-apiroute](https://github.com/Grazulex/laravel-apiroute)
+- **API Versioning** - URI-based versioning (e.g., `/api/v1`) using standard Laravel routing
 - **Query Building** - Filtering, sorting, includes via [spatie/laravel-query-builder](https://github.com/spatie/laravel-query-builder)
 - **Data Objects** - Type-safe DTOs via [spatie/laravel-data](https://github.com/spatie/laravel-data)
 - **Auto Documentation** - Zero-annotation OpenAPI 3.1 via [dedoc/scramble](https://github.com/dedoc/scramble)
@@ -301,14 +301,8 @@ laravel-api-kit/
 │   ├── Presentation/               # HTTP Entry points (Controllers, Requests, Resources)
 │   └── Providers/                  # Global Service Providers
 ├── config/
-│   ├── apiroute.php                       # API versioning config
-│   ├── cors.php                           # CORS settings
-│   ├── sanctum.php                        # Token auth config
-│   └── scramble.php                       # API docs config
-├── routes/
-│   ├── api.php                            # API routes entry point
-│   └── api/
-│       └── v1.php                         # Version 1 routes
+│   ├── api/
+│   │   └── v1.php                         # Version 1 routes
 ├── tests/
 │   └── Feature/Api/V1/
 │       └── AuthTest.php                   # Authentication tests
@@ -319,55 +313,34 @@ laravel-api-kit/
 
 ## API Versioning
 
-This kit uses [grazulex/laravel-apiroute](https://github.com/Grazulex/laravel-apiroute) v2.x for API versioning with support for:
+This kit follows a manual versioning approach using directory-based route files:
 
-- **URI Path** (default): `/api/v1/users`, `/api/v2/users`
-- **Header**: `X-API-Version: 2`
-- **Query Parameter**: `?api_version=2`
-- **Accept Header**: `Accept: application/vnd.api.v2+json`
+- **URI Path**: `/api/v1/users`, `/api/v2/users`
 
 ### Adding a New API Version
 
-1. Create controllers in `app/Http/Controllers/Api/V2/`
-2. Create requests in `app/Http/Requests/Api/V2/`
-3. Create route file `routes/api/v2.php`:
+1. Create controllers in `app/Presentation/Controllers/Api/V2/`
+2. Create route file `routes/api/v2.php`:
 
 ```php
 <?php
 
-use App\Http\Controllers\Api\V2\AuthController;
+use App\Presentation\Controllers\Api\V2\AuthController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('register', [AuthController::class, 'register']);
 // ... more routes
 ```
 
-4. Update `config/apiroute.php`:
+3. Register the new version in `routes/api.php`:
 
 ```php
-'versions' => [
-    'v1' => [
-        'routes' => base_path('routes/api/v1.php'),
-        'status' => 'deprecated',
-        'deprecated_at' => '2025-06-01',
-        'sunset_at' => '2025-12-01',
-        'successor' => 'v2',
-    ],
-    'v2' => [
-        'routes' => base_path('routes/api/v2.php'),
-        'status' => 'active',
-    ],
-],
-```
+// Version 2
+Route::prefix('v2')->group(base_path('routes/api/v2.php'));
 
-### Deprecation Headers
-
-When accessing deprecated versions, responses include RFC-compliant headers:
-
-```http
-Deprecation: Sun, 01 Jun 2025 00:00:00 GMT
-Sunset: Mon, 01 Dec 2025 00:00:00 GMT
-Link: </api/v2>; rel="successor-version"
+// Documentation
+Scramble::registerUiRoute('docs/v2', api: 'v2');
+Scramble::registerJsonSpecificationRoute('docs/v2/api.json', api: 'v2');
 ```
 
 ## Query Building
@@ -771,10 +744,6 @@ DB_DATABASE=/var/www/database/database.sqlite
 
 # Sanctum
 SANCTUM_STATEFUL_DOMAINS=localhost,localhost:3000,127.0.0.1
-
-# API Versioning
-API_VERSION_STRATEGY=uri
-API_DEFAULT_VERSION=latest
 
 # Rate Limiting
 API_RATE_LIMIT=60
