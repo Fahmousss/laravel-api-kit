@@ -6,7 +6,7 @@ FROM composer:${COMPOSER_VERSION} AS vendor
 
 FROM dunglas/frankenphp:${FRANKENPHP_VERSION}-php${PHP_VERSION}-alpine
 
-LABEL maintainer="Junie <junie@jetbrains.com>"
+LABEL maintainer="Adzka <adzka.alhakim@gmail.com>"
 LABEL org.opencontainers.image.title="Laravel API Kit Production"
 LABEL org.opencontainers.image.description="Production-ready Docker Setup for Laravel API Kit"
 

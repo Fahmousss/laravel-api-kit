@@ -48,15 +48,6 @@ services:
     environment:
       CONTAINER_MODE: scheduler
 
-  worker:
-    <<: *base
-    container_name: ${WORKER_CONTAINER_NAME:-laravel-api-worker}
-    environment:
-      CONTAINER_MODE: worker
-      WORKER_COMMAND: "php artisan queue:work"
-    # Set autostart to false if you don't use queues
-    deploy:
-      replicas: ${WORKER_REPLICAS:-1}
 
   db:
     image: 'postgres:16-alpine'
