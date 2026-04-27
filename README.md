@@ -2,7 +2,7 @@
 
 A production-ready, API-only Laravel 12 starter kit following the 2024-2025 REST API ecosystem best practices. No frontend dependencies - purely headless API for mobile apps, SPAs, or microservices.
 
-[![PHP Version](https://img.shields.io/badge/PHP-8.3%2B-blue)](https://php.net)
+[![PHP Version](https://img.shields.io/badge/PHP-8.5%2B-blue)](https://php.net)
 [![Laravel Version](https://img.shields.io/badge/Laravel-12.x-red)](https://laravel.com)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
@@ -16,6 +16,7 @@ A production-ready, API-only Laravel 12 starter kit following the 2024-2025 REST
 - **Auto Documentation** - Zero-annotation OpenAPI 3.1 via [dedoc/scramble](https://github.com/dedoc/scramble)
 - **Modern Testing** - Pest PHP with Laravel HTTP testing
 - **Code Quality** - PHPStan (max level), Rector, and Pint with strict rules
+- **Docker Production Ready** - Optimized Dockerfile and Compose setup for production
 - **Rate Limiting** - Configurable per-route rate limiters
 - **Reusable Middleware** - ForceJsonResponse, LogApiRequests
 - **Standardized Responses** - Consistent JSON response format
@@ -25,7 +26,7 @@ A production-ready, API-only Laravel 12 starter kit following the 2024-2025 REST
 ## Requirements
 
 - Docker & Docker Compose
-- Or: PHP 8.3+, Composer 2.x
+- Or: PHP 8.5+, Composer 2.x
 
 ## Quick Start
 
@@ -521,6 +522,7 @@ API_DOCS_URL=http://localhost:8080/docs/api
 
 - [ ] Set `APP_ENV=production` and `APP_DEBUG=false`
 - [ ] Configure proper database (MySQL/PostgreSQL)
+- [ ] See `DEPLOYMENT.md` for full production setup instructions.
 - [ ] Set `APP_URL` to your production URL
 - [ ] Configure `JWT_SECRET` for your application
 - [ ] Review and tighten CORS settings in `config/cors.php`
@@ -533,7 +535,7 @@ API_DOCS_URL=http://localhost:8080/docs/api
 
 ```dockerfile
 # Example production Dockerfile additions
-FROM php:8.3-fpm-alpine
+FROM dunglas/frankenphp:1.12-php8.5-alpine
 
 # Install opcache for performance
 RUN docker-php-ext-install opcache

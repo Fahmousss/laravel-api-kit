@@ -5,7 +5,7 @@
     "description": "Laravel REST API starter kit with Octane, JWT, Scramble docs, and Pest testing.",
     "license": "MIT",
     "require": {
-        "php": "^8.3",
+        "php": "^8.3 || ^8.4 || ^8.5",
         "dedoc/scramble": "^0.12",
         "laravel/framework": "^12.0",
         "laravel/octane": "^2.17",
@@ -88,7 +88,7 @@
             "php-http/discovery": true
         },
         "platform": {
-            "php": "8.3.30"
+            "php": "8.5.0"
         }
     },
     "minimum-stability": "stable",
