@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace {{ namespace }};
 
 use App\Domain\{{ domain }}\Entities\{{ entity }}Entity;
+use App\Domain\Shared\Pagination\PaginatedResult;
 
 interface {{ class }}
 {
     public function findById({{ idType }} $id): ?{{ entity }}Entity;
 
     public function save({{ entity }}Entity ${{ entityVar }}): {{ entity }}Entity;
+
+    public function getAllPaginated(int $page, int $perPage): PaginatedResult;
 }

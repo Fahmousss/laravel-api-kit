@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace {{ namespace }};
 
-final class {{ class }}
+final readonly class {{ class }}
 {
     public function __construct(
         // TODO: add command properties here

@@ -10,6 +10,11 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
+use function Laravel\Prompts\text;
+
 #[AsCommand(name: 'make:data')]
 final class MakeDtoCommand extends GeneratorCommand
 {
@@ -42,6 +47,25 @@ final class MakeDtoCommand extends GeneratorCommand
         $this->components->info(sprintf('DTO [%s] created at Application/%s/DTOs/', $class, $domain));
 
         return null;
+    }
+
+    protected function promptForMissingArguments(InputInterface $input, OutputInterface $output): void
+    {
+        if (! $input->getArgument('domain')) {
+            $input->setArgument('domain', text(
+                label: 'What is the domain name?',
+                placeholder: 'e.g. Blog',
+                required: true
+            ));
+        }
+
+        if (! $input->getArgument('name')) {
+            $input->setArgument('name', text(
+                label: 'What is the DTO name?',
+                placeholder: 'e.g. Post',
+                required: true
+            ));
+        }
     }
 
     protected function getStub(): string

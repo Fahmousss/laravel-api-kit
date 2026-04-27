@@ -7,10 +7,12 @@ namespace {{ namespace }};
 /**
  * Pure domain entity — no framework dependencies.
  */
-final class {{ class }}
+final readonly class {{ class }}
 {
     public function __construct(
-        public readonly ?{{ idType }} $id,
+        public ?{{ idType }} $id,
         // TODO: add your properties here
+        public ?string $createdAt = null,
+        public ?string $updatedAt = null,
     ) {}
 }

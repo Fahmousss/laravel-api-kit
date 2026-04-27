@@ -10,6 +10,12 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
+use function Laravel\Prompts\confirm;
+use function Laravel\Prompts\text;
+
 #[AsCommand(name: 'make:domain')]
 final class MakeDomainCommand extends GeneratorCommand
 {
@@ -31,6 +37,33 @@ final class MakeDomainCommand extends GeneratorCommand
         $this->components->info(sprintf('Domain [%s/%s] scaffolded successfully.', $domain, $entity));
 
         return null;
+    }
+
+    protected function promptForMissingArguments(InputInterface $input, OutputInterface $output): void
+    {
+        if (! $input->getArgument('domain')) {
+            $input->setArgument('domain', text(
+                label: 'What is the domain name?',
+                placeholder: 'e.g. Blog',
+                required: true
+            ));
+        }
+
+        if (! $input->getArgument('entity')) {
+            $input->setArgument('entity', text(
+                label: 'What is the entity name?',
+                placeholder: 'e.g. Post',
+                required: true
+            ));
+        }
+
+        if (! $input->getOption('uuid') && ! $input->getOption('no-interaction')) {
+            $useUuid = confirm(
+                label: 'Use UUID for the entity ID?',
+                default: true
+            );
+            $input->setOption('uuid', $useUuid);
+        }
     }
 
     protected function getStub(): string

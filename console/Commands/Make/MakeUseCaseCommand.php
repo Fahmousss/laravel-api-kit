@@ -12,6 +12,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use function Laravel\Prompts\select;
+use function Laravel\Prompts\text;
 
 #[AsCommand(name: 'make:use-case')]
 final class MakeUseCaseCommand extends GeneratorCommand
@@ -47,6 +48,25 @@ final class MakeUseCaseCommand extends GeneratorCommand
         $this->components->info(sprintf('Use-case [%s/%s%s] scaffolded successfully.', $domain, $name, $type));
 
         return null;
+    }
+
+    protected function promptForMissingArguments(InputInterface $input, OutputInterface $output): void
+    {
+        if (! $input->getArgument('domain')) {
+            $input->setArgument('domain', text(
+                label: 'What is the domain name?',
+                placeholder: 'e.g. Blog',
+                required: true
+            ));
+        }
+
+        if (! $input->getArgument('name')) {
+            $input->setArgument('name', text(
+                label: 'What is the use-case name?',
+                placeholder: 'e.g. CreatePost',
+                required: true
+            ));
+        }
     }
 
     protected function getStub(): string

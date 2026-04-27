@@ -9,6 +9,11 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
+use function Laravel\Prompts\text;
+
 #[AsCommand(name: 'make:infrastructure')]
 final class MakeInfrastructureCommand extends GeneratorCommand
 {
@@ -56,6 +61,7 @@ final class MakeInfrastructureCommand extends GeneratorCommand
             'domain'  => $domain,
             'entity'  => $entity,
             '--force' => $force,
+            '--uuid'  => true,
         ]));
 
         // 3. Manage the Service Provider
@@ -63,6 +69,25 @@ final class MakeInfrastructureCommand extends GeneratorCommand
         $this->createOrUpdateProvider($domain, $entity);
 
         $this->info(sprintf('Infrastructure for [%s/%s] scaffolded successfully.', $domain, $entity));
+    }
+
+    protected function promptForMissingArguments(InputInterface $input, OutputInterface $output): void
+    {
+        if (! $input->getArgument('domain')) {
+            $input->setArgument('domain', text(
+                label: 'What is the domain name?',
+                placeholder: 'e.g. Blog',
+                required: true
+            ));
+        }
+
+        if (! $input->getArgument('entity')) {
+            $input->setArgument('entity', text(
+                label: 'What is the entity name?',
+                placeholder: 'e.g. Post',
+                required: true
+            ));
+        }
     }
 
     /**

@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\{{ domain }}\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use App\Application\Contracts\CommandBusInterface;
 use App\Application\Contracts\QueryBusInterface;
+use Illuminate\Support\ServiceProvider;
 
 final class {{ providerName }} extends ServiceProvider
 {
     public function register(): void
     {
-        
+        // Bind repositories here
     }
 
     public function boot(CommandBusInterface $commandBus, QueryBusInterface $queryBus): void
     {
-        
+        // Register commands and queries here
     }
 }

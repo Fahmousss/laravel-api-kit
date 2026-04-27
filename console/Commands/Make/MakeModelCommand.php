@@ -9,6 +9,11 @@ use Illuminate\Foundation\Console\ModelMakeCommand;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Attribute\AsCommand;
 
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
+use function Laravel\Prompts\text;
+
 #[AsCommand(name: 'make:model')]
 final class MakeModelCommand extends ModelMakeCommand
 {
@@ -46,6 +51,17 @@ final class MakeModelCommand extends ModelMakeCommand
         }
 
         return $rootNamespace.'Infrastructure\\Shared\\Models\\'.$name;
+    }
+
+    protected function promptForMissingArguments(InputInterface $input, OutputInterface $output): void
+    {
+        if (! $input->getArgument('name')) {
+            $input->setArgument('name', text(
+                label: 'What is the model name? (Domain/Model)',
+                placeholder: 'e.g. Blog/Post',
+                required: true
+            ));
+        }
     }
 
     /**

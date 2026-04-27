@@ -2,6 +2,12 @@
 
 declare(strict_types=1);
 
+use App\Console\Commands\Make\MakeDomainCommand;
+use App\Console\Commands\Make\MakeDtoCommand;
+use App\Console\Commands\Make\MakeInfrastructureCommand;
+use App\Console\Commands\Make\MakeModelCommand;
+use App\Console\Commands\Make\MakeRepositoryCommand;
+use App\Console\Commands\Make\MakeUseCaseCommand;
 use App\Presentation\Middleware\Authenticate;
 use App\Presentation\Middleware\EnsureEmailVerified;
 use App\Presentation\Middleware\ForceJsonResponse;
@@ -15,9 +21,17 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         // web: __DIR__.'/../routes/web.php',
         api: __DIR__.'/../routes/api.php',
-        // commands: __DIR__.'/../routes/console.php',
+        commands: __DIR__.'/../routes/console.php',
         // health: '/up',
     )
+    ->withCommands([
+        MakeDomainCommand::class,
+        MakeDtoCommand::class,
+        MakeInfrastructureCommand::class,
+        MakeModelCommand::class,
+        MakeRepositoryCommand::class,
+        MakeUseCaseCommand::class,
+    ])
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'force.json' => ForceJsonResponse::class,

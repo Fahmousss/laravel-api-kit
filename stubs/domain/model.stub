@@ -1,13 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace {{ namespace }};
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 {{ customFactoryImport }}
 
 {{ customUseFactory }}
-class {{ class }} extends Model
+final class {{ class }} extends Model
 {
-    {{ factory }}
+    /** @use HasFactory<\Database\Factories\{{ class }}Factory> */
+    use HasFactory;
+    use HasUuids;
+
+    protected $fillable = [
+        // TODO: add fillable properties
+    ];
 }

@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace {{ namespace }};
 
-final class {{ class }}
+final readonly class {{ class }}
 {
+    public function __construct(
+        // TODO: inject dependencies
+    ) {}
+
     public function handle({{ query }} $query): mixed
     {
         // TODO: implement query handling logic
+        return null;
     }
 }
