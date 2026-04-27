@@ -79,7 +79,8 @@ trait ApiResponse
     {
         return $this->error($message, Response::HTTP_UNPROCESSABLE_ENTITY, $errors, $headers);
     }
- protected function paginated(
+
+    protected function paginated(
         PaginatedResult $paginatedResult,
         mixed $data,
         string $message = 'Success',
@@ -92,10 +93,10 @@ trait ApiResponse
             'message'    => $message,
             'data'       => $data,
             'pagination' => [
-                'current_page' => $paginatedResult->currentPage,
-                'last_page'    => $paginatedResult->lastPage,
-                'per_page'     => $paginatedResult->perPage,
-                'total'        => $paginatedResult->total,
+                'current_page'  => $paginatedResult->currentPage,
+                'last_page'     => $paginatedResult->lastPage,
+                'per_page'      => $paginatedResult->perPage,
+                'total'         => $paginatedResult->total,
                 'next_page_url' => null,
                 'prev_page_url' => null,
             ],

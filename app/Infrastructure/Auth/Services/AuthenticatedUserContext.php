@@ -7,13 +7,13 @@ namespace App\Infrastructure\Auth\Services;
 use App\Application\Features\Auth\Common\Interfaces\AuthenticatedUserContextInterface;
 use Illuminate\Http\Request;
 
-final class AuthenticatedUserContext implements AuthenticatedUserContextInterface
+final readonly class AuthenticatedUserContext implements AuthenticatedUserContextInterface
 {
     public function __construct(
-        private readonly Request $request
+        private Request $request
     ) {}
 
-    public function currentUserId(): ?int
+    public function currentUserId(): ?string
     {
         return $this->request->user()?->id;
     }
@@ -21,16 +21,5 @@ final class AuthenticatedUserContext implements AuthenticatedUserContextInterfac
     public function currentToken(): ?string
     {
         return $this->request->bearerToken();
-    }
-
-    public function isEmailVerified(): bool
-    {
-        $user = $this->request->user();
-
-        if (! $user) {
-            return false;
-        }
-
-        return $user->hasVerifiedEmail();
     }
 }

@@ -18,6 +18,9 @@ final class LoginController extends ApiController
         private readonly QueryBusInterface $queryBus,
     ) {}
 
+    /**
+     * @unauthenticated
+     */
     public function __invoke(LoginRequest $request): JsonResponse
     {
         /** @var null|UserDTO $result */

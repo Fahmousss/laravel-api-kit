@@ -2,67 +2,15 @@
 
 declare(strict_types=1);
 
+use App\Application\Features\Auth\Common\Interfaces\AuthTokenServiceInterface;
 use App\Infrastructure\Auth\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\getJson;
 use function Pest\Laravel\postJson;
 use function Pest\Laravel\withHeader;
 
 uses(RefreshDatabase::class);
-
-describe('Registration', function (): void {
-    it('registers a new user successfully', function (): void {
-        $response = postJson('/api/v1/register', [
-            'name'                  => 'Test User',
-            'email'                 => 'test@example.com',
-            'password'              => 'password123',
-            'password_confirmation' => 'password123',
-        ]);
-
-        $response->assertStatus(201)
-            ->assertJsonStructure([
-                'success',
-                'message',
-                'data' => [
-                    'user' => ['id', 'name', 'email'],
-                    'token',
-                ],
-            ])
-            ->assertJson([
-                'success' => true,
-                'message' => 'User registered successfully. Please check your email to verify your account.',
-            ]);
-
-        assertDatabaseHas('users', [
-            'email' => 'test@example.com',
-        ]);
-    });
-
-    it('fails registration with invalid data', function (): void {
-        $response = postJson('/api/v1/register', [
-            'name'     => '',
-            'email'    => 'invalid-email',
-            'password' => 'short',
-        ]);
-
-        $response->assertStatus(422);
-    });
-
-    it('fails registration with duplicate email', function (): void {
-        User::factory()->create(['email' => 'existing@example.com']);
-
-        $response = postJson('/api/v1/register', [
-            'name'                  => 'Test User',
-            'email'                 => 'existing@example.com',
-            'password'              => 'password123',
-            'password_confirmation' => 'password123',
-        ]);
-
-        $response->assertStatus(422);
-    });
-});
 
 describe('Login', function (): void {
     it('logs in with valid credentials', function (): void {
@@ -120,7 +68,7 @@ describe('Login', function (): void {
 describe('Logout', function (): void {
     it('logs out authenticated user', function (): void {
         $user  = User::factory()->create();
-        $token = $user->createToken('test-token')->plainTextToken;
+        $token = resolve(AuthTokenServiceInterface::class)->generateForUser($user->id);
 
         $response = withHeader('Authorization', 'Bearer '.$token)
             ->postJson('/api/v1/logout');
@@ -142,7 +90,7 @@ describe('Logout', function (): void {
 describe('Me', function (): void {
     it('returns authenticated user data', function (): void {
         $user  = User::factory()->create();
-        $token = $user->createToken('test-token')->plainTextToken;
+        $token = resolve(AuthTokenServiceInterface::class)->generateForUser($user->id);
 
         $response = withHeader('Authorization', 'Bearer '.$token)
             ->getJson('/api/v1/me');

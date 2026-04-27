@@ -16,14 +16,14 @@ trait EntityMapper
      *
      * @template T of object
      *
-     * @param class-string<T> $entityClass
-     *
-     * @return array<T>|T
+     * @param  Model|Collection<int, Model>  $model
+     * @param  class-string<T>  $entityClass
+     * @return ($model is Collection ? array<int, T> : T)
      */
     protected function mapToEntity(Model|Collection $model, string $entityClass): object|array
     {
         if ($model instanceof Collection) {
-            return $model->map(fn (Model $item) => $this->mapToEntity($item, $entityClass))->all();
+            return $model->map(fn (Model $item): object => $this->mapToEntity($item, $entityClass))->all();
         }
 
         $reflection  = new ReflectionClass($entityClass);

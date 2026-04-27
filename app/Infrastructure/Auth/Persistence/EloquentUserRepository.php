@@ -26,7 +26,7 @@ final class EloquentUserRepository implements UserRepositoryInterface
         return $this->mapToEntity($model, UserEntity::class);
     }
 
-    public function findById(int $id): ?UserEntity
+    public function findById(string $id): ?UserEntity
     {
         $model = User::query()->find($id);
 
@@ -60,23 +60,12 @@ final class EloquentUserRepository implements UserRepositoryInterface
         return $this->mapToEntity($model, UserEntity::class);
     }
 
-    public function markEmailAsVerified(int $userId): void
-    {
-        $model = User::query()->find($userId);
-
-        if ($model === null) {
-            return;
-        }
-
-        $model->markEmailAsVerified();
-    }
-
     public function getAllPaginated(int $page, int $perPage): PaginatedResult
     {
         $paginator = User::query()->paginate(perPage: $perPage, page: $page);
 
         $entities = array_map(
-            fn (User $model): array|object => $this->mapToEntity($model, UserEntity::class),
+            fn (User $model): UserEntity => $this->mapToEntity($model, UserEntity::class),
             $paginator->items()
         );
 

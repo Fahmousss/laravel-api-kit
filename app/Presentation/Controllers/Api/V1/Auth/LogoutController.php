@@ -26,6 +26,6 @@ final class LogoutController extends ApiController
             $this->commandBus->dispatch(new LogoutUserCommand($token));
         }
 
-        return $this->success(message: 'Logged out successfully');
+        return $this->noContent();
     }
 }

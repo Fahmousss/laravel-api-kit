@@ -20,7 +20,7 @@ final class DocumentationServiceProvider extends ServiceProvider
             ->expose(false)
             ->withDocumentTransformers(function (OpenApi $openApi): void {
                 $openApi->secure(
-                    securityScheme: SecurityScheme::http('bearer')
+                    securityScheme: SecurityScheme::http('bearer', 'JWT')
                 );
             });
 

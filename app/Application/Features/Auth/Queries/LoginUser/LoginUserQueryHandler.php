@@ -35,7 +35,6 @@ final readonly class LoginUserQueryHandler
             id: $entity->id,
             name: $entity->name,
             email: $entity->email,
-            emailVerifiedAt: $entity->emailVerifiedAt,
             createdAt: $entity->createdAt ?? now()->toIso8601String(),
             updatedAt: $entity->updatedAt ?? now()->toIso8601String(),
             token: $token,

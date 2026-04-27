@@ -9,9 +9,7 @@ A production-ready, API-only Laravel 12 starter kit following the 2024-2025 REST
 ## Features
 
 - **API-Only** - No Blade, Vite, or frontend assets
-- **Token Authentication** - Laravel Sanctum for mobile/SPA auth
-- **Email Verification** - Built-in email verification flow with signed URLs
-- **Password Reset** - Secure password reset with token-based flow
+- **Token Authentication** - JWT for mobile/SPA auth
 - **API Versioning** - URI-based versioning (e.g., `/api/v1`) using standard Laravel routing
 - **Query Building** - Filtering, sorting, includes via [spatie/laravel-query-builder](https://github.com/spatie/laravel-query-builder)
 - **Data Objects** - Type-safe DTOs via [spatie/laravel-data](https://github.com/spatie/laravel-data)
@@ -19,7 +17,7 @@ A production-ready, API-only Laravel 12 starter kit following the 2024-2025 REST
 - **Modern Testing** - Pest PHP with Laravel HTTP testing
 - **Code Quality** - PHPStan (max level), Rector, and Pint with strict rules
 - **Rate Limiting** - Configurable per-route rate limiters
-- **Reusable Middleware** - ForceJsonResponse, LogApiRequests, EnsureEmailVerified
+- **Reusable Middleware** - ForceJsonResponse, LogApiRequests
 - **Standardized Responses** - Consistent JSON response format
 - **Optional: API Idempotency** - RFC-compliant idempotency via [grazulex/laravel-api-idempotency](https://github.com/Grazulex/laravel-api-idempotency)
 - **Optional: Smart Rate Limiting** - Plan-aware throttling with quotas via [grazulex/laravel-api-throttle-smart](https://github.com/Grazulex/laravel-api-throttle-smart)
@@ -87,40 +85,7 @@ Once running, access the auto-generated documentation:
 
 ## Authentication
 
-This kit uses **Laravel Sanctum** with token-based authentication (ideal for mobile apps and third-party API consumers).
-
-### Register a New User
-
-```bash
-curl -X POST http://localhost:8080/api/v1/register \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json" \
-  -d '{
-    "name": "John Doe",
-    "email": "john@example.com",
-    "password": "password123",
-    "password_confirmation": "password123"
-  }'
-```
-
-**Response:**
-
-```json
-{
-    "success": true,
-    "message": "User registered successfully. Please check your email to verify your account.",
-    "data": {
-        "user": {
-            "id": 1,
-            "name": "John Doe",
-            "email": "john@example.com",
-            "email_verified_at": null,
-            "created_at": "2025-01-15T10:30:00+00:00"
-        },
-        "token": "1|abc123..."
-    }
-}
-```
+This kit uses **JWT (JSON Web Token)** with token-based authentication (ideal for mobile apps and third-party API consumers).
 
 ### Login
 
@@ -132,6 +97,25 @@ curl -X POST http://localhost:8080/api/v1/login \
     "email": "john@example.com",
     "password": "password123"
   }'
+```
+
+**Response:**
+
+```json
+{
+    "success": true,
+    "message": "Login successful",
+    "data": {
+        "user": {
+            "id": 1,
+            "name": "John Doe",
+            "email": "john@example.com",
+            "created_at": "2025-01-15T10:30:00+00:00",
+            "updated_at": "2025-01-15T10:30:00+00:00"
+        },
+        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
+    }
+}
 ```
 
 ### Using the Token
@@ -416,11 +400,10 @@ Configured in `app/Providers/AppServiceProvider.php`:
 // In routes/api.php
 Route::middleware('throttle:auth')->group(function () {
     Route::post('login', [AuthController::class, 'login']);
-    Route::post('register', [AuthController::class, 'register']);
 });
 
-Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function () {
-    // Protected routes with higher limits
+Route::middleware(['auth:api', 'throttle:authenticated'])->group(function () {
+    Route::get('me', [AuthController::class, 'me']);
 });
 ```
 
@@ -458,7 +441,7 @@ php artisan vendor:publish --tag="api-idempotency-config"
 
 ```php
 // routes/api/v1.php
-Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function () {
+Route::middleware(['auth:api', 'throttle:authenticated'])->group(function () {
     Route::post('orders', [OrderController::class, 'store'])
         ->middleware('idempotent');
 
@@ -505,7 +488,7 @@ php artisan vendor:publish --tag="throttle-smart-config"
 
 ```php
 // routes/api/v1.php
-Route::middleware(['auth:sanctum', 'throttle.smart'])->group(function () {
+Route::middleware(['auth:api', 'throttle.smart'])->group(function () {
     Route::apiResource('posts', PostController::class);
 });
 ```
@@ -565,7 +548,7 @@ Route::middleware('log.api')->group(function () {
 Protects routes that require a verified email address. Returns 403 if email is not verified.
 
 ```php
-Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+Route::middleware(['auth:api', 'verified'])->group(function () {
     // Only users with verified emails can access
 });
 ```
@@ -742,8 +725,9 @@ DB_DATABASE=/var/www/database/database.sqlite
 # DB_USERNAME=laravel
 # DB_PASSWORD=secret
 
-# Sanctum
-SANCTUM_STATEFUL_DOMAINS=localhost,localhost:3000,127.0.0.1
+# JWT
+JWT_SECRET=
+JWT_TTL=60
 
 # Rate Limiting
 API_RATE_LIMIT=60
@@ -759,7 +743,7 @@ API_DOCS_URL=http://localhost:8080/docs/api
 - [ ] Set `APP_ENV=production` and `APP_DEBUG=false`
 - [ ] Configure proper database (MySQL/PostgreSQL)
 - [ ] Set `APP_URL` to your production URL
-- [ ] Configure `SANCTUM_STATEFUL_DOMAINS` for your frontend domains
+- [ ] Configure `JWT_SECRET` for your application
 - [ ] Review and tighten CORS settings in `config/cors.php`
 - [ ] Set up proper rate limiting for production load
 - [ ] Configure caching (Redis recommended)
@@ -869,7 +853,7 @@ This project is open-sourced software licensed under the [MIT license](LICENSE).
 ## Credits
 
 - [Laravel](https://laravel.com) - The PHP Framework
-- [Laravel Sanctum](https://laravel.com/docs/sanctum) - API Token Authentication
+- [JWT Auth](https://github.com/PHP-Open-Source-Saver/jwt-auth) - API Token Authentication
 - [grazulex/laravel-apiroute](https://github.com/Grazulex/laravel-apiroute) - API Versioning
 - [spatie/laravel-query-builder](https://github.com/spatie/laravel-query-builder) - Query Building
 - [spatie/laravel-data](https://github.com/spatie/laravel-data) - Data Transfer Objects

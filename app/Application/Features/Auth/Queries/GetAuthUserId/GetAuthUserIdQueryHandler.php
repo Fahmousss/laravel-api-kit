@@ -6,13 +6,13 @@ namespace App\Application\Features\Auth\Queries\GetAuthUserId;
 
 use App\Application\Features\Auth\Common\Interfaces\AuthenticatedUserContextInterface;
 
-final class GetAuthUserIdQueryHandler
+final readonly class GetAuthUserIdQueryHandler
 {
     public function __construct(
-        private readonly AuthenticatedUserContextInterface $authenticatedUser
+        private AuthenticatedUserContextInterface $authenticatedUser
     ) {}
 
-    public function handle(GetAuthUserIdQuery $query): ?int
+    public function handle(): ?string
     {
         return $this->authenticatedUser->currentUserId();
     }
